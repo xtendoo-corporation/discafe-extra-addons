@@ -3,11 +3,11 @@ from odoo.exceptions import UserError
 
 
 class SaleOrder(models.Model):
-
     _inherit = "sale.order"
 
     @api.multi
     def action_confirm(self):
+        print("Action comfirm***************************************")
         res = super().action_confirm()
         for so in self:
             for line in so.order_line.filtered(lambda l: l.product_id.tracking == 'lot'):
@@ -34,7 +34,6 @@ class SaleOrder(models.Model):
 
 
 class SaleOrderLine(models.Model):
-
     _inherit = 'sale.order.line'
 
     lot_id = fields.Many2one(
@@ -45,6 +44,7 @@ class SaleOrderLine(models.Model):
 
     @api.onchange('product_uom_qty', 'lot_id', 'product_uom')
     def _onchage_quantity_or_lot(self):
+        print("On change quality or lot###################################")
         if not self.product_id:
             return
         if self.product_id.tracking != 'lot':
@@ -67,3 +67,4 @@ class SaleOrderLine(models.Model):
                 _('Not enough stock in lot %s, only %.2f for product : %s') %
                 (self.lot_id.name, product_lot_qty, self.product_id.name )
                 )
+
