@@ -1,15 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
     <data>
+         <record id="d_hr_administration.invoice_margin_form_ihnerit_margin" model="ir.ui.view">
+            <field name="name">account.invoice.form.margin.hr</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account_invoice_margin.invoice_margin_form_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='margin']" position="replace">
+                    <field name="margin" groups="d_hr_administration.show_margins"/>
+                </xpath>
+            </field>
+         </record>
 
         <record id="d_hr_administration.invoice_margin_form_ihnerit" model="ir.ui.view">
             <field name="name">account.invoice.form</field>
             <field name="model">account.invoice</field>
             <field name="inherit_id" ref="account.invoice_form"/>
             <field name="arch" type="xml">
-                <xpath expr="//field[@name='margin']" position="replace">
-                    <field name="margin" groups="d_hr_administration.show_margins"/>
-                </xpath>
+<!--                <xpath expr="//field[@name='margin']" position="replace">-->
+<!--                    <field name="margin" groups="d_hr_administration.show_margins"/>-->
+<!--                </xpath>-->
 
                 <xpath expr="//field[@name='invoice_line_ids']//field[@name='purchase_price']" position="replace">
                     <field name="purchase_price" groups="d_hr_administration.show_cost_price"/>
@@ -25,17 +35,17 @@
                     <field name="can_edit_account" invisible="1"/>
                     <field name="account_id" attrs="{'readonly': [('can_edit_account', '=', False)]}"/>
                </xpath>
-                
+
                 <xpath expr="//field[@name='invoice_line_ids']//field[@name='quantity']" position="replace">
                     <field name="can_edit_quantity" invisible="1"/>
                     <field name="quantity" attrs="{'readonly': [('can_edit_quantity', '=', False)]}"/>
                </xpath>
-                 
+
                 <xpath expr="//field[@name='invoice_line_ids']//field[@name='discount']" position="replace">
                     <field name="can_edit_discounts" invisible="1"/>
                     <field name="discount" attrs="{'readonly': [('can_edit_discounts', '=', False)]}"  force_save="1"/>
                 </xpath>
-                
+
                 <xpath expr="//field[@name='invoice_line_ids']//field[@name='invoice_line_tax_ids']" position="replace">
                     <field name="can_edit_tax" invisible="1"/>
                     <field name="invoice_line_tax_ids" widget="many2many_tags" force_save="1" options="{'no_create': True}" context="{'type':parent.type, 'tree_view_ref': 'account.account_tax_view_tree', 'search_view_ref': 'account.account_tax_view_search'}" domain="[('type_tax_use','=','sale'),('company_id', '=', parent.company_id)]" attrs="{'readonly': [('can_edit_tax', '=', False)]}"/>
@@ -71,4 +81,4 @@
             </field>
         </record>
     </data>
-</odoo> 
+</odoo>
