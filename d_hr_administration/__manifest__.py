@@ -15,7 +15,7 @@
         'product',
         'account',
         'account_invoice_margin',
-        'partner_delivery_zone',
+        'xtendoo_partner_delivery_zone',
     ],
     'license': 'AGPL-3',
     'data': [

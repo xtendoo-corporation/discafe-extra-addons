@@ -11,6 +11,8 @@ class PartnerDeliveryZone(models.Model):
 
     date = datetime.utcnow()
 
+    code = fields.Char()
+
     name = fields.Char(
         string='Zone',
         required=True,
@@ -33,6 +35,7 @@ class PartnerDeliveryZone(models.Model):
         string='Delivery Zone',
         auto_join=True,
     )
+    active = fields.Boolean(default=True)
 
     @api.multi
     def set_values(self):
