@@ -10,9 +10,8 @@ class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
     def _get_delivery_zone_id(self):
-        #if request.session:
-        #    if request.session['partner_delivery_zone_id']:
-        #        return request.session['partner_delivery_zone_id']
+        if 'partner_delivery_zone_id' in request.session:
+            return request.session['partner_delivery_zone_id']
         return 0
 
     def _get_next_partner(self):
