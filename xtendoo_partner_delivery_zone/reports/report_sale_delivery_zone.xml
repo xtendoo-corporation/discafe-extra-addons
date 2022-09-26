@@ -4,7 +4,7 @@
      <template id="report_sale_delivery_zone">
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="doc">
-                <t t-call="partner_delivery_zone.report_sale_delivery_zone_document"/>
+                <t t-call="xtendoo_partner_delivery_zone.report_sale_delivery_zone_document"/>
             </t>
         </t>
     </template>
@@ -352,9 +352,9 @@
 
     <report id="report_sale"
             string="Sale Report"
-            model="partner_delivery_zone.report_sale_delivery_zone"
+            model="xtendoo_partner_delivery_zone.report_sale_delivery_zone"
             report_type="qweb-pdf"
-            name="partner_delivery_zone.report_sale_delivery_zone"
-            file="partner_delivery_zone.report_sale_delivery_zone"/>
+            name="xtendoo_partner_delivery_zone.report_sale_delivery_zone"
+            file="xtendoo_partner_delivery_zone.report_sale_delivery_zone"/>
 
 </odoo>
