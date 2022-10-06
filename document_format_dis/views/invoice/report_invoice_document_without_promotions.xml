@@ -6,12 +6,14 @@
 
         <template id="document_format_dis.report_invoice_document_without_promotions">
 
+            <t t-name="document_format_dis.report_invoice_document_without_promotions">
+
              <t t-name="document_format_dis.report_invoice_document_without_promotions">
 
                    <t t-call="web.external_layout">
 
                         <div class="page">
-                            <t t-set="esRect" t-value="o.type"></t>
+                            <t t-set="esRect" t-value="o.type"/>
 
                 <div style="width:50%; float:left;margin-top:35px;">
                     <ul class="list-unstyled">
@@ -20,11 +22,11 @@
                             <span t-field="o.number"/>
                         </li>
                         <li t-if="o.type == 'out_invoice' and o.state == 'draft'">
-                            <b>Borrador de factura</b>
+                            <b>Borrador de factura:</b>
                             <span t-field="o.number"/>
                         </li>
                         <li t-if="o.type == 'out_invoice' and o.state == 'cancel'">
-                            <b>Factura cancelada</b>
+                            <b>Factura cancelada:</b>
                             <span t-field="o.number"/>
                         </li>
                         <li t-if="o.type == 'out_refund'">
@@ -32,11 +34,11 @@
                             <span t-field="o.number"/>
                         </li>
                         <li t-if="o.type == 'in_refund'">
-                            <b>Vendor Credit Note</b>
+                            <b>Factura Rectificativa de Proveedor:</b>
                             <span t-field="o.number"/>
                         </li>
                         <li t-if="o.type == 'in_invoice'">
-                            <b>Vendor Bill</b>
+                            <b>Factura de Proveedor:</b>
                             <span t-field="o.number"/>
                         </li>
 
@@ -128,8 +130,7 @@
                             <div class="text-right" style="font-weight:bolder; color:#4f4b4b;float:left;width:10%;">
                                 <span>Precio/Ud</span>
                             </div>
-                            <div class="text-right" groups="sale.group_discount_per_so_line"
-                                 style="font-weight:bolder; color:#4f4b4b;float:left;width:10%;">
+                            <div class="text-right" groups="sale.group_discount_per_so_line" style="font-weight:bolder; color:#4f4b4b;float:left;width:10%;">
                                 <span>Des.(%)</span>
                             </div>
 
@@ -152,12 +153,10 @@
                     <t t-set="current_subtotal" t-value="0"/>
                     <t t-foreach="o.invoice_line_ids" t-as="line">
 
-                        <t t-if="line.price_unit > 0.00">
+                        <t t-if="line.price_unit &gt; 0.00">
 
-                                    <t t-set="current_subtotal" t-value="current_subtotal + line.price_subtotal"
-                                       groups="account.group_show_line_subtotals_tax_excluded"/>
-                                    <t t-set="current_subtotal" t-value="current_subtotal + line.price_total"
-                                       groups="account.group_show_line_subtotals_tax_included"/>
+                                    <t t-set="current_subtotal" t-value="current_subtotal + line.price_subtotal" groups="account.group_show_line_subtotals_tax_excluded"/>
+                                    <t t-set="current_subtotal" t-value="current_subtotal + line.price_total" groups="account.group_show_line_subtotals_tax_included"/>
                                     <div style="clear:both;font-size:0.9em;">
 
                                         <!-- si no es una nota -->
@@ -192,8 +191,8 @@
                                             <!-- descripción -->
 
                                             <div class="text-left" style="float:left;width:26%;">
-                                                <t t-set="descripcion" t-value="line.name.find(']') +1"></t>
-                                                <t t-set="linea" t-value="line.name[descripcion:]"></t>
+                                                <t t-set="descripcion" t-value="line.name.find(']') +1"/>
+                                                <t t-set="linea" t-value="line.name[descripcion:]"/>
                                                 <span t-esc="linea"/>
                                             </div>
 
@@ -202,6 +201,9 @@
 
                                             <div class="text-right" style="float:left;width:7%;">
                                                 <span t-if="esRect == 'out_refund'">-</span>
+                                                <t t-if="o.type == 'in_refund'">
+                                                <span>-</span>
+                                              </t>
                                                 <span t-esc="round(line.quantity,2)"/>
                                             </div>
 
@@ -217,8 +219,7 @@
 
                                             <!-- Descuento -->
 
-                                            <div class="text-right" groups="sale.group_discount_per_so_line"
-                                                 style="float:left;width:10%;">
+                                            <div class="text-right" groups="sale.group_discount_per_so_line" style="float:left;width:10%;">
                                                 <span t-field="line.discount"/>
                                             </div>
 
@@ -228,8 +229,10 @@
 
                                             <div class="text-right" style="float:left;width:12%;">
                                                 <span t-if="esRect == 'out_refund'">-</span>
-                                                <span t-field="line.price_subtotal"
-                                                      groups="account.group_show_line_subtotals_tax_excluded"/>
+                                                <t t-if="o.type == 'in_refund'">
+                                                <span>-</span>
+                                              </t>
+                                                <span t-field="line.price_subtotal" groups="account.group_show_line_subtotals_tax_excluded"/>
                                             </div>
 
                                             <!-- Fin valor neto -->
@@ -241,7 +244,7 @@
                                                 <!--<span t-esc="int(iva)"/> -->
                                                 <t t-foreach="line.invoice_line_tax_ids" t-as="tax">
                                                     <div>
-                                                        <span t-esc="round(tax.amount,2)"></span>%
+                                                        <span t-esc="round(tax.amount,2)"/>%
                                                     </div>
                                                 </t>
 
@@ -286,7 +289,7 @@
 
                     <!-- Separador -->
 
-                    <div style="height:2px;background-color:black;clear:both;"></div>
+                    <div style="height:2px;background-color:black;clear:both;"/>
 
                     <!-- Fin separador -->
 
@@ -301,6 +304,9 @@
                         </div>
 
                         <div style="width:60%;float:left;text-align:right">
+                          <t t-if="o.type == 'in_refund'">
+                                                <span>-</span>
+                                              </t>
                             <span t-if="o.type == 'out_refund'">-</span>
                             <span t-field="o.amount_untaxed"/>
                         </div>
@@ -317,6 +323,9 @@
 
                                 <div class="text-right o_price_total" style="width:60%;float:left;text-align:right">
                                     <span t-if="o.type == 'out_refund'">-</span>
+                                    <t t-if="o.type == 'in_refund'">
+                                                <span>-</span>
+                                              </t>
                                     <span t-esc="amount_by_group[3]"/>
                                 </div>
 
@@ -334,6 +343,9 @@
                                 </div>
 
                                 <div class="text-right o_price_total" style="width:60%;float:left;text-align:right">
+                                  <t t-if="o.type == 'in_refund'">
+                                                <span>-</span>
+                                              </t>
                                     <span t-if="o.type == 'out_refund'">-</span>
                                     <span t-esc="amount_by_group[3]"/>
                                 </div>
@@ -350,6 +362,9 @@
                         </div>
                         <div class="text-right">
                             <span t-if="o.type == 'out_refund'">-</span>
+                            <t t-if="o.type == 'in_refund'">
+                                                <span>-</span>
+                                              </t>
                             <span t-field="o.amount_total" style="font-weight:bolder;"/>
                         </div>
 
@@ -357,7 +372,7 @@
 
                         <!-- Separador -->
 
-                        <div style="height:2px;background-color:black;clear:both;"></div>
+                        <div style="height:2px;background-color:black;clear:both;"/>
 
                         <!-- FIn Separador -->
 
@@ -434,7 +449,7 @@
                    </t>
              </t>
 
-        </template>
+        </t>        </template>
 
     </data>
 
