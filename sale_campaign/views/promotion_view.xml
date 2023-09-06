@@ -53,6 +53,7 @@
               <group>
                 <field name="apply_to_same_product"/>
                 <field name="product_id"  attrs="{'invisible':['|',('type','not in', ('add')), ('apply_to_same_product', '=', True)]}" />
+                <field name="promotion_product_price"  attrs="{'invisible':['|',('type','not in', ('add')), ('apply_to_same_product', '=', True)]}" />
               </group>
               <group attrs="{'invisible':['|', ('type','in', ('add')),('apply_to_same_product','=', True) ]}">
                 <field name="apply_to"/>

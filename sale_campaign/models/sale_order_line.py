@@ -46,7 +46,7 @@ class OrderLine(models.Model):
                 'sequence': line_to_add.sequence + 1,
                 'product_id': product_id,
                 'product_uom_qty': free_qty,
-                'price_unit': 0,
+                'price_unit': promotion.promotion_product_price,
                 'discount': 0
             })
 

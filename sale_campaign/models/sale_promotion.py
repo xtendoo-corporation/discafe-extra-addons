@@ -78,6 +78,9 @@ class SalePromotion(models.Model):
     excluding_promotion = fields.Boolean(
         string='Excluding Promotion',
         default=False)
+    promotion_product_price = fields.Float(
+        string='Precio',
+        default=0.00)
 
     @api.multi
     def get_promotion_keys(self):
