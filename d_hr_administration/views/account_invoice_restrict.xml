@@ -1,28 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
     <data>
-         <record id="d_hr_administration.invoice_margin_form_ihnerit_margin" model="ir.ui.view">
-            <field name="name">account.invoice.form.margin.hr</field>
+         <record id="invoice_margin_form_tree_inherit" model="ir.ui.view">
             <field name="model">account.invoice</field>
-            <field name="inherit_id" ref="account_invoice_margin.invoice_margin_form_tree"/>
+            <field name="inherit_id" ref="account.invoice_form"/>
+            <field name="groups_id"
+                   eval="[(4, ref('d_hr_administration.show_margins'))]"/>
             <field name="arch" type="xml">
-                <xpath expr="//field[@name='margin']" position="replace">
-                    <field name="margin" groups="d_hr_administration.show_margins"/>
+                <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='price_unit']"
+                       position="after">
+                        <field name="purchase_price"/>
+                        <field name="margin"/>
+                        <field name="margin_percent"/>
                 </xpath>
+                <field name="amount_untaxed" position="before">
+                    <field name="margin"/>
+                    <field name="margin_percent"/>
+                </field>
             </field>
-         </record>
+        </record>
 
         <record id="d_hr_administration.invoice_margin_form_ihnerit" model="ir.ui.view">
-            <field name="name">account.invoice.form</field>
+            <field name="name">account.invoice.form.inherit</field>
             <field name="model">account.invoice</field>
             <field name="inherit_id" ref="account.invoice_form"/>
             <field name="arch" type="xml">
-<!--                <xpath expr="//field[@name='margin']" position="replace">-->
+                <xpath expr="//field[@name='margin']" position="replace">
 <!--                    <field name="margin" groups="d_hr_administration.show_margins"/>-->
-<!--                </xpath>-->
+                </xpath>
 
                 <xpath expr="//field[@name='invoice_line_ids']//field[@name='purchase_price']" position="replace">
-                    <field name="purchase_price" groups="d_hr_administration.show_cost_price"/>
+<!--                    <field name="purchase_price" groups="d_hr_administration.show_cost_price"/>-->
                </xpath>
 
                 <xpath expr="//field[@name='invoice_line_ids']//field[@name='price_unit']" position="replace">

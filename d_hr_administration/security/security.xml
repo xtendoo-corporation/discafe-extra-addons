@@ -18,6 +18,13 @@
             </field>
         </record>
         <!-- Fin Grupo de admins -->
+        <!-- No Editar promotions  -->
+         <record id="no_edit_promotions" model="res.groups">
+            <field name="name">No editar Promociones</field>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+            <field name="comment">No editar promocioes ni campañas</field>
+        </record>
+        <!-- Fin No Editar promotions -->
         <!-- Margen  -->
          <record id="show_margins" model="res.groups">
             <field name="name">Show Margins</field>

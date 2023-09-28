@@ -16,6 +16,7 @@
     'summary': 'Sales campaigns and promotions',
     'depends': [
         'sale_management',
+        'd_hr_administration'
     ],
     'data': [
         'security/ir.model.access.csv',
