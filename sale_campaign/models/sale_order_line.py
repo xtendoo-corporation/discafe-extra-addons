@@ -14,6 +14,7 @@ class OrderLine(models.Model):
     promotion = fields.Boolean(
         string='In promotion',
         default=False)
+    parent_id = fields.Many2one('sale.order.line', 'Linea padre')
 
     @api.multi
     def apply_promotions(self, promotion):
@@ -47,7 +48,9 @@ class OrderLine(models.Model):
                 'product_id': product_id,
                 'product_uom_qty': free_qty,
                 'price_unit': promotion.promotion_product_price,
-                'discount': 0
+                'discount': 0,
+                'promotion': True,
+                'parent_id': self.id
             })
 
     @api.multi
@@ -83,3 +86,12 @@ class OrderLine(models.Model):
     @api.multi
     def apply_promotion_free_last(self, promotion):
         pass
+
+    @api.model
+    def unlink(self):
+        if not self.promotion:
+            son_line = self.env['sale.order.line'].search([('parent_id', '=', self.id)])
+            if son_line:
+                son_line.unlink()
+        return super().unlink()
+

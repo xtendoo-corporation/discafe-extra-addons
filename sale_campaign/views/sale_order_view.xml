@@ -13,11 +13,15 @@
                         class="oe_inline oe_link">
                     <i class="fa fa-arrow-left"/>
                 </button>
-
-<!--                <button string="Apply Promotions"-->
-<!--                        name="apply_promotions"-->
-<!--                        type="object"/>-->
-
+            </xpath>
+            <xpath expr="//field[@name='partner_id']" position="replace">
+                <field name="partner_id_readonly" invisible="1"></field>
+                <field name="partner_id" widget="res_partner_many2one" domain="[('customer','=',True)]" context="{'search_default_customer':1, 'show_address': 1, 'show_vat': True}" options="{&quot;always_reload&quot;: True}" attrs="{'readonly': [('partner_id_readonly', '=', True)]}"/>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/tree/field[@name='product_id']" position="replace">
+                <field name="promotion" invisible="1"/>
+                <field name="parent_id" invisible="1"/>
+                <field name="product_id" context="{'partner_id':parent.partner_id, 'quantity':product_uom_qty, 'pricelist':parent.pricelist_id, 'uom':product_uom, 'company_id': parent.company_id}" attrs="{'readonly': ['|',('product_updatable', '=', False),('promotion', '=', True)],'required': [('display_type', '=', False)],}" force_save="1"/>
             </xpath>
 
         </field>

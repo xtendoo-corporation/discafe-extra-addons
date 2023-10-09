@@ -1,9 +1,27 @@
-from odoo import models, api
+from odoo import models, api, fields
 import math
 
 
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
+
+    partner_id_readonly = fields.Boolean(
+        string='Partner id status',
+        default=False,
+        compute='_compute_partner_id_readonly',
+        store=True)
+
+    @api.depends('order_line')
+    def _compute_partner_id_readonly(self):
+        for order in self:
+            order.partner_id_readonly = bool(order.order_line)
+
+    # @api.onchange('order_line')
+    # def _onchange_order_lines(self):
+    #     print("*"*50)
+    #     print("order_line", self.order_line)
+    #     print("*"*50)
+    #     self._compute_partner_id_readonly
 
     @api.multi
     def apply_promotions_multi(self):
