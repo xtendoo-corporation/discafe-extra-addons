@@ -37,6 +37,8 @@ class SaleOrder(models.Model):
 
     @api.multi
     def button_next_partner(self):
+        if self.partner_id_readonly:
+            raise ValidationError(_("No puede cambiar de cliente si hay lineas en el pedido"))
         if not self.delivery_zone_id:
             return
 

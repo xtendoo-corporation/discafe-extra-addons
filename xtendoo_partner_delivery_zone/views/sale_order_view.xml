@@ -8,6 +8,7 @@
         <field name="model">sale.order</field>
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="arch" type="xml">
+
 <!--            <button name="action_draft" states="cancel" type="object" string="Set to Quotation"/>-->
 <!--            <xpath expr="//button[@name='action_unlock']" position="after">-->
 <!--                <button name="button_next_partner"-->
@@ -17,6 +18,7 @@
 <!--                    <span> Next Partner</span>-->
 <!--                </button>-->
 <!--            </xpath> -->
+
             <xpath expr="//button[@name='action_cancel']" position="after">
                 <button name="button_next_partner"
                         type="object"
@@ -27,6 +29,7 @@
             <xpath expr="//field[@name='payment_term_id']" position="after">
                 <field name="delivery_zone_id" attrs="{'readonly':[('state','in', ['done', 'cancel'])]}"/>
             </xpath>
+
         </field>
     </record>
 
