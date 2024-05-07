@@ -110,6 +110,25 @@
                         </li>
 
                     </ul>
+                    <div t-if="o.partner_shipping_id and o.partner_shipping_id != o.partner_id">
+                        <span><b>Dirección de entrega:</b></span>
+                        <ul class="list-unstyled">
+
+                            <li t-if="o.partner_shipping_id.name">
+                                <span t-field="o.partner_shipping_id.name"/>
+                            </li>
+
+                            <li t-if="o.partner_shipping_id.street">
+                                <span t-field="o.partner_shipping_id.street"/>
+                            </li>
+                            <li>
+                                <span t-if="o.partner_shipping_id.zip" t-field="o.partner_id.zip"/>
+                                <span t-if="o.partner_shipping_id.city" t-field="o.partner_id.city"/>,
+                                <span t-if="o.partner_shipping_id.country_id" t-field="o.partner_id.country_id"/>
+                            </li>
+
+                        </ul>
+                    </div>
 
                 </div>
 
@@ -182,7 +201,7 @@
 
                                         <div t-if="line.product_id">
 
-                                           
+
                                             <!-- Código -->
                                             <div class="text-left" style="width:13%;float:left;">
                                                 <t t-if="line.product_id.default_code">
