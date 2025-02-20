@@ -58,12 +58,35 @@ class ReportSaleDeliveryZone(models.AbstractModel):
 
     @api.multi
     def get_invoices_delivery_zone_date(self, delivery_zone_id, date):
-        return self.env['account.invoice'].search(
+        invoices = self.env['account.invoice'].search(
             [('delivery_zone_id', '=', delivery_zone_id),
              ('state', '!=', 'draft'),
              ('type', '=', 'out_invoice'),
              ('date_invoice', '=', date)]
         )
+        result = []
+        for invoice in invoices:
+            importe_pagado_a_fecha = 0.00
+            payments = self.env['account.payment'].search([
+                ('invoice_ids', 'in', [invoice.id]),
+                ('payment_type', '=', 'inbound'),
+                ('payment_date', '<=', date)
+            ])
+            if payments:
+                importe_pagado_a_fecha = sum(payment.amount for payment in payments)
+
+            result.append((invoice, importe_pagado_a_fecha))
+
+        return result
+
+    # @api.multi
+    # def get_invoices_delivery_zone_date(self, delivery_zone_id, date):
+    #     return self.env['account.invoice'].search(
+    #         [('delivery_zone_id', '=', delivery_zone_id),
+    #          ('state', '!=', 'draft'),
+    #          ('type', '=', 'out_invoice'),
+    #          ('date_invoice', '=', date)]
+    #     )
 
     @api.multi
     def get_payments_delivery_zone_date(self, delivery_zone_id, date):

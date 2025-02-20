@@ -179,25 +179,25 @@
                         <t t-foreach="invoices" t-as="invoice">
                             <tr style="line-height:10px; margin: 0px 0px 0px 0px;">
                                 <td style="border: none;">
-                                    <span t-esc="invoice.number"/>
+                                    <span t-esc="invoice[0].number"/>
                                 </td>
                                 <td style="border: none;">
-                                    <span t-esc="invoice.partner_id.ref"/>-
-                                    <span t-esc="invoice.partner_id.display_name"/>
+                                    <span t-esc="invoice[0].partner_id.ref"/>-
+                                    <span t-esc="invoice[0].partner_id.display_name"/>
                                 </td>
                                 <td align="right" style="border: none;">
-                                    <span t-esc="invoice.amount_total_signed"
+                                    <span t-esc="invoice[0].amount_total_signed"
                                         t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
                                 </td>
                                 <td align="right" style="border: none;">
-                                    <span t-esc="invoice.amount_total_signed - invoice.residual_signed"
+                                    <span t-esc="invoice[1]"
                                         t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
                                 </td>
                             </tr>
                             <t t-set="invoice_subtotal"
-                                t-value="invoice_subtotal + invoice.amount_total_signed"/>
+                                t-value="invoice_subtotal + invoice[0].amount_total_signed"/>
                             <t t-set="invoice_payments"
-                                t-value="invoice_payments + invoice.amount_total_signed - invoice.residual_signed"/>
+                                t-value="invoice_payments + invoice[1]"/>
                         </t>
                     </tbody>
                     <tfoot>
