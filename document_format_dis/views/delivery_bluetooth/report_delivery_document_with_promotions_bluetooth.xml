@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
+<!-- Esta vista se encarga de mostrar los productos en los albaranes, siempre que su precio sea menor a 0 euros -->
 <odoo>
-
+    <!-- Odoo 13  -->
     <data>
 
         <template id="document_format_dis.report_delivery_bluetooth_with_promotions">
@@ -9,18 +9,19 @@
             <t t-name="document_format_dis.report_delivery_bluetooth_with_promotions">
 
                 <t t-set="isPromo" t-value="0"></t>
-                 <t t-set="numLines" t-value="0"></t>
+                <t t-set="doc" t-value="o"/>
+                <t t-set="numLines" t-value="0"></t>
 
-                 <t t-foreach="o.move_line_ids" t-as="move_line">
-                     <t t-if="move_line.move_id.sale_line_id.price_unit == 0.0">
-                         <t t-set="isPromo" t-value="1"></t>
-                         <t t-set="numLines" t-value="numLines + 1"></t>
+                <!-- Comprobación de si ha productos con promoción -->
+                <t t-foreach="o.move_line_ids" t-as="move_line">
+                    <t t-if="move_line.move_id.sale_line_id.price_unit == 0.0">
+                        <t t-set="isPromo" t-value="1"></t>
+                        <t t-set="numLines" t-value="numLines + 1"></t>
 
-                     </t>
-                 </t>
-                        <t t-if="isPromo == 1">
-
-                <t t-call="web.html_container">
+                    </t>
+                </t>
+                <!-- Condicional que nos indica si la comprobación fue exitosa o no -->
+                <t t-if="isPromo == 1">
 
                     <t t-set="o" t-value="o.with_context(lang=o.partner_id.lang)"/>
                     <t t-set="partner"
@@ -34,52 +35,53 @@
 
                     <div class="page">
 
-                         <!-- Cabecera documento -->
+                        <!-- Cabecera documento (No usamos la plantilla para evitar saltos de página si hay promociones) -->
 
-                    <div class="col-6" style="display:block; width:80%; margin:25px auto;">
-                        <img t-if="res_company.logo"
-                             t-att-src="image_data_uri(res_company.logo)" alt="Logo"
-                             style="width:60%;margin-left:20%;"/>
-                    </div>
 
-                    <div style="font-size:1em;font-weight:bolder;text-align:center;">
-
-                        <div>
-                            <span t-if="res_company.name" t-field="res_company.name"/>
+                        <div class="col-6" style="display:block; width:80%; margin:25px auto;">
+                            <img t-if="res_company.logo"
+                                 t-att-src="image_data_uri(res_company.logo)" alt="Logo"
+                                 style="width:60%;margin-left:20%;"/>
                         </div>
 
-                        <div>
-                            <span t-if="res_company.street"
-                                    t-field="res_company.street"/>.
-                            <span t-if="res_company.zip" t-field="res_company.zip"/>
-                            <span t-if="res_company.city" t-field="res_company.city"/>
-                        </div>
+                        <div style="font-size:1em;font-weight:bolder;text-align:center;">
 
-                        <div>
-                            <!--<span t-if="res_company.zip" t-field="res_company.zip"/> <span t-if="res_company.city" t-field="res_company.city"/>
-                          (<span t-if="res_company.state_id.name" t-field="res_company.state_id.name"/>)-->
-                        </div>
-
-                        <div>
-                            <div t-if="res_company.phone" style="width:50%;float:left;">
-                                <div style="text-align:right;margin-right:5px;">
-                                    <span>TLF.:</span>
-                                    <span t-field="res_company.phone"/>
-                                </div>
+                            <div>
+                                <span t-if="res_company.name" t-field="res_company.name"/>
                             </div>
 
-                            <div t-if="res_company.vat" style="width:50%;float:left;">
-                                <div style="text-align:left;margin-left:5px;">
-                                    <span>N.I.F.:</span>
-                                    <span t-field="res_company.vat"/>
+                            <div>
+                                <span t-if="res_company.street"
+                                      t-field="res_company.street"/>.
+                                <span t-if="res_company.zip" t-field="res_company.zip"/>
+                                <span t-if="res_company.city" t-field="res_company.city"/>
+                            </div>
+
+                            <div>
+                                <!--<span t-if="res_company.zip" t-field="res_company.zip"/> <span t-if="res_company.city" t-field="res_company.city"/>
+                              (<span t-if="res_company.state_id.name" t-field="res_company.state_id.name"/>)-->
+                            </div>
+
+                            <div>
+                                <div t-if="res_company.phone" style="width:50%;float:left;">
+                                    <div style="text-align:right;margin-right:5px;">
+                                        <span>TLF.:</span>
+                                        <span t-field="res_company.phone"/>
+                                    </div>
                                 </div>
+
+                                <div t-if="res_company.vat" style="width:50%;float:left;">
+                                    <div style="text-align:left;margin-left:5px;">
+                                        <span>N.I.F.:</span>
+                                        <span t-field="res_company.vat"/>
+                                    </div>
+                                </div>
+
                             </div>
 
                         </div>
 
-                    </div>
-
-                    <!-- Fin Cabecera documento -->
+                        <!-- Fin Cabecera documento -->
 
                         <hr style="height:3px; background-color:black;clear:both;"></hr>
 
@@ -91,8 +93,8 @@
                                 <span t-field="o.partner_id.name"/>
                             </div>
 
-                            <div t-if="o.partner_id.comercial">
-                                <span t-field="o.partner_id.comercial"/>
+                            <div t-if="'comercial' in doc.partner_id and doc.partner_id.comercial">
+                                <span t-field="doc.partner_id.comercial"/>
                             </div>
 
                             <div t-if="o.partner_id.street">
@@ -142,7 +144,8 @@
                         <div style="margin-top:20px;width:60%;float:left;margin-bottom:10px;">
 
                             <div t-if="o.picking_type_id.id == 5">
-                                <span style="font-weight:bolder;color:black;display:block;">Albarán de entrega:</span>
+                                <span style="font-weight:bolder;color:black;display:block;">Albarán de entrega:
+                                </span>
                             </div>
 
                             <div t-if="o.picking_type_id.id == 3">
@@ -266,13 +269,17 @@
 
                             <div style="width:25%;float:left;text-align:right;">
 
-                                <b><span>Uds</span></b>
+                                <b>
+                                    <span>Uds</span>
+                                </b>
 
                             </div>
 
                             <div style="width:25%;float:left;text-align:right;">
 
-                                <b><span>Precio/U</span></b>
+                                <b>
+                                    <span>Precio/U</span>
+                                </b>
 
                             </div>
 
@@ -284,7 +291,9 @@
                                     </t>
                                 </t>
                                 <t t-if="ifDiscount == 1">
-                                    <b><span>Dto%</span></b>
+                                    <b>
+                                        <span>Dto%</span>
+                                    </b>
                                 </t>
                                 <t t-else="">
                                     <span style="color:white;">Dto%</span>
@@ -292,15 +301,17 @@
 
                             </div>
 
-                           <!-- <div style="width:15%;float:left;text-align:right;">
+                            <!-- <div style="width:15%;float:left;text-align:right;">
 
-                                <b><span>IVA</span></b>
+                                 <b><span>IVA</span></b>
 
-                            </div> -->
+                             </div> -->
 
                             <div style="width:25%;float:left;text-align:right;">
 
-                                <b><span>Total</span></b>
+                                <b>
+                                    <span>Total</span>
+                                </b>
 
                             </div>
 
@@ -314,7 +325,8 @@
 
                         <!-- Fin separador -->
 
-                        <div t-if="o.move_line_ids and o.state=='done'" style="font-size:0.8em;margin-top:5px;padding-bottom:5px;">
+                        <div t-if="o.move_line_ids and o.state=='done'"
+                             style="font-size:0.8em;margin-top:5px;padding-bottom:5px;">
 
 
                             <t t-set="importeTotal" t-value="0"></t>
@@ -329,26 +341,28 @@
                             <t t-set="ActLine" t-value="0"></t>
                             <t t-set="addSeparator" t-value="1"></t>
                             <t t-foreach="o.move_line_ids" t-as="move_line">
-                            <t t-if="move_line.move_id.sale_line_id.price_unit == 0.00">
-                                <t t-set="ActLine" t-value="ActLine +1"></t>
-                                <t t-if="ActLine == numLines">
-                                    <t t-set="addSeparator" t-value="0"></t>
-                                </t>
-                               <!-- Fila 1: Producto -->
+                                <t t-if="move_line.move_id.sale_line_id.price_unit == 0.00">
+                                    <t t-set="ActLine" t-value="ActLine +1"></t>
+                                    <t t-if="ActLine == numLines">
+                                        <t t-set="addSeparator" t-value="0"></t>
+                                    </t>
+                                    <!-- Fila 1: Producto -->
 
-                                <div style="width:100%;clear:both;">
-                                    <span t-field="move_line.product_id"/>
-                                </div>
+                                    <div style="width:100%;clear:both;">
+                                        <span t-field="move_line.product_id"/>
+                                    </div>
 
-                                 <!-- Fin fila 1: Producto -->
-                                 <!-- Fila 2: Lote -->
+                                    <!-- Fin fila 1: Producto -->
+                                    <!-- Fila 2: Lote -->
 
-                                <div style="width:97%;margin-left:3%;">
+                                    <div style="width:97%;margin-left:3%;">
 
 
                                         <!-- Lote -->
                                         <div style="width:100%;" t-if="move_line.lot_id">
-                                            <span><b>Lote:</b></span>
+                                            <span>
+                                                <b>Lote:</b>
+                                            </span>
                                             <span t-field="move_line.lot_id"/>
                                         </div>
                                         <!-- Fin Lote -->
@@ -361,7 +375,8 @@
                                         <!--Unidades -->
                                         <div style="width:25%;float:left;text-align:right;">
                                             <t t-if="move_line.qty_done">
-                                                <span style="text-align:right;display:block" t-esc="'%.0f'%(move_line.qty_done)"/>
+                                                <span style="text-align:right;display:block"
+                                                      t-esc="'%.0f'%(move_line.qty_done)"/>
                                             </t>
                                             <t t-else="">
                                                 <span style="text-align:right;display:block;color:white;">aa</span>
@@ -371,7 +386,9 @@
                                         <!-- Precio -->
                                         <div style="width:25%;float:left;text-align:right;">
                                             <t t-if="move_line.move_id.sale_line_id.price_unit">
-                                                <span style="text-align:right;display:block;"><span t-esc="'%.2f'%move_line.move_id.sale_line_id.price_unit"/>€</span>
+                                                <span style="text-align:right;display:block;"><span
+                                                    t-esc="'%.2f'%move_line.move_id.sale_line_id.price_unit"/>€
+                                                </span>
                                             </t>
                                             <t t-else="">
                                                 <span style="text-align:right;display:block;">0.00</span>
@@ -382,7 +399,9 @@
                                         <!-- Descuento -->
                                         <div style="width:25%;float:left;text-align:right;">
                                             <t t-if="move_line.move_id.sale_line_id.discount">
-                                                <span style="text-align:right;display:block;"><span t-esc="'%.2f'%move_line.move_id.sale_line_id.discount"/>%</span>
+                                                <span style="text-align:right;display:block;"><span
+                                                    t-esc="'%.2f'%move_line.move_id.sale_line_id.discount"/>%
+                                                </span>
                                             </t>
                                             <t t-else="">
                                                 <span style="text-align:right;display:block;color:white;">aa</span>
@@ -407,28 +426,32 @@
 
                                         <!-- Fin IVA -->
                                         <!-- Neto -->
-                                         <div style="width:25%;float:left;text-align:right;">
+                                        <div style="width:25%;float:left;text-align:right;">
 
-                                            <span style="text-align:right;display:block;"><span t-esc="'%.2f'%(move_line.move_id.sale_line_id.price_reduce*move_line.move_id.sale_line_id.qty_delivered)"/>€</span>
+                                            <span style="text-align:right;display:block;">
+                                                <span
+                                                    t-esc="'%.2f'%(move_line.move_id.sale_line_id.price_reduce*move_line.move_id.sale_line_id.qty_delivered)"/>
+                                                €
+                                            </span>
                                             <t t-set="importeTotal"
-                                       t-value="importeTotal + (move_line.move_id.sale_line_id.price_reduce*move_line.move_id.sale_line_id.qty_delivered)"></t>
+                                               t-value="importeTotal + (move_line.move_id.sale_line_id.price_reduce*move_line.move_id.sale_line_id.qty_delivered)"></t>
                                         </div>
                                         <!-- Fin Neto -->
 
 
                                     </div>
                                     <!--Fila 3: datos -->
-                                <!-- Separador -->
+                                    <!-- Separador -->
 
-                        <div style="height:1px;background-color:black;clear:both;" t-if="addSeparator == 1"></div>
+                                    <div style="height:1px;background-color:black;clear:both;"
+                                         t-if="addSeparator == 1"></div>
 
-                        <!-- Fin separador -->
-                            </t>
+                                    <!-- Fin separador -->
+                                </t>
                             </t>
 
 
                         </div>
-
 
 
                         <!-- Fin Productos hecho-->
@@ -441,9 +464,10 @@
                         <!-- Firma del cliente -->
                         <div style="clear:both;"></div>
 
-                        <div style="height:100px;width:100%;border:2px solid black;margin-top:20px;">
-                              <span style="text-align:center;display:block;width:100%;">Firma del cliente:</span>
-                              <img style="width:100%;" t-attf-src="data:image/*;base64,{{o.digital_signature}}"/>
+                        <div style="height:100px;width:100%;border:2px solid black;"
+                             t-if="'digital_signature' in doc and doc.digital_signature">
+                            <span style="text-align:center;display:block;width:100%;">Firma del cliente:</span>
+                            <img style="width:100%;" t-attf-src="data:image/*;base64,{{doc.digital_signature}}"/>
                         </div>
 
                         <div style="clear:both;height:10px;" class="oe_structure"/>
@@ -453,14 +477,14 @@
 
                         <p>
                             <t t-if="o.backorder_ids and o.backorder_ids.filtered(lambda x: x.state not in ('done', 'cancel'))">
-                                All items couldn't be shipped, the remaining ones will be shipped as soon as they become
+                                All items couldn't be shipped, the remaining ones will be shipped as soon as they
+                                become
                                 available.
                             </t>
                         </p>
 
                     </div>
 
-                </t>
 
                 </t>
             </t>

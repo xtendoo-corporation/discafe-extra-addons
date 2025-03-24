@@ -1,116 +1,94 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Esta vista se encarga de sobreescribir la cabacera y el pie por defecto -->
 <odoo>
     <data>
 
-        <template id="document_format_dis.external_layout_clean_dis" inherit_id="web.external_layout_clean">
 
-            <!-- Header -->
+        <!-- Le indicamos de quien debe heredar -->
+        <template id="document_format_dis.external_layout_clean_dis" inherit_id="web.external_layout_standard">
 
-            <xpath expr="//div[@class='o_clean_header']" position="replace">
-                <div>
-                    <div class="col-6" style="display:block; width:27%;float:left;margin-left:-5%;margin-top:15px;">
+            <!-- Sustituimos la 1 aparición de un div con la clase row por nuestra cabecera personalizada -->
+           <xpath expr="(//div[contains(@class, 'row')])[1]" position="replace">
+                <div style="position: absolute; left: 5px; width: 100%; top: 10px;">
+                    <div class="col-6" style="width:27%; float:left; margin-left:-5%;">
                         <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" alt="Logo"
-                             style="width:100%;max-height:200px;"/>
+                             style="width:100%; max-height:200px; margin-right:5%"/>
                     </div>
-                    <div style="width:70%; display:block;float:left;margin-top:20px;">
+                    <div style="width:70%; float:left;">
                         <strong>
                             <div t-if="company.name">
-                                <span style="color:black; margin-bottom:0px" t-field="company.name"/>
+                                <span style="color:black;" t-field="company.name"/>
                             </div>
                         </strong>
-                        <hr style="heigth:5px; color:black; margin: 3px"></hr>
-                        <div class="col-5 offset-1" name="company_address"
-                             style="color:black; display:inline; width:50%">
-                            <div style="width:50%; display:block; float:left">
-                                <span>
-                                </span>
-                                <ul class="list-unstyled">
-
+                        <hr style="height:2px; color:black; margin:3px;"/>
+                        <div name="company_address" style="color:black; width:100%; overflow:hidden;">
+                            <div style="width:50%; float:left;">
+                                <ul style="margin:0; padding:0; list-style:none;">
                                     <li>
-                                        <div t-if="company.street" style="display:inline-block">
-                                            <span t-field="company.street"/>
-                                        </div>
-                                        <div t-if="company.street2" style="display:inline-block">
-                                            <span>,</span><span t-field="company.street2"/>
-                                        </div>
+                                        <span t-if="company.street" t-field="company.street"/>
+                                        <t t-if="company.street2">
+                                            ,
+                                            <span t-field="company.street2"/>
+                                        </t>
                                     </li>
-
                                     <li>
-                                        <div t-if="company.zip" style="display:inline">
-                                            <span t-field="company.zip"/>
-                                        </div>
-                                        <div t-if="company.city" style="display:inline"><span t-field="company.city"/>.
-                                        </div>
-                                        <!--<div t-if="company.state_id" style="display:inline"><span
-                                                t-field="company.state_id"/>.
-                                        </div> -->
-                                        <div t-if="company.country_id" style="display:inline">
-                                            <span t-field="company.country_id"/>
-                                        </div>
+                                        <span t-if="company.zip" t-field="company.zip"/>
+                                        <span t-if="company.city" t-field="company.city"/>
+                                        <span t-if="company.country_id" t-field="company.country_id.name"/>
                                     </li>
                                     <li t-if="company.vat">
-                                        <spam>C.I.F: :</spam>
+                                        <strong>C.I.F:</strong>
                                         <span t-field="company.vat"/>
                                     </li>
-
                                 </ul>
                             </div>
-                            <div style="width:50%; display:block; float:left">
-                                <span>
-                                </span>
-                                <ul class="list-unstyled">
-                                    <li>
-                                        <div t-if="company.phone" style="display:inline">
-                                            <span t-field="company.phone"/>
-                                        </div>
+                            <div style="width:50%; float:left;">
+                                <ul style="margin:0; padding:0; list-style:none;">
+                                    <li t-if="company.phone">
+                                        <span t-field="company.phone"/>
                                     </li>
-                                     <li>
-                                        <div t-if="company.email" style="clear:both;text-align:left;width:100%;">
-                                            <span t-field="company.email"/>
-                                        </div>
+                                    <li t-if="company.email">
+                                        <span t-field="company.email"/>
                                     </li>
-                                    <li>
-                                        <div t-if="company.website" style="display:inline">
-                                            <span t-field="company.website"/>
-                                        </div>
+                                    <li t-if="company.website">
+                                        <span t-field="company.website"/>
                                     </li>
                                 </ul>
                             </div>
-
-
                         </div>
-
                     </div>
                 </div>
 
                 <div style="clear:both;"></div>
+            </xpath>
+
+            <!-- vaciamos algunas partes que nos causaban problemas -->
+              <xpath expr="(//div[contains(@class, 'row')])[2]" position="replace">
+                <div/>
+            </xpath>
+            <xpath expr="(//div[contains(@class, 'col-12')])[1]" position="replace">
+                <div/>
+            </xpath>
+
+             <!-- Sustituimos también el footer -->
+            <xpath expr="//div[@class='text-center']" position="replace">
+                <div class="row mt8">
+                    <div>
+                        <span style="font-weight:bolder;font-size:0.9em;">
+                            Inscrita en el Reg. Mercantil de Huelva, Tpmp 762,
+                            Libro 0, Folio 150, Sección 8ª, Hoja H13722/h, Inscrip. 1ª 10/05/05
+                        </span>
+                    </div>
+                    <div style="width:95%; float:left; font-size:0.5em">
+                        <span t-field="company.report_footer"/>
+                    </div>
+                </div>
+
 
             </xpath>
 
-            <!-- Fin Header -->
-
-            <!-- Footer -->
-
-            <xpath expr="//div[@class='row mt8']" position="replace">
-
-                <div>
-                    <span style="font-weight:bolder;font-size:0.9em;">Inscrita en el Reg. Mercantil de Huelva, Tpmp 762,
-                        Libro 0, Folio 150, Sección 8ª, Hoja H13722/h, Inscrip. 1ª 10/05/05
-                    </span>
-                </div>
-                <div style="width:95%; float:left; font-size:0.5em">
-                    <span t-field="company.report_footer"/>
-                </div>
-                <!-- <div class="col-1" style="width:5%; float:left;">
-                     <ul style="background-color:red; border-color:red; display:none;" t-if="report_type == 'pdf'" class="list-inline pagenumber float-right text-center">
-                       <li class="list-inline-item"><strong><span class="page"/></strong></li>
-                     </ul>
-                 </div>-->
-
-            </xpath>
-
-            <!-- Fin footer -->
 
         </template>
+
     </data>
 </odoo>

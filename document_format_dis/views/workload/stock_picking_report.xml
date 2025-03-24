@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Esta vista se encarga de llamar a las dos vistas de Albarán -->
+<!-- Este reporte se puede imprimir desde: Inventario > Operaciones > Transferencias > Imprimir > Informe de carga -->
 
 <odoo>
 
     <data>
 
-        <record id="A4_picking_report" model="report.paperformat">
+        <!-- Formato de papel para el informe de carga -->
+        <record id="A4_picking_report_print" model="report.paperformat">
             <field name="name">A4 Picking Report</field>
             <field name="default" eval="False"/>
             <field name="format">custom</field>
@@ -20,22 +23,32 @@
             <field name="dpi">90</field>
         </record>
 
-         <report id="stock_picking_report"
+        <!-- Definición del reporte -->
+        <report id="stock_picking_report_print"
                 string="Informe de carga"
                 model="stock.picking"
                 report_type="qweb-pdf"
                 name="document_format_dis.stock_picking_report"
+                file="stock.stock_picking_report"
                 print_report_name="'Informe de carga - %s - %s' % (object.partner_id.name or '', object.name)"
         />
 
-         <record id="document_format_dis.stock_picking_report" model="ir.actions.report">
-            <field name="paperformat_id" ref="document_format_dis.A4_picking_report"/>
+        <!-- Acción del reporte asociada al formato de papel -->
+        <record id="document_format_dis.stock_picking_report_action" model="ir.actions.report">
+            <field name="name">Informe de carga</field>
+            <field name="model">stock.picking</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">document_format_dis.stock_picking_report</field>
+            <field name="paperformat_id" ref="document_format_dis.A4_picking_report_print"/>
         </record>
 
+        <!-- Plantilla principal del reporte -->
         <template id="document_format_dis.stock_picking_report">
-            <t t-call="web.html_container">
-                <t t-foreach="docs" t-as="o">
-                    <t t-call="document_format_dis.stock_picking_report_charge" t-lang="o.partner_id.lang"/>
+            <t t-name="document_format_dis.stock_picking_report">
+                <t t-call="web.html_container">
+                    <t t-foreach="docs" t-as="o">
+                        <t t-call="document_format_dis.stock_picking_report_charge" t-lang="o.partner_id.lang"/>
+                    </t>
                 </t>
             </t>
         </template>
@@ -44,7 +57,9 @@
 
             <t t-name="document_format_dis.stock_picking_report_charge">
 
-               <t t-call="web.external_layout">
+                <!-- llamada a la cabecera y pie y declaración de variables -->
+              <t t-set="company" t-value="o.company_id"/>
+                <t t-call="web.external_layout_standard">
 
                         <div class="page">
 

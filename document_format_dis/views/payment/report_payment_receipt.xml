@@ -24,14 +24,17 @@
                 string="Recibo de Pago"
                 model="account.payment"
                 report_type="qweb-pdf"
-                name="document_format_dis.report_payment_receipt"
-        />
+                name="document_format_dis.report_payment_receipt_template"/>
 
-        <record id="document_format_dis.report_payment_receipt" model="ir.actions.report">
+        <record id="document_format_dis.report_payment_receipt_print" model="ir.actions.report">
+            <field name="name">Recibo de Pago</field>
+            <field name="model">account.payment</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">document_format_dis.report_payment_receipt_print</field>
             <field name="paperformat_id" ref="document_format_dis.payment_A4"/>
         </record>
 
-        <template id="document_format_dis.report_payment_receipt">
+        <template id="document_format_dis.report_payment_receipt_template">
             <t t-call="web.html_container">
                 <t t-foreach="docs" t-as="o">
                     <t t-set="lang" t-value="o.partner_id.lang"/>
@@ -41,53 +44,66 @@
         </template>
 
         <template id="document_format_dis.report_payment_receipt_document">
-            <t t-call="web.external_layout">
-                <t t-set="o" t-value="o.with_context({'lang': lang})"/>
-                <div class="page">
+            <t t-set="o" t-value="o.with_context({'lang': lang})"/>
+            <t t-set="doc" t-value="o"/>
+             <t t-set="company" t-value="doc.company_id"/>
+            <t t-call="web.external_layout_standard">
+                <div class="page"  style="margin-top: 20px;">
                     <!-- Datos del documento -->
                     <div>
-                        <div style="width:50%;float:left;">
-                            <ul class="list-unstyled">
+                        <div style="width: 100%; display: flex; align-items: flex-start;">
+                            <ul class="list-unstyled" style="list-style: none; padding-left: 0; margin: 0;">
 
                                 <!-- Nombre -->
-                                <li>
+                                <li style="margin-bottom: 5px;">
 
-                                    <b><span>Recibo: </span></b>
+                                    <b>
+                                        <span>Recibo:</span>
+                                    </b>
                                     <span t-field="o.name"/>
 
-                                </li>
+                                </li >
                                 <!-- Fin nombre -->
                                 <!-- Fecha -->
 
-                                <li>
+                                <li style="margin-bottom: 5px;">
 
-                                    <b><span>Fecha: </span></b>
+                                    <b>
+                                        <span>Fecha:</span>
+                                    </b>
                                     <span t-field="o.payment_date"/>
 
                                 </li>
                                 <!-- Fin fecha -->
                                 <!-- Método de pago -->
 
-                                <li>
+                                <li style="margin-bottom: 5px;">
 
-                                    <b><span>Método de pago: </span></b>
+                                    <b>
+                                        <span>Método de pago:</span>
+                                    </b>
                                     <span t-field="o.payment_method_id.name"/>
 
                                 </li>
                                 <!-- Fin método de pago -->
                                 <!-- Cantidad -->
 
-                                <li>
+                                <li style="margin-bottom: 5px;">
 
-                                    <b><span>Cantidad pagada: </span></b>
-                                    <span t-field="o.amount" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                                    <b>
+                                        <span>Cantidad pagada:</span>
+                                    </b>
+                                    <span t-field="o.amount"
+                                          t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
 
                                 </li>
                                 <!-- Fin Cantidad -->
                                 <!-- Referencia -->
-                                <li>
+                                <li style="margin-bottom: 5px;">
 
-                                    <b><span>Referencia: </span></b>
+                                    <b>
+                                        <span>Referencia:</span>
+                                    </b>
                                     <span t-field="o.communication"/>
 
                                 </li>
@@ -96,44 +112,41 @@
                             </ul>
                         </div>
 
-                        <div style="width:50%;float:left;">
-                             <ul class="list-unstyled">
-                                 <!-- Nombre comercial -->
+                        <div style="margin-top:-74px; width: 40%; text-align: left; margin-left: auto; margin-right: 5%; align-self: flex-start; display: flex; flex-direction: column; justify-content: flex-start; min-height: 100px;">
+                            <ul class="list-unstyled" style="list-style: none; padding-left: 0; margin: 0;">
 
-                                  <li t-if="o.partner_id.comercial">
-                                   <span t-field="o.partner_id.comercial" />
-                                  </li>
+                                <!-- Nombre -->
 
-                                  <!-- Fin nombre comercial -->
-                                  <!-- Nombre -->
+                                <li t-if="o.partner_id.name" style="margin-bottom: 5px;">
+                                    <span t-field="o.partner_id.name"/>
+                                </li>
 
-                                  <li t-if="o.partner_id.name">
-                                   <span t-field="o.partner_id.name" />
-                                  </li>
+                                <!-- Fin nombre -->
+                                <!-- Calle -->
 
-                                 <!-- Fin nombre -->
-                                 <!-- Calle -->
+                                <li t-if="o.partner_id.street" style="margin-bottom: 5px;">
+                                    <span t-field="o.partner_id.street"/>
+                                </li>
 
-                                  <li t-if="o.partner_id.street" >
-                                   <span t-field="o.partner_id.street" />
-                                  </li>
+                                <!-- Fin calle -->
+                                <!-- Dirección -->
 
-                                 <!-- Fin calle -->
-                                 <!-- Dirección -->
+                                <li style="margin-bottom: 5px;">
+                                    <span t-if="o.partner_id.zip" t-field="o.partner_id.zip"/>
+                                    <span t-if="o.partner_id.city" t-field="o.partner_id.city"/>,
+                                    <span t-if="o.partner_id.country_id" t-field="o.partner_id.country_id"/>
+                                </li>
 
-                                  <li>
-                                    <span t-if="o.partner_id.zip" t-field="o.partner_id.zip" /> <span t-if="o.partner_id.city" t-field="o.partner_id.city" />, <span t-if="o.partner_id.country_id" t-field="o.partner_id.country_id" />
-                                  </li>
+                                <!-- Fin dirección -->
+                                <!-- CIF -->
 
-                                 <!-- Fin dirección -->
-                                 <!-- CIF -->
+                                <li t-if="o.partner_id.vat" style="margin-bottom: 5px;">
+                                    CIF:
+                                    <span t-field="o.partner_id.vat"/>
+                                </li>
 
-                                  <li t-if="o.partner_id.vat" >
-                                    CIF:  <span t-field="o.partner_id.vat"/>
-                                  </li>
-
-                                 <!-- Fin CIF -->
-                                </ul>
+                                <!-- Fin CIF -->
+                            </ul>
 
                         </div>
 
@@ -152,27 +165,37 @@
 
                             <div style="width:27.5%;float:left;">
 
-                                <b><span>Fecha factura</span></b>
+                                <b>
+                                    <span>Fecha factura</span>
+                                </b>
 
                             </div>
                             <div style="width:27.5%;float:left;">
 
-                                <b><span>Factura</span></b>
+                                <b>
+                                    <span>Factura</span>
+                                </b>
 
                             </div>
                             <div style="width:15%;float:left;text-align:right;">
 
-                                <b><span>Total</span></b>
+                                <b>
+                                    <span>Total</span>
+                                </b>
 
                             </div>
                             <div style="width:15%;float:left;text-align:right;">
 
-                                <b><span>Pagado</span></b>
+                                <b>
+                                    <span>Pagado</span>
+                                </b>
 
                             </div>
                             <div style="width:15%;float:left;text-align:right;">
 
-                                <b><span>Diferencia</span></b>
+                                <b>
+                                    <span>Diferencia</span>
+                                </b>
 
                             </div>
 
@@ -187,57 +210,61 @@
                         <div>
                             <t t-foreach="o.reconciled_invoice_ids" t-as="inv">
 
-                                 <div style="width:27.5%;float:left;">
-                                     <t t-if="inv.date_invoice">
-                                         <span t-field="inv.date_invoice"/>
-                                     </t>
-                                     <t t-else="">
-                                         <span style="color:white;">aaaa</span>
-                                     </t>
-
+                                <div style="width:27.5%;float:left;">
+                                    <t t-if="inv.invoice_date">
+                                        <span t-field="inv.invoice_date"/>
+                                    </t>
+                                    <t t-else="">
+                                        <span style="color:white;">aaaa</span>
+                                    </t>
                                 </div>
+
 
                                 <div style="width:27.5%;float:left;">
 
-                                    <t t-if="inv.number">
-                                        <span t-field="inv.number"/>
+                                    <t t-if="inv.name">
+                                        <span t-field="inv.name"/>
+                                    </t>
+
+
+                                    <t t-else="">
+                                        <span style="color:white;">aaaa</span>
+                                    </t>
+
+                                </div>
+                                <div style="width:15%;float:left;text-align:right;">
+
+                                    <t t-if="inv.amount_total">
+                                        <span t-field="inv.amount_total"/>
+                                    </t>
+                                    <t t-else="">
+                                        <span style="color:white;">aaaa</span>
+                                    </t>
+
+                                </div>
+                                <div style="width:15%;float:left;text-align:right;">
+
+                                    <t t-if="inv.amount_total">
+                                        <span t-esc="inv.amount_total - inv.amount_residual"
+                                              t-options="{'widget': 'monetary', 'display_currency': inv.currency_id}"/>
+                                    </t>
+                                    <t t-else="">
+                                        <span style="color:white;">aaaa</span>
+                                    </t>
+
+                                </div>
+                                <div style="width:15%;float:left;text-align:right;">
+
+                                    <t t-if="inv.amount_residual">
+                                        <span t-field="inv.amount_residual"
+                                              t-options="{'widget': 'monetary', 'display_currency': inv.currency_id}"/>
                                     </t>
 
                                     <t t-else="">
-                                         <span style="color:white;">aaaa</span>
-                                     </t>
+                                        <span>0.00</span>
+                                    </t>
 
-                            </div>
-                            <div style="width:15%;float:left;text-align:right;">
-
-                                <t t-if="inv.amount_total">
-                                    <span t-field="inv.amount_total"/>
-                                </t>
-                                <t t-else="">
-                                    <span style="color:white;">aaaa</span>
-                                </t>
-
-                            </div>
-                            <div style="width:15%;float:left;text-align:right;">
-
-                                <t t-if="inv.amount_total">
-                                    <span t-esc="inv.amount_total - inv.residual" t-options="{'widget': 'monetary', 'display_currency': inv.currency_id}"/>
-                                </t>
-                                <t t-else="">
-                                    <span style="color:white;">aaaa</span>
-                                </t>
-
-                            </div>
-                            <div style="width:15%;float:left;text-align:right;">
-
-                                <t t-if="inv.residual">
-                                    <span t-field="inv.residual"/>
-                                </t>
-                                <t t-else="">
-                                    <span>0.00</span>
-                                </t>
-
-                            </div>
+                                </div>
 
                             </t>
                         </div>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
+<!-- Esta vista se encarga de llamar a las dos vistas de albarán bluetooth -->
+<!-- Este reporte se puede imprimir desde: Inventario > Operaciones > Transferencias > Imprimir > Albarán Bluetooth-->
 <odoo>
 
     <data>
@@ -20,28 +21,37 @@
             <field name="dpi">90</field>
         </record>
 
-        <report id="document_format_dis.report_delivery_promotions_bluetooh"
+        <!-- Definición del reporte con el nombre corregido -->
+        <report id="document_format_dis.report_delivery_promotions_bluetooth_action"
                 string="Albarán Bluetooth"
                 model="stock.picking"
                 report_type="qweb-pdf"
-                name="document_format_dis.report_delivery_promotions_bluetooh"
+                name="document_format_dis.report_delivery_promotions_bluetooth"
+                file="stock.report_delivery_promotions_bluetooth"
                 print_report_name="'Delivery Slip - %s - %s' % (object.partner_id.name or '', object.name)"
         />
 
-        <record id="document_format_dis.report_delivery_promotions_bluetooh" model="ir.actions.report">
+        <!-- Acción del reporte con el formato de papel corregido -->
+        <record id="document_format_dis.report_delivery_promotions_bluetooth_action" model="ir.actions.report">
+            <field name="name">Albarán Bluetooth</field>
+            <field name="model">stock.picking</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">document_format_dis.report_delivery_promotions_bluetooth</field>
             <field name="paperformat_id" ref="document_format_dis.bluetooth_delivery_2"/>
         </record>
 
-        <template id="document_format_dis.report_delivery_promotions_bluetooh">
-             <t t-name="document_format_dis.report_delivery_promotions_bluetooh">
+        <!-- Plantilla del reporte -->
+        <template id="document_format_dis.report_delivery_promotions_bluetooth">
+            <t t-name="document_format_dis.report_delivery_promotions_bluetooth">
                 <t t-call="web.html_container">
                     <t t-foreach="docs" t-as="o">
                         <t t-call="document_format_dis.report_delivery_bluetooth_without_promotions" t-lang="o.partner_id.lang"/>
                         <t t-call="document_format_dis.report_delivery_bluetooth_with_promotions" t-lang="o.partner_id.lang"/>
                     </t>
                 </t>
-             </t>
+            </t>
         </template>
 
     </data>
+
 </odoo>

@@ -1,39 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Esta vista se encarga de mostrar los productos en los albaranes, siempre que su precio sea menor a 0 euros -->
 
 <odoo>
-
+    <!-- Odoo 13  -->
     <data>
 
         <template id="document_format_dis.report_delivery_document_promotions">
 
-             <t t-name="document_format_dis.report_delivery_document_promotions">
+            <t t-name="document_format_dis.report_delivery_document_promotions">
 
-                   <t t-call="web.external_layout">
+                <!-- llamada a la cabecera y pie y declaración de variables -->
+                <t t-set="doc" t-value="o"/>
+                <t t-set="company" t-value="doc.company_id"/>
+                <t t-call="web.external_layout_standard">
 
-                        <div class="page">
+                    <!-- Empieza el contenido -->
+                    <div class="page">
 
-                            <t t-set="isPromo" t-value="0"></t>
+                        <!-- Comprobación de si ha productos con promoción -->
+                        <t t-set="isPromo" t-value="0"></t>
+                        <t t-foreach="o.move_ids_without_package.sorted(key=lambda m: m.product_id.id)" t-as="move">
+                            <t t-foreach="move.move_line_ids.sorted(key=lambda ml: ml.location_id.id)" t-as="ml">
+                                <t t-if="ml.move_id.sale_line_id.price_unit == 0.0">
 
-                             <t t-foreach="o.move_ids_without_package.sorted(key=lambda m: m.product_id.id)" t-as="move">
-                                <t t-foreach="move.move_line_ids.sorted(key=lambda ml: ml.location_id.id)" t-as="ml">
-                                    <t t-if="ml.move_id.sale_line_id.price_unit == 0.0">
-
-                                            <t t-set="isPromo" t-value="1"></t>
-                                    </t>
+                                    <t t-set="isPromo" t-value="1"></t>
                                 </t>
-                             </t>
+                            </t>
+                        </t>
 
-                            <t t-if="isPromo == 1">
+                        <!-- Condicional que nos indica si la comprobación fue exitosa o no -->
+                        <t t-if="isPromo == 1">
 
-                                <div class="row">
+                            <div class="row">
 
-                                <!--Datos del documento -->
+                                <!-- Lista de la izquierda  -->
 
-                                <div style="width:50%;margin-left:15px;padding-bottom:10px;margin-top:35px;">
+                                <div style="list-style: none; padding-left: 0; margin: 0;">
 
-                                    <ul class="list-unstyled">
+                                    <ul class="list-unstyled" style="list-style: none; padding-left: 0; margin: 0;">
 
-                                        <li name="docName">
+                                        <li name="docName" style="margin-bottom: 5px;">
                                             <b>Albarán:</b>
                                             <span t-field="o.name"/>
                                         </li>
@@ -43,29 +49,29 @@
                                             <spam t-field="o.delivery_zone_id"/>
                                         </li> -->
 
-                                        <li>
+                                        <li style="margin-bottom: 5px;">
                                             <b>Estado:</b>
                                             <spam t-field="o.state"/>
                                         </li>
 
 
-                                        <li t-if="o.state == 'done'">
+                                        <li t-if="o.state == 'done'" style="margin-bottom: 5px;">
                                             <b>Fecha de entrega:</b>
                                             <span t-esc="o.date_done.strftime('%d/%m/%Y')"/>
                                         </li>
 
 
-                                        <li t-if="o.state != 'done'">
+                                        <li t-if="o.state != 'done'" style="margin-bottom: 5px;">
                                             <b>Fecha estimada:</b>
                                             <span t-esc="o.scheduled_date.strftime('%d/%m/%Y')"/>
                                         </li>
 
-                                        <li t-if="o.origin">
+                                        <li t-if="o.origin" style="margin-bottom: 5px;">
                                             <b>Pedido:</b>
                                             <span t-field="o.origin"/>
                                         </li>
 
-                                        <li t-if="o.sale_id.partner_id.ref">
+                                        <li t-if="o.sale_id.partner_id.ref" style="margin-bottom: 5px;">
                                             <b>Ref. Cliente:</b>
                                             <span t-field="o.sale_id.partner_id.ref"/>
                                         </li>
@@ -74,33 +80,35 @@
 
                                 </div>
 
-                                <!-- Fin datos documento -->
 
-                                <!-- Datos del cliente -->
+                                <!-- Lista de la derecha -->
 
-                                <div style="width:50%;margin-top:35px;">
+                                <div
+                                    style="margin-top:-74px; width: 40%; text-align: left; margin-left: auto; margin-right: 5%; align-self: flex-start; display: flex; flex-direction: column; justify-content: flex-start; min-height: 100px;">
 
-                                    <ul class="list-unstyled">
+                                    <ul class="list-unstyled" style="list-style: none; padding-left: 0; margin: 0;">
 
-                                        <li t-if="o.sale_id.partner_id.name">
+                                        <li t-if="o.sale_id.partner_id.name" style="margin-bottom: 5px;">
                                             <span t-field="o.sale_id.partner_id.name"/>
                                         </li>
 
-                                        <li t-if="o.sale_id.partner_id.comercial">
-                                            <span t-field="o.sale_id.partner_id.comercial"/>
+                                        <li t-if="doc.user_id.name" style="margin-bottom: 5px;">
+                                            <span t-field="doc.user_id"/>
                                         </li>
 
-                                        <li t-if="o.sale_id.partner_id.street">
+                                        <li t-if="o.sale_id.partner_id.street" style="margin-bottom: 5px;">
                                             <span t-field="o.sale_id.partner_id.street"/>
                                         </li>
 
-                                        <li>
+                                        <li style="margin-bottom: 5px;">
                                             <span t-if="o.sale_id.partner_id.zip" t-field="o.sale_id.partner_id.zip"/>
-                                            <span t-if="o.sale_id.partner_id.city" t-field="o.sale_id.partner_id.city"/>,
-                                            <span t-if="o.sale_id.partner_id.country_id" t-field="o.sale_id.partner_id.country_id"/>
+                                            <span t-if="o.sale_id.partner_id.city" t-field="o.sale_id.partner_id.city"/>
+                                            ,
+                                            <span t-if="o.sale_id.partner_id.country_id"
+                                                  t-field="o.sale_id.partner_id.country_id"/>
                                         </li>
 
-                                        <li t-if="o.sale_id.partner_id.vat">
+                                        <li t-if="o.sale_id.partner_id.vat" style="margin-bottom: 5px;">
                                             CIF:
                                             <span t-field="o.sale_id.partner_id.vat"/>
                                         </li>
@@ -131,7 +139,8 @@
 
                                         <div t-field="o.partner_id"
                                              t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;name&quot;, &quot;phone&quot;], &quot;no_marker&quot;: True, &quot;phone_icons&quot;: True}"/>
-                                        <p t-if="o.sudo().partner_id.vat"><t t-esc="o.company_id.country_id.vat_label or 'Tax ID'"/>
+                                        <p t-if="o.sudo().partner_id.vat">
+                                            <t t-esc="o.company_id.country_id.vat_label or 'Tax ID'"/>
                                             :
                                             <span t-field="o.sudo().partner_id.vat"/>
                                         </p>
@@ -146,17 +155,15 @@
 
                             <!-- Estado del movimiento -->
 
-                             <div style="width:100%;text-align:center;font-size:1.3em;font-weight:bolder;">
+                            <div style="width:100%;text-align:center;font-size:1.3em;font-weight:bolder;">
                                 <p>Artículos en Promoción</p>
                             </div>
 
-                            <!-- Fin estado del movimiento -->
 
-                            <!-- Productos -->
-
-                            <!--Cabecera -->
-
-                            <div style="border-bottom:2px solid black;border-right:2px solid black;border-top:2px solid black;border-left:1px solid black;height:25px;">
+                            <!-- Tabla con los productos -->
+                            <!--Cabecera de la tabla -->
+                            <div
+                                style="border-bottom:2px solid black;border-right:2px solid black;border-top:2px solid black;border-left:1px solid black;height:25px;">
 
                                 <div class="text-left" style="font-weight:bolder; color:#4f4b4b;width:13%;float:left;">
                                     <span>Código</span>
@@ -170,7 +177,8 @@
                                     <span>Descripción</span>
                                 </div>
 
-                                <div class="text-center" style="font-weight:bolder; color:#4f4b4b;float:left;width:10%;">
+                                <div class="text-center"
+                                     style="font-weight:bolder; color:#4f4b4b;float:left;width:10%;">
                                     <span>Unidades</span>
                                 </div>
 
@@ -179,18 +187,18 @@
                                 </div>
 
                                 <div class="text-right" style="font-weight:bolder; color:#4f4b4b;float:left;width:8%;">
-                                     <t t-set="ifDiscount" t-value="0"></t>
-                                        <t t-foreach="o.move_line_ids" t-as="ml">
-                                            <t t-if="ml.move_id.sale_line_id.discount">
-                                                <t t-set="ifDiscount" t-value="1"></t>
-                                            </t>
+                                    <t t-set="ifDiscount" t-value="0"></t>
+                                    <t t-foreach="o.move_line_ids" t-as="ml">
+                                        <t t-if="ml.move_id.sale_line_id.discount">
+                                            <t t-set="ifDiscount" t-value="1"></t>
                                         </t>
-                                        <t t-if="ifDiscount == 1">
-                                            <span>Dto(%)</span>
-                                        </t>
-                                        <t t-else="">
-                                            <span style="color:white;">Dto%</span>
-                                        </t>
+                                    </t>
+                                    <t t-if="ifDiscount == 1">
+                                        <span>Dto(%)</span>
+                                    </t>
+                                    <t t-else="">
+                                        <span style="color:white;">Dto%</span>
+                                    </t>
                                 </div>
 
                                 <div class="text-right" style="font-weight:bolder; color:#4f4b4b;float:left;width:10%;">
@@ -219,14 +227,17 @@
 
                                 <t t-set="has_barcode"
                                    t-value="any([move_ids_without_package.product_id and move_ids_without_package.product_id.sudo().barcode or move_ids_without_package.package_id for move_ids_without_package in o.move_line_ids])"/>
-                                <t t-set="has_serial_number" t-value="o.move_line_ids.filtered(lambda ml: ml.lot_id or ml.lot_name)"
+                                <t t-set="has_serial_number"
+                                   t-value="o.move_line_ids.filtered(lambda ml: ml.lot_id or ml.lot_name)"
                                    groups="stock.group_production_lot"/>
-                                <t t-foreach="o.move_ids_without_package.sorted(key=lambda m: m.product_id.id)" t-as="move">
-                                    <t t-foreach="move.move_line_ids.sorted(key=lambda ml: ml.location_id.id)" t-as="ml">
+                                <t t-foreach="o.move_ids_without_package.sorted(key=lambda m: m.product_id.id)"
+                                   t-as="move">
+                                    <t t-foreach="move.move_line_ids.sorted(key=lambda ml: ml.location_id.id)"
+                                       t-as="ml">
                                         <t t-if="ml.move_id.sale_line_id.price_unit == 0.00">
                                             <div style="font-size:0.9em;">
 
-                                                    <!--Código -->
+                                                <!--Código -->
 
                                                 <div style="width:13%;float:left;clear:both;text-align:left;">
                                                     <span t-field="ml.product_id.default_code"/>
@@ -252,12 +263,17 @@
                                                 <!-- Descripción -->
 
                                                 <div class="text-left" style="float:left;width:26%;">
-                                                    <t t-set="productName" t-value="ml.move_id.sale_line_id.product_id.name"></t>
+                                                    <t t-set="productName" t-value="ml.move_id.sale_line_id.name"></t>
+                                                    <t t-set="lenProductName" t-value="len(productName)"></t>
+                                                    <t t-set="isCode" t-value="productName.find(']')"></t>
 
-
+                                                    <t t-if="isCode == -1">
                                                         <spam t-esc="productName"></spam>
+                                                    </t>
 
-
+                                                    <t t-if="isCode != -1">
+                                                        <spam t-esc="productName[isCode+1:lenProductName]"></spam>
+                                                    </t>
 
                                                 </div>
 
@@ -274,8 +290,10 @@
 
                                                 <!-- Precio/u -->
 
-                                                <div class="text-right" style="float:left;width:10%;padding-right:12px;">
-                                                    <div style="width:84px;  display:block;float:left; text-align:right;">
+                                                <div class="text-right"
+                                                     style="float:left;width:10%;padding-right:12px;">
+                                                    <div
+                                                        style="width:84px;  display:block;float:left; text-align:right;">
                                                         <span t-esc="'%.2f'%ml.move_id.sale_line_id.price_unit"/>€
                                                     </div>
                                                 </div>
@@ -298,7 +316,8 @@
                                                 <!-- total linea -->
 
                                                 <div class="text-right" style="float:left;width:10%;">
-                                                    <span t-esc="'%.2f'%(ml.move_id.sale_line_id.price_reduce*ml.move_id.sale_line_id.qty_delivered)"/>
+                                                    <span
+                                                        t-esc="'%.2f'%(ml.move_id.sale_line_id.price_reduce*ml.move_id.sale_line_id.qty_delivered)"/>
                                                     €
                                                 </div>
 
@@ -357,15 +376,15 @@
 
                                             </div>
 
-                                            </t>
-
                                         </t>
+
+                                    </t>
 
                                 </t>
 
-                                    </div>
+                            </div>
 
-                                    <!-- fin lineas -->
+                            <!-- fin lineas -->
 
                             <!-- Separador -->
 
@@ -390,21 +409,23 @@
 
                             <!-- Firma del cliente -->
 
-                        <div t-if="o.digital_signature" style="height:100px;width:30%;border:2px solid black;margin-top:5px;">
-                              <span style="text-align:center;display:block;width:100%;">Firma del cliente:</span>
-                              <img style="width:100%;" t-attf-src="data:image/*;base64,{{o.digital_signature}}"/>
-                        </div>
+                            <t t-if="'digital_signature' in doc and doc.digital_signature">
+                                <div style="height:100px;width:30%;border:2px solid black;margin-top:5px;">
+                                    <span style="text-align:center;display:block;width:100%;">Firma del cliente:</span>
+                                    <img style="width:100%;"
+                                         t-attf-src="data:image/*;base64,{{doc.digital_signature}}"/>
+                                </div>
+                            </t>
 
 
-                        <!-- fin Firmar del cliente -->
+                            <!-- fin Firmar del cliente -->
+
+                        </t>
 
 
-                                        </t>
-
-
-                        </div>
-                   </t>
-             </t>
+                    </div>
+                </t>
+            </t>
 
         </template>
 
