@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<odoo>
+
+    <data>
+
+        <record id="payment_A4" model="report.paperformat">
+            <field name="name">A4 payment</field>
+            <field name="default" eval="False"/>
+            <field name="format">custom</field>
+            <field name="margin_top">50</field>
+            <field name="margin_bottom">28</field>
+            <field name="margin_right">7</field>
+            <field name="margin_left">7</field>
+            <field name="page_height">297</field>
+            <field name="page_width">210</field>
+            <field name="orientation">Portrait</field>
+            <field name="header_line">False</field>
+            <field name="header_spacing">45</field>
+            <field name="dpi">95</field>
+        </record>
+
+        <report id="report_payment_receipt"
+                string="Recibo de Pago"
+                model="account.payment"
+                report_type="qweb-pdf"
+                name="document_format_dis.report_payment_receipt_template"/>
+
+        <record id="document_format_dis.report_payment_receipt_print" model="ir.actions.report">
+            <field name="name">Recibo de Pago</field>
+            <field name="model">account.payment</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">document_format_dis.report_payment_receipt_print</field>
+            <field name="paperformat_id" ref="document_format_dis.payment_A4"/>
+        </record>
+
+        <template id="document_format_dis.report_payment_receipt_template">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-set="lang" t-value="o.partner_id.lang"/>
+                    <t t-call="document_format_dis.report_payment_receipt_document" t-lang="lang"/>
+                </t>
+            </t>
+        </template>
+
+        <template id="document_format_dis.report_payment_receipt_document">
+            <t t-set="o" t-value="o.with_context({'lang': lang})"/>
+            <t t-set="doc" t-value="o"/>
+             <t t-set="company" t-value="doc.company_id"/>
+            <t t-call="web.external_layout_standard">
+                <div class="page"  style="margin-top: 20px;">
+                    <!-- Datos del documento -->
+                    <div>
+                        <div style="width: 100%; display: flex; align-items: flex-start;">
+                            <ul class="list-unstyled" style="list-style: none; padding-left: 0; margin: 0;">
+
+                                <!-- Nombre -->
+                                <li style="margin-bottom: 5px;">
+
+                                    <b>
+                                        <span>Recibo:</span>
+                                    </b>
+                                    <span t-field="o.name"/>
+
+                                </li >
+                                <!-- Fin nombre -->
+                                <!-- Fecha -->
+
+                                <li style="margin-bottom: 5px;">
+
+                                    <b>
+                                        <span>Fecha:</span>
+                                    </b>
+                                    <span t-field="o.payment_date"/>
+
+                                </li>
+                                <!-- Fin fecha -->
+                                <!-- Método de pago -->
+
+                                <li style="margin-bottom: 5px;">
+
+                                    <b>
+                                        <span>Método de pago:</span>
+                                    </b>
+                                    <span t-field="o.payment_method_id.name"/>
+
+                                </li>
+                                <!-- Fin método de pago -->
+                                <!-- Cantidad -->
+
+                                <li style="margin-bottom: 5px;">
+
+                                    <b>
+                                        <span>Cantidad pagada:</span>
+                                    </b>
+                                    <span t-field="o.amount"
+                                          t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+
+                                </li>
+                                <!-- Fin Cantidad -->
+                                <!-- Referencia -->
+                                <li style="margin-bottom: 5px;">
+
+                                    <b>
+                                        <span>Referencia:</span>
+                                    </b>
+                                    <span t-field="o.communication"/>
+
+                                </li>
+                                <!-- Fin referencia -->
+
+                            </ul>
+                        </div>
+
+                        <div style="margin-top:-74px; width: 40%; text-align: left; margin-left: auto; margin-right: 5%; align-self: flex-start; display: flex; flex-direction: column; justify-content: flex-start; min-height: 100px;">
+                            <ul class="list-unstyled" style="list-style: none; padding-left: 0; margin: 0;">
+
+                                <!-- Nombre -->
+
+                                <li t-if="o.partner_id.name" style="margin-bottom: 5px;">
+                                    <span t-field="o.partner_id.name"/>
+                                </li>
+
+                                <!-- Fin nombre -->
+                                <!-- Calle -->
+
+                                <li t-if="o.partner_id.street" style="margin-bottom: 5px;">
+                                    <span t-field="o.partner_id.street"/>
+                                </li>
+
+                                <!-- Fin calle -->
+                                <!-- Dirección -->
+
+                                <li style="margin-bottom: 5px;">
+                                    <span t-if="o.partner_id.zip" t-field="o.partner_id.zip"/>
+                                    <span t-if="o.partner_id.city" t-field="o.partner_id.city"/>,
+                                    <span t-if="o.partner_id.country_id" t-field="o.partner_id.country_id"/>
+                                </li>
+
+                                <!-- Fin dirección -->
+                                <!-- CIF -->
+
+                                <li t-if="o.partner_id.vat" style="margin-bottom: 5px;">
+                                    CIF:
+                                    <span t-field="o.partner_id.vat"/>
+                                </li>
+
+                                <!-- Fin CIF -->
+                            </ul>
+
+                        </div>
+
+                    </div>
+                    <!-- Fin datos del documento -->
+                    <div t-if="o.reconciled_invoice_ids">
+                        <!-- Separador -->
+
+                        <div style="height:2px;background-color:black;clear:both;"></div>
+
+                        <!-- Fin separador -->
+                        <!-- datos del pago -->
+
+                        <!-- Cabecera -->
+                        <div>
+
+                            <div style="width:27.5%;float:left;">
+
+                                <b>
+                                    <span>Fecha factura</span>
+                                </b>
+
+                            </div>
+                            <div style="width:27.5%;float:left;">
+
+                                <b>
+                                    <span>Factura</span>
+                                </b>
+
+                            </div>
+                            <div style="width:15%;float:left;text-align:right;">
+
+                                <b>
+                                    <span>Total</span>
+                                </b>
+
+                            </div>
+                            <div style="width:15%;float:left;text-align:right;">
+
+                                <b>
+                                    <span>Pagado</span>
+                                </b>
+
+                            </div>
+                            <div style="width:15%;float:left;text-align:right;">
+
+                                <b>
+                                    <span>Diferencia</span>
+                                </b>
+
+                            </div>
+
+                        </div>
+                        <!-- Fin cabecera -->
+                        <!-- Separador -->
+
+                        <div style="height:2px;background-color:black;clear:both;"></div>
+
+                        <!-- Fin separador -->
+
+                        <div>
+                            <t t-foreach="o.reconciled_invoice_ids" t-as="inv">
+
+                                <div style="width:27.5%;float:left;">
+                                    <t t-if="inv.invoice_date">
+                                        <span t-field="inv.invoice_date"/>
+                                    </t>
+                                    <t t-else="">
+                                        <span style="color:white;">aaaa</span>
+                                    </t>
+                                </div>
+
+
+                                <div style="width:27.5%;float:left;">
+
+                                    <t t-if="inv.name">
+                                        <span t-field="inv.name"/>
+                                    </t>
+
+
+                                    <t t-else="">
+                                        <span style="color:white;">aaaa</span>
+                                    </t>
+
+                                </div>
+                                <div style="width:15%;float:left;text-align:right;">
+
+                                    <t t-if="inv.amount_total">
+                                        <span t-field="inv.amount_total"/>
+                                    </t>
+                                    <t t-else="">
+                                        <span style="color:white;">aaaa</span>
+                                    </t>
+
+                                </div>
+                                <div style="width:15%;float:left;text-align:right;">
+
+                                    <t t-if="inv.amount_total">
+                                        <span t-esc="inv.amount_total - inv.amount_residual"
+                                              t-options="{'widget': 'monetary', 'display_currency': inv.currency_id}"/>
+                                    </t>
+                                    <t t-else="">
+                                        <span style="color:white;">aaaa</span>
+                                    </t>
+
+                                </div>
+                                <div style="width:15%;float:left;text-align:right;">
+
+                                    <t t-if="inv.amount_residual">
+                                        <span t-field="inv.amount_residual"
+                                              t-options="{'widget': 'monetary', 'display_currency': inv.currency_id}"/>
+                                    </t>
+
+                                    <t t-else="">
+                                        <span>0.00</span>
+                                    </t>
+
+                                </div>
+
+                            </t>
+                        </div>
+
+                        <!-- Fin Datos del pago -->
+                    </div>
+
+                </div>
+            </t>
+
+        </template>
+    </data>
+
+</odoo>

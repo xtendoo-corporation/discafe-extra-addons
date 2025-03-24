@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Esta vista se encarga de llamar a las dos vistas de venta bluetooth -->
+<!-- Este reporte se puede imprimir desde: Ventas > Pedidos > Imprimir > Presupuesto / Pedido Bluetooth -->
+<odoo>
+
+    <data>
+
+        <!-- Configuración del formato de papel -->
+        <record id="bluetooth_saleorder_2" model="report.paperformat">
+            <field name="name">Bluetooth saleorder_2</field>
+            <field name="default" eval="False"/>
+            <field name="format">custom</field>
+            <field name="margin_top">10</field>
+            <field name="margin_bottom">3</field>
+            <field name="margin_right">1.5</field>
+            <field name="margin_left">1.5</field>
+            <field name="page_height">500</field>
+            <field name="page_width">80</field>
+            <field name="orientation">Portrait</field>
+            <field name="header_line">False</field>
+            <field name="header_spacing">35</field>
+            <field name="dpi">90</field>
+        </record>
+
+        <!-- Definición del reporte -->
+        <report id="report_saleorder_promotions_bluetooth_action"
+                string="Presupuesto / Pedido bluetooth"
+                model="sale.order"
+                report_type="qweb-pdf"
+                name="document_format_dis.report_saleorder_promotions_bluetooth"
+                file="sale.report_saleorder_promotions_bluetooth"
+                print_report_name="(object.state in ('draft', 'sent') and 'Quotation - %s' % (object.name)) or 'Order - %s' % (object.name)"
+        />
+
+
+        <!-- Acción del reporte con el formato de papel corregido -->
+        <record id="document_format_dis.report_saleorder_promotions_bluetooth_action" model="ir.actions.report">
+            <field name="name">Presupuesto / Pedido Bluetooth</field>
+            <field name="model">sale.order</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">document_format_dis.report_saleorder_promotions_bluetooth</field>
+            <field name="paperformat_id" ref="document_format_dis.bluetooth_saleorder_2"/>
+        </record>
+
+
+        <!-- Plantilla del reporte -->
+        <template id="document_format_dis.report_saleorder_promotions_bluetooth">
+            <t t-name="document_format_dis.report_saleorder_promotions_bluetooth">
+                <t t-call="web.html_container">
+                    <t t-foreach="docs" t-as="doc">
+                        <t t-call="document_format_dis.report_saleorder_document_bluetooth_without_promotions"
+                           t-lang="doc.partner_id.lang"/>
+                        <t t-call="document_format_dis.report_saleorder_document_bluetooth_with_promotions"
+                           t-lang="doc.partner_id.lang"/>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+    </data>
+
+</odoo>
