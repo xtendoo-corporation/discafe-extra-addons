@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+         <!-- Grupo -->
+            <record model="ir.module.category" id="group_furgon_security">
+                <field name="name">Furgones</field>
+                <field name="sequence">60</field>
+            </record>
+        <!-- Fin Grupo -->
+        <!-- Furgón 1 -->
+        <record id="furgon1_warehouse" model="res.groups">
+            <field name="name">Furgón 1</field>
+            <field name="comment">Permiso para ver Paz y Furgón 1
+            </field>
+            <field name="category_id" ref="group_furgon_security"/>
+        </record>
+
+          <record id="warehouse_furgon1" model="ir.rule">
+            <field name="name">Furgon 1</field>
+            <field name="model_id" ref="stock.model_stock_warehouse"/>
+            <field name="domain_force">[('id','in',(1,2))]</field>
+            <field name="groups" eval="[(4, ref('discafe_select_user_warehouse.furgon1_warehouse'))]"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_read" eval="True"/>
+        </record>
+        <record id="warehouse_furgon1_location" model="ir.rule">
+            <field name="name">Furgon 1 Locations</field>
+            <field name="model_id" ref="stock.model_stock_location"/>
+            <field name="domain_force">[('id','in',(14,11,1,18,21))]</field>
+            <field name="groups" eval="[(4, ref('discafe_select_user_warehouse.furgon1_warehouse'))]"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_read" eval="True"/>
+        </record>
+
+        <!-- Fin Furgón 1 -->
+        <!-- Furgón 2 -->
+        <record id="furgon2_warehouse" model="res.groups">
+            <field name="name">Furgón 2</field>
+            <field name="comment">Permiso para ver Paz y Furgón 2
+            </field>
+            <field name="category_id" ref="group_furgon_security"/>
+        </record>
+
+        <record id="warehouse_furgon2" model="ir.rule">
+            <field name="name">Furgon 2</field>
+            <field name="model_id" ref="stock.model_stock_warehouse"/>
+            <field name="domain_force">[('id','in',(1,4))]</field>
+            <field name="groups" eval="[(4, ref('discafe_select_user_warehouse.furgon2_warehouse'))]"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_read" eval="True"/>
+        </record>
+
+        <record id="warehouse_furgon2_location" model="ir.rule">
+            <field name="name">Furgon 2 Locations</field>
+            <field name="model_id" ref="stock.model_stock_location"/>
+            <field name="domain_force">[('id','in',(14,11,1,30,33))]</field>
+            <field name="groups" eval="[(4, ref('discafe_select_user_warehouse.furgon2_warehouse'))]"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_read" eval="True"/>
+        </record>
+        <!-- Fin Furgón 2 -->
+        <!-- Furgón 3 -->
+        <record id="furgon3_warehouse" model="res.groups">
+            <field name="name">Furgón 3</field>
+            <field name="comment">Permiso para ver Paz y Furgón 3
+            </field>
+            <field name="category_id" ref="group_furgon_security"/>
+        </record>
+
+        <record id="warehouse_furgon3" model="ir.rule">
+            <field name="name">Furgon 3</field>
+            <field name="model_id" ref="stock.model_stock_warehouse"/>
+            <field name="domain_force">[('id','in',(1,5))]</field>
+            <field name="groups" eval="[(4, ref('discafe_select_user_warehouse.furgon3_warehouse'))]"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_read" eval="True"/>
+        </record>
+
+        <record id="warehouse_furgon3_location" model="ir.rule">
+            <field name="name">Furgon 3 Locations</field>
+            <field name="model_id" ref="stock.model_stock_location"/>
+            <field name="domain_force">[('id','in',(14,11,1,36,39))]</field>
+            <field name="groups" eval="[(4, ref('discafe_select_user_warehouse.furgon3_warehouse'))]"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_read" eval="True"/>
+        </record>
+        <!-- Fin Furgón 3 -->
+        <!-- Furgón 4 -->
+        <record id="furgon4_warehouse" model="res.groups">
+            <field name="name">Furgón 4</field>
+            <field name="comment">Permiso para ver Paz y Furgón 4
+            </field>
+            <field name="category_id" ref="group_furgon_security"/>
+        </record>
+
+        <record id="warehouse_furgon4" model="ir.rule">
+            <field name="name">Furgon 2</field>
+            <field name="model_id" ref="stock.model_stock_warehouse"/>
+            <field name="domain_force">[('id','in',(1,6))]</field>
+            <field name="groups" eval="[(4, ref('discafe_select_user_warehouse.furgon4_warehouse'))]"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_read" eval="True"/>
+        </record>
+
+        <record id="warehouse_furgon4_location" model="ir.rule">
+            <field name="name">Furgon 4 Locations</field>
+            <field name="model_id" ref="stock.model_stock_location"/>
+            <field name="domain_force">[('id','in',(14,11,1,42,45))]</field>
+            <field name="groups" eval="[(4, ref('discafe_select_user_warehouse.furgon4_warehouse'))]"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_read" eval="True"/>
+        </record>
+        <!-- Fin Furgón 4-->
+
+        <!-- Furgón 5 -->
+        <record id="furgon5_warehouse" model="res.groups">
+            <field name="name">Furgón 5</field>
+            <field name="comment">Permiso para ver Paz y Furgón 5
+            </field>
+            <field name="category_id" ref="group_furgon_security"/>
+        </record>
+
+        <record id="warehouse_furgon5" model="ir.rule">
+            <field name="name">Furgon 5</field>
+            <field name="model_id" ref="stock.model_stock_warehouse"/>
+            <field name="domain_force">[('id','in',(1,9))]</field>
+            <field name="groups" eval="[(4, ref('discafe_select_user_warehouse.furgon5_warehouse'))]"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_read" eval="True"/>
+        </record>
+
+        <record id="warehouse_furgon5_location" model="ir.rule">
+            <field name="name">Furgon 5 Locations</field>
+            <field name="model_id" ref="stock.model_stock_location"/>
+            <field name="domain_force">[('id','in',(14,11,1,62,66))]</field>
+            <field name="groups" eval="[(4, ref('discafe_select_user_warehouse.furgon5_warehouse'))]"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_read" eval="True"/>
+        </record>
+        <!-- Fin Furgón 5-->
+    </data>
+</odoo>
