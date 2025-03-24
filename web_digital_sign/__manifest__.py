@@ -18,7 +18,11 @@
         Digital signature can be very usefull for documents.
     ''',
     'images': ['static/description/Digital_Signature.jpg'],
-    'depends': ['sale'],
+    'depends': [
+        'sale',
+        'account',
+        'stock',
+    ],
     'data': [
         'views/web_digital_sign_view.xml',
         'views/users_view.xml',
