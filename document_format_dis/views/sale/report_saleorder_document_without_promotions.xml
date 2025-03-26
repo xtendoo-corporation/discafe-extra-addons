@@ -1,195 +1,135 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Esta vista se encarga de mostrar los productos en las ventas, siempre que su precio sea mayor a 0 euros -->
+
 <odoo>
-    <!-- Odoo 13  -->
 
     <data>
 
         <template id="document_format_dis.report_saleorder_document_without_promotions">
 
-            <t t-name="document_format_dis.report_saleorder_document_without_promotions">
+             <t t-name="document_format_dis.report_saleorder_document_without_promotions">
 
-                <!-- llamada a la cabecera y pie y declaración de variables -->
-
-                <t t-set="doc" t-value="doc"/>
-                <t t-set="company" t-value="doc.company_id"/>
-                <t t-call="web.external_layout_clean">
-
-                    <!-- Información oculta (para cálculos internos) -->
-                    <div style="display:none;">
-                        <t t-set="address">
-                            <div t-field="doc.partner_id"
-                                 t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: True}"
-                                 style="display:none;"/>
-                            <p t-if="doc.partner_id.vat" style="display:none;">
-                                <t t-esc="doc.company_id.country_id.vat_label or 'Tax ID'"/>:
-                                <span t-field="doc.partner_id.vat"/>
-                            </p>
-                        </t>
-                    </div>
-
-
-                    <!-- Empieza el contenido -->
-
-                    <div class="page">
-
-
-                        <!-- Lista de la izquierda -->
-
-                        <div style="width: 100%; display: flex; align-items: flex-start;">
-                            <ul class="list-unstyled" style="list-style: none; padding-left: 0; margin: 0;">
-                                <t t-if="not (env.context.get('proforma', False) or is_pro_forma)">
-                                    <li t-if="doc.state in ['draft','sent']" style="margin-bottom: 5px;">
-                                        <b>Pedido:</b>
-                                        <span t-field="doc.name"/>
-                                    </li>
-
-                                </t>
-
-                                <li t-if="env.context.get('proforma', False) or is_pro_forma"
-                                    style="margin-bottom: 5px;">
-                                    <b>Factura Pro-Forma:</b>
-                                    <span t-field="doc.name"/>
-                                </li>
-
-                                <li t-if="'delivery_zone_id' in doc and doc.delivery_zone_id"
-                                    style="margin-bottom: 5px;">
-                                    <b>Zona:</b>
-                                    <span t-field="doc.delivery_zone_id"/>
-                                </li>
-
-                                <li t-if="doc.date_order"
-                                    style="margin-bottom: 5px;">
-                                    <b>Fecha:</b>
-                                    <span t-esc="doc.date_order.strftime('%d/%m/%Y')"/>
-                                </li>
-
-                                <li t-if="doc.client_order_ref" style="margin-bottom: 5px;">
-                                    <b>Ref. cliente:</b>
-                                    <span t-field="doc.client_order_ref"/>
-                                </li>
-
-                                <li t-if="doc.user_id.name" style="margin-bottom: 5px;">
-                                    <b>Comercial:</b>
-                                    <span t-field="doc.user_id"/>
-                                </li>
-
-                                <li t-if="doc.payment_term_id" style="margin-bottom: 5px;">
-                                    <b>Terminos de pago:</b>
-                                    <span t-field="doc.payment_term_id"/>
-                                </li>
-
-                                <li t-if="doc.validity_date and doc.state in ['draft', 'sent']"
-                                    style="margin-bottom: 5px;">
-                                    <b>Fecha de validez:</b>
-                                    <span t-field="doc.validity_date"/>
-                                </li>
-
-                                <li t-if="doc.partner_id.ref" style="margin-bottom: 5px;">
-                                    <b>Ref. Cliente:</b>
-                                    <span t-field="doc.partner_id.ref"/>
-                                </li>
-
-                            </ul>
-                        </div>
-
-                        <!-- Lista de la derecha -->
-
-                        <div
-                            style="margin-top:-74px; width: 40%; text-align: left; margin-left: auto; margin-right: 5%; align-self: flex-start; display: flex; flex-direction: column; justify-content: flex-start; min-height: 100px;">
-                            <ul class="list-unstyled" style="list-style: none; padding-left: 0; margin: 0;">
-
-                                <li t-if="'comercial' in doc.partner_id and doc.partner_id.comercial"
-                                    style="margin-bottom: 5px;">
-                                    <span t-field="doc.partner_id.comercial"/>
-                                </li>
-
-                                <li t-if="doc.partner_id.name" style="margin-bottom: 5px;">
-                                    <b>
-                                        <span t-field="doc.partner_id.name"/>
-                                    </b>
-                                </li>
-
-                                <li t-if="doc.partner_id.street" style="margin-bottom: 5px;">
-                                    <span t-field="doc.partner_id.street"/>
-                                </li>
-
-                                <li style="margin-bottom: 5px;">
-                                    <span t-if="doc.partner_id.zip" t-field="doc.partner_id.zip"/>
-                                    <span t-if="doc.partner_id.city" t-field="doc.partner_id.city"/>,
-                                    <span t-if="doc.partner_id.country_id" t-field="doc.partner_id.country_id"/>
-                                </li>
-
-                                <li t-if="doc.partner_id.vat" style="margin-bottom: 5px;">
-                                    <b>CIF:</b>
-                                    <span t-field="doc.partner_id.vat"/>
-                                </li>
-
-                            </ul>
-                        </div>
-
-
-                        <t t-if="doc.partner_shipping_id == doc.partner_invoice_id                              and doc.partner_invoice_id != doc.partner_id                              or doc.partner_shipping_id != doc.partner_invoice_id">
-                            <t t-set="information_block">
-                                <strong t-if="doc.partner_shipping_id == doc.partner_invoice_id">Dirección de
-                                    facturación y envio:
-                                </strong>
-                                <strong t-if="doc.partner_shipping_id != doc.partner_invoice_id">Dirección de
-                                    facturación:
-                                </strong>
-                                <div t-field="doc.partner_invoice_id"
-                                     t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;, &quot;phone&quot;], &quot;no_marker&quot;: True, &quot;phone_icons&quot;: True}"/>
-                                <t t-if="doc.partner_shipping_id != doc.partner_invoice_id">
-                                    <strong>Dirección de envio:</strong>
-                                    <div t-field="doc.partner_shipping_id"
-                                         t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;, &quot;phone&quot;], &quot;no_marker&quot;: True, &quot;phone_icons&quot;: True}"/>
-                                </t>
-                            </t>
-                        </t>
-
-                        <!-- Tabla con los productos -->
+                   <t t-call="web.external_layout">
 
                         <div class="page">
 
-                            <div class="oe_structure"/>
+                             <div style="width:50%; float:left;margin-top:10px;">
+                                <ul class="list-unstyled">
+                                    <t t-if="not (env.context.get('proforma', False) or is_pro_forma)">
+                                        <li t-if="doc.state in ['draft','sent']"><b>Presupuesto:  </b> <span t-field="doc.name"/></li>
+                                        <li t-if="doc.state not in ['draft','sent']"><b>Pedido: </b> <span t-field="doc.name"/></li>
+                                    </t>
 
+                                    <li t-if="env.context.get('proforma', False) or is_pro_forma"><b>Factura Pro-Forma: </b><span t-field="doc.name"/></li>
 
-                            <!-- Is there a discount on at least one line? -->
-                            <t t-set="display_discount" t-value="any([l.discount for l in doc.order_line])"/>
+                                    <li t-if="doc.delivery_zone_id">
+                                            <b>Zona:</b>
+                                            <spam t-field="doc.delivery_zone_id"/>
+                                     </li>
 
-                            <div style="width:100%;clear:both;">
-                                <!--Cabecera de la tabla-->
-                                <div
-                                    style="border-bottom:2px solid black;border-right:2px solid black;border-top:2px solid black;border-left:1px solid black;height:25px;">
+                                    <li t-if="doc.date_order and doc.state not in ['draft','sent']">
+                                        <b>Fecha:</b><span t-esc="doc.date_order.strftime('%d/%m/%Y')" />
+                                    </li>
 
-                                    <div class="text-left"
-                                         style="font-weight:bolder; color:#4f4b4b;width:13%;float:left;">
-                                        <span>Código</span>
+                                    <li t-if="doc.client_order_ref">
+                                        <b>Ref. cliente: </b> <span t-field="doc.client_order_ref"/>
+                                    </li>
+
+                                    <li t-if="doc.user_id.name">
+                                        <b>Comercial: </b> <span t-field="doc.user_id"/>
+                                    </li>
+
+                                    <div name="payment_term">
+
+                                        <li t-if="doc.payment_term_id">
+                                            <b>Terminos de pago: </b> <span t-field="doc.payment_term_id"/>
+                                        </li>
                                     </div>
 
-                                    <div class="text-left"
-                                         style="font-weight:bolder; color:#4f4b4b;width:15%;float:left;">
-                                        <span>Lote</span>
-                                    </div>
+                                    <li t-if="doc.validity_date and doc.state in ['draft', 'sent']">
+                                        <b>Fecha de validez: </b> <span t-field="doc.validity_date"/>
+                                    </li>
+                                    <li t-if="doc.partner_id.ref">
+                                        <b>Ref. Cliente:</b>
+                                        <span t-field="doc.partner_id.ref"/>
+                                    </li>
+                                </ul>
+                            </div>
+
+                       <div style="width:50%;  float:left;margin-top:10px;">
+                        <ul class="list-unstyled">
+
+                          <li t-if="doc.partner_id.comercial">
+                           <span t-field="doc.partner_id.comercial" />
+                          </li>
+
+                          <li t-if="doc.partner_id.name">
+                           <span t-field="doc.partner_id.name" />
+                          </li>
+
+                          <li t-if="doc.partner_id.street" >
+                           <span t-field="doc.partner_id.street" />
+                          </li>
+
+                          <li>
+                            <span t-if="doc.partner_id.zip" t-field="doc.partner_id.zip" /> <span t-if="doc.partner_id.city" t-field="doc.partner_id.city" />, <span t-if="doc.partner_id.country_id" t-field="doc.partner_id.country_id" />
+                          </li>
+
+                          <li t-if="doc.partner_id.vat" >
+                            CIF:  <span t-field="doc.partner_id.vat"/>
+                          </li>
+
+                          <!-- <li t-if="doc.partner_id.ref" >
+                            REF:  <span t-field="doc.partner_id.ref"/>
+                          </li>-->
+
+                        </ul>
+                      </div>
+
+                    <t t-if="doc.partner_shipping_id == doc.partner_invoice_id                              and doc.partner_invoice_id != doc.partner_id                              or doc.partner_shipping_id != doc.partner_invoice_id">
+                        <t t-set="information_block">
+                            <strong t-if="doc.partner_shipping_id == doc.partner_invoice_id">Dirección de facturación y envio:</strong>
+                            <strong t-if="doc.partner_shipping_id != doc.partner_invoice_id">Dirección de facturación:</strong>
+                            <div t-field="doc.partner_invoice_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;, &quot;phone&quot;], &quot;no_marker&quot;: True, &quot;phone_icons&quot;: True}"/>
+                            <t t-if="doc.partner_shipping_id != doc.partner_invoice_id">
+                                <strong>Dirección de envio:</strong>
+                                <div t-field="doc.partner_shipping_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;, &quot;phone&quot;], &quot;no_marker&quot;: True, &quot;phone_icons&quot;: True}"/>
+                            </t>
+                        </t>
+                    </t>
+                    <div class="page">
+
+                           <div class="oe_structure"/>
 
 
-                                    <div class="text-left"
-                                         style="font-weight:bolder; color:#4f4b4b;float:left;width:26%;">
-                                        <span>Descripción</span>
-                                    </div>
+                        <!-- Is there a discount on at least one line? -->
+                        <t t-set="display_discount" t-value="any([l.discount for l in doc.order_line])"/>
 
-                                    <div class="text-right"
-                                         style="font-weight:bolder; color:#4f4b4b;float:left;width:7%;">
-                                        <span>Uds.</span>
-                                    </div>
+                        <div style="width:100%;clear:both;">
+                          <!--Cabecera -->
+                          <div style="border-bottom:2px solid black;border-right:2px solid black;border-top:2px solid black;border-left:1px solid black;height:25px;">
 
-                                    <div class="text-right"
-                                         style="font-weight:bolder; color:#4f4b4b;float:left;width:10%;">
-                                        <span>Precio/Ud</span>
-                                    </div>
-                                    <div class="text-right" groups="sale.group_discount_per_so_line"
-                                         style="font-weight:bolder; color:#4f4b4b;float:left;width:10%;">
-                                        <t t-set="ifDiscount" t-value="0"></t>
+                            <div class="text-left" style="font-weight:bolder; color:#4f4b4b;width:13%;float:left;">
+                              <span>Código</span>
+                            </div>
+
+                             <div class="text-left" style="font-weight:bolder; color:#4f4b4b;width:15%;float:left;">
+                              <span>Lote</span>
+                            </div>
+
+
+                            <div class="text-left" style="font-weight:bolder; color:#4f4b4b;float:left;width:26%;">
+                              <span>Descripción</span>
+                            </div>
+
+                            <div class="text-right" style="font-weight:bolder; color:#4f4b4b;float:left;width:7%;">
+                              <span>Uds.</span>
+                            </div>
+
+                            <div class="text-right" style="font-weight:bolder; color:#4f4b4b;float:left;width:10%;">
+                              <span>Precio/Ud</span>
+                            </div>
+                            <div class="text-right" style="font-weight:bolder; color:#4f4b4b;float:left;width:10%;">
+                              <t t-set="ifDiscount" t-value="0"></t>
                                         <t t-foreach="doc.order_line" t-as="ml">
                                             <t t-if="ml.discount">
                                                 <t t-set="ifDiscount" t-value="1"></t>
@@ -201,70 +141,63 @@
                                         <t t-else="">
                                             <span style="color:white;">Dto%</span>
                                         </t>
-                                    </div>
+                            </div>
 
 
-                                    <div class="text-right"
-                                         style="font-weight:bolder; color:#4f4b4b;float:left;width:12%;">
-                                        <span>Valor neto</span>
-                                    </div>
+                            <div class="text-right" style="font-weight:bolder; color:#4f4b4b;float:left;width:12%;">
+                              <span>Valor neto</span>
+                            </div>
 
-                                    <div class="text-right"
-                                         style="font-weight:bolder; color:#4f4b4b;float:left;width:7%;">
-                                        <span>IVA</span>
-                                    </div>
+                            <div class="text-right" style="font-weight:bolder; color:#4f4b4b;float:left;width:7%;">
+                              <span>IVA</span>
+                            </div>
 
-                                </div>
+                          </div>
 
-                                <!-- Fin cabecera -->
+                          <!-- Fin cabecera -->
 
-                                <!-- Lineas de productos en la tabla -->
+                          <!-- Lineas -->
 
-                                <t t-set="current_subtotal" t-value="0"/>
+                          <t t-set="current_subtotal" t-value="0"/>
                                 <t t-foreach="doc.order_line" t-as="line">
                                     <t t-if="line.price_unit > 0.00">
-                                        <t t-set="current_subtotal" t-value="current_subtotal + line.price_subtotal"
-                                           groups="account.group_show_line_subtotals_tax_excluded"/>
-                                        <t t-set="current_subtotal" t-value="current_subtotal + line.price_total"
-                                           groups="account.group_show_line_subtotals_tax_included"/>
-                                        <div style="clear:both;font-size:0.9em;">
+                                                        <t t-set="current_subtotal" t-value="current_subtotal + line.price_subtotal" groups="account.group_show_line_subtotals_tax_excluded"/>
+                                                        <t t-set="current_subtotal" t-value="current_subtotal + line.price_total" groups="account.group_show_line_subtotals_tax_included"/>
+                                              <div style="clear:both;font-size:0.9em;">
 
-                                            <!--Si es nota -->
+                                                    <!--Si es nota -->
 
-                                            <t t-if="not line.product_id">
+                                                    <t t-if="not line.product_id">
 
-                                                <div class="text-left" style="width:100%;">
-                                                    <b>
-                                                        <span t-field="line.name"/>
-                                                    </b>
-                                                </div>
-                                            </t>
+                                                        <div class="text-left" style="width:100%;">
+                                                            <b><span t-field="line.name"/></b>
+                                                        </div>
+                                                    </t>
 
 
-                                            <!-- Fin si es nota -->
-                                            <!-- Si no es nota -->
-                                            <t t-if="line.product_id">
+                                              <!-- Fin si es nota -->
+                                                  <!-- Si no es nota -->
+                                                    <t t-if="line.product_id">
                                                 <!-- Código -->
 
                                                 <div class="text-left" style="width:13%;float:left;">
-                                                    <span t-field="line.product_id.default_code"/>
+                                                <span t-field="line.product_id.default_code"/>
                                                 </div>
 
-                                                <!-- Fin codigo -->
+                                                  <!-- Fin codigo -->
 
-                                                <!-- Lote -->
+                                                  <!-- Lote -->
 
                                                 <div class="text-left" style="width:15%;float:left;">
-                                                    <t t-if="'lot_id' in line">
+                                                    <t t-if="line.lot_id">
                                                         <span t-field="line.lot_id.name"/>
                                                     </t>
                                                     <t t-else="">
-                                                        <span style="color:red;">No tiene lote</span>
+                                                        <span style="color:white;">aaa</span>
                                                     </t>
-
                                                 </div>
 
-                                                <!-- Fin Lote -->
+                                                  <!-- Fin Lote -->
 
                                                 <!-- descripción -->
 
@@ -279,7 +212,7 @@
                                                 <!-- UDS -->
 
                                                 <div class="text-right" style="float:left;width:7%;">
-                                                    <span t-esc="round(line.product_uom_qty,2)"/>
+                                                  <span t-esc="round(line.product_uom_qty,2)"/>
                                                 </div>
 
                                                 <!-- Fin UDS -->
@@ -287,16 +220,15 @@
                                                 <!-- Precio por unidad -->
 
                                                 <div class="text-right" style="float:left;width:10%;">
-                                                    <span t-field="line.price_unit"/>
+                                                  <span t-field="line.price_unit"/>
                                                 </div>
 
                                                 <!-- Fin precio unidad -->
 
                                                 <!-- Descuento -->
 
-                                                <div class="text-right" groups="sale.group_discount_per_so_line"
-                                                     style="float:left;width:10%;">
-                                                    <t t-if="line.discount">
+                                                <div class="text-right"  style="float:left;width:10%;">
+                                                  <t t-if="line.discount">
                                                         <span t-field="line.discount"/>
                                                     </t>
                                                     <t t-else="">
@@ -310,8 +242,7 @@
                                                 <!--  Valor Neto -->
 
                                                 <div class="text-right" style="float:left;width:12%;">
-                                                    <span t-field="line.price_subtotal"
-                                                          groups="account.group_show_line_subtotals_tax_excluded"/>
+                                                  <span t-field="line.price_subtotal" groups="account.group_show_line_subtotals_tax_excluded"/>
                                                 </div>
 
                                                 <!-- Fin valor neto -->
@@ -319,135 +250,125 @@
                                                 <!-- IVA -->
 
                                                 <div class="text-right" style="float:left;width:7%;">
-                                                    <t t-set="iva" t-value="line.tax_id.amount"></t>
-                                                    <span t-esc="int(iva)"/>
-                                                    <span t-if="line.price_tax > 0">%</span>
+                                                  <t t-set="iva" t-value="line.tax_id.amount"></t>
+                                                  <span t-esc="int(iva)"/><span t-if="line.price_tax > 0">%</span>
                                                 </div>
 
                                                 <!-- Fin IVA -->
 
                                                 <!-- Fin si no es nota -->
 
-                                            </t>
+                                                  </t>
 
-                                        </div>
+                                              </div>
 
-                                    </t>
-                                </t>
-
-
-                                <!-- Fin lineas -->
-
-                                <!-- Separador -->
-
-                                <div style="height:2px;background-color:black;clear:both;"></div>
-
-                                <!-- Fin separador -->
-
-                            </div>
-
-                            <!-- Totales -->
-
-                            <div style="width:50%;float:right;clear:both">
-
-
-                                <!-- Subtotal -->
-
-                                <div style="width:60%;float:left">
-                                    <span>Base Imponible</span>
-                                </div>
-
-                                <div style="width:40%;float:left;text-align:right">
-                                    <span t-field="doc.amount_untaxed"/>
-                                </div>
-
-                                <!-- Fin Subtotal -->
-
-                                <!-- Impuestos -->
-
-                                <t t-foreach="doc.amount_by_group" t-as="amount_by_group">
-                                    <t t-if="amount_by_group[3] == 1 and doc.amount_untaxed == amount_by_group[2]">
-                                        <div style="width:40%;float:left">
-                                            <span t-esc="amount_by_group[0]"/>
-                                            <span>&amp;nbsp;<span>sobre</span>&amp;nbsp;
-                                                <t t-esc="amount_by_group[2]"
-                                                   t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.pricelist_id.currency_id}"/>
-                                            </span>
-                                        </div>
-
-                                        <div class="text-right o_price_total" style="width:60%;float:left;">
-                                            <span t-esc="amount_by_group[1]"
-                                                  t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.pricelist_id.currency_id}"/>
-                                        </div>
-                                    </t>
-                                    <t t-else="">
-                                        <div style="width:60%;float:left;clear:both;">
-                                            <div style="clear:both;width:40%;float:left;">
-                                                <span t-esc="amount_by_group[0]"/>
-                                            </div>
-                                            <div style="width:60%;float:left;text-align:right;">
-                                                <span>&amp;nbsp;<span>sobre</span>&amp;nbsp;
-                                                    <t t-esc="amount_by_group[2]"
-                                                       t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.pricelist_id.currency_id}"/>
-                                                </span>
-                                            </div>
-                                        </div>
-
-                                        <div class="text-right o_price_total" style="width:40%;float:left;">
-                                            <span t-esc="amount_by_group[1]"
-                                                  t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.pricelist_id.currency_id}"/>
-                                        </div>
-                                    </t>
-
-                                </t>
-
-                                <!-- Fin impuestos -->
-
-                                <!-- Total -->
-
-                                <div style="font-weight:bolder;width:40%;float:left;">
-                                    <span>Total</span>
-                                </div>
-                                <div class="text-right">
-                                    <span t-field="doc.amount_total" style="font-weight:bolder;"/>
-                                </div>
-
-                                <!-- FIn total -->
-
-                                <div style="height:2px;background-color:black;clear:both;"></div>
-                            </div>
-
-
-                            <!-- Fin totales -->
-
-                            <p t-field="doc.note"/>
-
-                            <p id="fiscal_position_remark"
-                               t-if="doc.fiscal_position_id and doc.fiscal_position_id.note">
-                                <strong>Observación de la posición fiscal</strong>
-                                <span t-field="doc.fiscal_position_id.note"/>
-                            </p>
-
-                            <!-- Firma del cliente -->
-
-                            <t t-if="'digital_signature' in doc and doc.digital_signature">
-                                <div style="height:100px;width:30%;border:2px solid black;margin-top:5px;">
-                                    <span style="text-align:center;display:block;width:100%;">Firma del cliente:</span>
-                                    <img style="width:100%;"
-                                         t-attf-src="data:image/*;base64,{{doc.digital_signature}}"/>
-                                </div>
+                                              </t>
                             </t>
 
 
-                            <!-- fin Firmar del cliente -->
-                            <div class="oe_structure"/>
+
+
+                                              <!-- Fin lineas -->
+
+                          <!-- Separador -->
+
+                          <div style="height:2px;background-color:black;clear:both;"></div>
+
+                          <!-- Fin separador -->
 
                         </div>
 
-                    </div>
-                </t>
+                        <!-- Totales -->
 
-            </t>
+                        <div style="width:50%;float:right;clear:both">
+
+
+                          <!-- Subtotal -->
+
+                          <div style="width:60%;float:left">
+                            <span>Base Imponible</span>
+                          </div>
+
+                          <div style="width:40%;float:left;text-align:right">
+                            <span t-field="doc.amount_untaxed"/>
+                          </div>
+
+                          <!-- Fin Subtotal -->
+
+                          <!-- Impuestos -->
+
+                          <t t-foreach="doc.amount_by_group" t-as="amount_by_group">
+                            <t t-if="amount_by_group[3] == 1 and doc.amount_untaxed == amount_by_group[2]">
+                              <div style="width:40%;float:left">
+                                <span t-esc="amount_by_group[0]"/>
+                                <span>&amp;nbsp;<span>sobre</span>&amp;nbsp;<t t-esc="amount_by_group[2]" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.pricelist_id.currency_id}"/></span>
+                              </div>
+
+                              <div class="text-right o_price_total" style="width:60%;float:left;">
+                                <span t-esc="amount_by_group[1]" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.pricelist_id.currency_id}"/>
+                              </div>
+                            </t>
+                            <t t-else="">
+                              <div style="width:60%;float:left;clear:both;">
+                                  <div style="clear:both;width:40%;float:left;">
+                                    <span t-esc="amount_by_group[0]"/>
+                                  </div>
+                                  <div style="width:60%;float:left;text-align:right;">
+                                    <span>&amp;nbsp;<span>sobre</span>&amp;nbsp;<t t-esc="amount_by_group[2]" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.pricelist_id.currency_id}"/></span>
+                                  </div>
+                              </div>
+
+                              <div class="text-right o_price_total" style="width:40%;float:left;">
+                                <span t-esc="amount_by_group[1]" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.pricelist_id.currency_id}"/>
+                              </div>
+                            </t>
+
+                          </t>
+
+                          <!-- Fin impuestos -->
+
+                          <!-- Total -->
+
+                          <div style="font-weight:bolder;width:40%;float:left;">
+                            <span>Total</span>
+                          </div>
+                          <div class="text-right">
+                            <span t-field="doc.amount_total" style="font-weight:bolder;"/>
+                          </div>
+
+                          <!-- FIn total -->
+
+                             <div style="height:2px;background-color:black;clear:both;"></div>
+                          </div>
+
+
+                        <!-- Fin totales -->
+
+                        <p t-field="doc.note"/>
+
+                        <p id="fiscal_position_remark" t-if="doc.fiscal_position_id and doc.fiscal_position_id.note">
+                            <strong>Observación de la posición fiscal</strong>
+                            <span t-field="doc.fiscal_position_id.note"/>
+                        </p>
+
+                         <!-- Firma del cliente -->
+
+                        <div t-if="doc.digital_signature" style="height:100px;width:30%;border:2px solid black;margin-top:5px;">
+                              <span style="text-align:center;display:block;width:100%;">Firma del cliente:</span>
+                              <img style="width:100%;" t-attf-src="data:image/*;base64,{{doc.digital_signature}}"/>
+                        </div>
+
+
+                        <!-- fin Firmar del cliente -->
+                        <div class="oe_structure"/>
+
+                    </div>
+
+                        </div>
+                   </t>
+             </t>
+
+
         </template>
 
     </data>
