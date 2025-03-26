@@ -14,7 +14,7 @@
                 <t t-set="doc" t-value="o"/>
                 <t t-set="company" t-value="doc.company_id"/>
                 <t t-set="blu" t-value="0"/>
-                <t t-call="web.external_layout_standard">
+                <t t-call="web.external_layout_clean">
 
                     <!-- Empieza el contenido -->
                     <div class="page">
@@ -351,10 +351,6 @@
                                         <div style="width:40%;float:left;clear:both;">
                                             <div style="clear:both;width:60%;float:left;">
                                                 <span t-esc="amount_by_group[0]"/>
-                                                <span>sobre</span>
-                                            </div>
-                                            <div style="width:40%;float:left;text-align:right;">
-                                                <t t-esc="amount_by_group[4]"/>
                                             </div>
                                         </div>
 

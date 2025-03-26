@@ -14,7 +14,7 @@
                 <t t-set="doc" t-value="o"/>
                 <t t-set="company" t-value="doc.company_id"/>
                 <t t-set="blu" t-value="0"/>
-                <t t-call="web.external_layout_standard">
+                <t t-call="web.external_layout_clean">
 
                     <!-- Empieza el contenido -->
                     <div class="page">

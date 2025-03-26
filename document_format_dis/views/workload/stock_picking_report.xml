@@ -59,7 +59,7 @@
 
                 <!-- llamada a la cabecera y pie y declaración de variables -->
               <t t-set="company" t-value="o.company_id"/>
-                <t t-call="web.external_layout_standard">
+                <t t-call="web.external_layout_clean">
 
                         <div class="page">
 

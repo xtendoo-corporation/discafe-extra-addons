@@ -11,7 +11,7 @@
                 <!-- llamada a la cabecera y pie y declaración de variables -->
                 <t t-set="doc" t-value="doc"/>
                 <t t-set="company" t-value="doc.company_id"/>
-                <t t-call="web.external_layout_standard">
+                <t t-call="web.external_layout_clean">
 
                     <!-- Comprobación de si ha productos con promoción -->
                     <t t-set="isPromo" t-value="0"></t>

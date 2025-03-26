@@ -19,8 +19,15 @@
             </xpath>
             <xpath expr="//p[@t-if='o.partner_id.vat']" position="replace">
             </xpath>
+            <xpath expr="//t[@t-call='web.external_layout']" position="before">
+                <t t-set="doc" t-value="o"/>
+                <t t-set="company" t-value="doc.company_id"/>
+            </xpath>
+            <xpath expr="//t[@t-call='web.external_layout']" position="attributes">
+                <attribute name="t-call">web.external_layout_clean</attribute>
+            </xpath>
 
-             <!-- En este es donde vamos a reemplazar el código original por el nuestro -->
+            <!-- En este es donde vamos a reemplazar el código original por el nuestro -->
             <xpath expr="//div[@class='page']" position="replace">
 
                 <div style="width:50%; float:left;margin-top:10px;">

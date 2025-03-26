@@ -47,7 +47,7 @@
             <t t-set="o" t-value="o.with_context({'lang': lang})"/>
             <t t-set="doc" t-value="o"/>
              <t t-set="company" t-value="doc.company_id"/>
-            <t t-call="web.external_layout_standard">
+            <t t-call="web.external_layout_clean">
                 <div class="page"  style="margin-top: 20px;">
                     <!-- Datos del documento -->
                     <div>
