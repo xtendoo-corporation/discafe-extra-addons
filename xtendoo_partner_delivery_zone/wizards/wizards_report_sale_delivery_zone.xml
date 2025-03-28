@@ -35,7 +35,7 @@
 
     <!-- Acción para el reporte que aparecerá en el menú de acciones -->
     <record id="partner_delivery_zone_wizard_action" model="ir.actions.act_window">
-        <field name="name">Report Date</field>
+        <field name="name">Informe por fecha</field>
         <field name="res_model">wizard.report.sale.delivery.zone</field>
         <field name="view_mode">form</field>
         <field name="target">new</field>
@@ -46,7 +46,7 @@
 
     <!-- Agregar la acción al menú de acciones del modelo 'partner.delivery.zone' -->
     <record id="action_partner_delivery_zone_report" model="ir.actions.server">
-        <field name="name">Report Date</field>
+        <field name="name">Informe por fecha</field>
         <field name="model_id" ref="model_partner_delivery_zone"/>
         <field name="binding_model_id" ref="model_partner_delivery_zone"/>
         <field name="state">code</field>

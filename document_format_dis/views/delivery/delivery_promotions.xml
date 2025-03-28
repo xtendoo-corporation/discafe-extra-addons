@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Esta vista se encarga de llamar a las dos vistas de Albarán -->
-<!-- Este reporte se puede imprimir desde: Inventario > Operaciones > Transferencias > Imprimir > Albarán -->
 
 <odoo>
 
     <data>
 
-         <report id="document_format_dis.report_delivery_promotions_print"
+         <report id="document_format_dis.report_delivery_promotions_action"
                 string="Vale de Entrega"
                 model="stock.picking"
                 report_type="qweb-pdf"
@@ -15,11 +13,30 @@
         />
 
         <template id="document_format_dis.report_delivery_promotions">
-            <t t-name="document_format_dis.report_delivery_promotions_print">
+            <t t-name="document_format_dis.report_delivery_promotions">
                 <t t-call="web.html_container">
                     <t t-foreach="docs" t-as="o">
                         <t t-call="document_format_dis.report_delivery_document_without_promotions" t-lang="o.partner_id.lang"/>
                         <t t-call="document_format_dis.report_delivery_document_promotions" t-lang="o.partner_id.lang"/>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+        <report id="document_format_dis.report_delivery_promotions_new_action"
+                string="Vale de Entrega"
+                model="stock.picking"
+                report_type="qweb-pdf"
+                name="document_format_dis.report_delivery_promotions_new"
+                print_report_name="'Delivery Slip - %s - %s' % (object.partner_id.name or '', object.name)"
+        />
+
+        <template id="document_format_dis.report_delivery_promotions_new">
+            <t t-name="document_format_dis.report_delivery_promotions_new">
+                <t t-call="web.html_container">
+                    <t t-foreach="docs" t-as="o">
+                        <t t-call="document_format_dis.report_delivery_document_without_promotions_new" t-lang="o.partner_id.lang"/>
+                        <t t-call="document_format_dis.report_delivery_document_promotions_new" t-lang="o.partner_id.lang"/>
                     </t>
                 </t>
             </t>

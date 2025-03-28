@@ -126,7 +126,7 @@
                         <div class="text-right" style="font-weight:bolder; color:#4f4b4b;float:left;width:10%;">
                             <span>Precio/Ud</span>
                         </div>
-                        <div class="text-right" groups="sale.group_discount_per_so_line"
+                        <div class="text-right"
                              style="font-weight:bolder; color:#4f4b4b;float:left;width:10%;">
                             <t t-set="ifDiscount" t-value="0"></t>
                             <t t-foreach="o.order_line" t-as="ml">
@@ -192,7 +192,7 @@
                                     </div>
                                     <!-- Fin precio unidad -->
                                     <!-- Descuento -->
-                                    <div class="text-right" groups="sale.group_discount_per_so_line"
+                                    <div class="text-right"
                                          style="float:left;width:10%;">
                                         <t t-if="line.discount">
                                             <span t-field="line.discount"/>
