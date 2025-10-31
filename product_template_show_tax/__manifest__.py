@@ -16,7 +16,7 @@
     ],
     'license': 'AGPL-3',
     'data': [
-        'views/product_template_show_tax.xml',
+        #'views/product_template_show_tax.xml',
     ],
     'demo': [],
     'installable': True,
