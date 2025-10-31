@@ -1,7 +1,7 @@
 {
     'name': 'Product Filter Discafe',
     'summary': 'Filter products by quantity',
-    'version': '13.0.1.0.0',
+    'version': '14.0.1.0.0',
     'website': 'https://xtendoo.es/',
     'depends': ['stock', 'product_expiry'],
     'license': 'LGPL-3',

@@ -1,6 +1,6 @@
 {
     'name': 'Sale Order Lot Validation',
-    'version': '13.0.1.0.0',
+    'version': '14.0.1.0.0',
     'category': 'Sales Management',
     'author': "Manuel Calero, Daniel Dominguez",
     'website': 'https://github.com/xtendoo-corporation/xtendoo',
