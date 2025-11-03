@@ -20,18 +20,18 @@
             <field name="dpi">90</field>
         </record>
 
-        <report id="document_format_dis.report_payment_receipt_bluetooth_action"
-                string="Recibo de Pago Bluetooth"
-                model="account.payment"
-                report_type="qweb-pdf"
-                name="document_format_dis.report_payment_receipt_bluetooth"
-        />
-
-        <record id="document_format_dis.report_payment_receipt_bluetooth_action" model="ir.actions.report">
-            <field name="paperformat_id" ref="document_format_dis.bluetooth_payment"/>
+        <record id="report_payment_receipt_bluetooth_action" model="ir.actions.report">
+            <field name="name">Recibo de Pago Bluetooth</field>
+            <field name="model">account.payment</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">document_format_dis.report_payment_receipt_bluetooth</field>
+            <field name="report_file">document_format_dis.report_payment_receipt_bluetooth</field>
+            <field name="binding_model_id" ref="account.model_account_payment"/>
+            <field name="binding_type">report</field>
+            <field name="paperformat_id" ref="bluetooth_payment"/>
         </record>
 
-        <template id="document_format_dis.report_payment_receipt_bluetooth">
+        <template id="report_payment_receipt_bluetooth">
             <t t-call="web.html_container">
                 <t t-foreach="docs" t-as="o">
                     <t t-set="lang" t-value="o.partner_id.lang"/>

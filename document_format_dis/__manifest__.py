@@ -19,53 +19,26 @@
     'license': 'AGPL-3',
     'data': [
 
-        # Cabecera y Pie
-        #'views/layout/external_layout_clean.xml',
-
-        # Ventas
-        #'views/sale/report_saleorder_document_without_promotions.xml',
-        #'views/sale/report_saleorder_document_promotions.xml',
-        #'views/sale/saleorder_promotions.xml',
+        # Sólo vistas Bluetooth (se han eliminado las vistas "normales")
 
         # Ventas Bluetooth
-        #'views/sale_bluetooth/report_saleorder_bluetooth_without_promotions.xml',
-        #'views/sale_bluetooth/report_saleorder_bluetooth_with_promotions.xml',
-        #'views/sale_bluetooth/saleorder_promotions_bluetooth.xml',
-
-        # Albarán
-        #'views/delivery/report_delivery_document_promotions.xml',
-        #'views/delivery/report_delivery_document_without_promotions.xml',
-        #'views/delivery/delivery_promotions.xml',
+        'views/sale_bluetooth/report_saleorder_bluetooth_without_promotions.xml',
+        'views/sale_bluetooth/report_saleorder_bluetooth_with_promotions.xml',
+        'views/sale_bluetooth/saleorder_promotions_bluetooth.xml',
 
         # Albarán Bluetooth
-        #'views/delivery_bluetooth/report_delivery_document_with_promotions_bluetooth.xml',
-        #'views/delivery_bluetooth/report_delivery_document_without_promotions_bluetooth.xml',
-        #'views/delivery_bluetooth/delivery_promotions_bluetooth.xml',
+        'views/delivery_bluetooth/report_delivery_document_with_promotions_bluetooth.xml',
+        'views/delivery_bluetooth/report_delivery_document_without_promotions_bluetooth.xml',
+        'views/delivery_bluetooth/delivery_promotions_bluetooth.xml',
 
-        # Informe de carga
-        #'views/workload/stock_picking_report.xml',
-
-        #Factura Bluetooth
-        #'views/invoice_bluetooth/report_invoice_document_with_promotions_bluetooth.xml',
-        #'views/invoice_bluetooth/report_invoice_document_without_promotions_bluetooth.xml',
-        #'views/invoice_bluetooth/invoice_promotions_bluetooth.xml',
-
-        # Factura
-        #'views/invoice/report_invoice_document_promotions.xml',
-        #'views/invoice/report_invoice_document_without_promotions.xml',
-        #'views/invoice/invoice_promotions.xml',
-
-        # Compras
-        #'views/purchase/report_purchase_document.xml',
-
-        # Pagos
-        #'views/payment/report_payment_receipt.xml',
+        # Factura Bluetooth
+        'views/invoice_bluetooth/report_invoice_document_with_promotions_bluetooth.xml',
+        'views/invoice_bluetooth/report_invoice_document_without_promotions_bluetooth.xml',
+        'views/invoice_bluetooth/invoice_promotions_bluetooth.xml',
 
         # Pagos Bluetooth
-        #'views/payment_bluetooth/report_payment_receipt_bluetooth.xml',
+        'views/payment_bluetooth/report_payment_receipt_bluetooth.xml',
 
-        # Factura Sin promociones
-        #'views/invoice_without_promotions/invoice_without_promotions.xml',
 
     ],
     'demo': [],
