@@ -1,7 +1,7 @@
 {
     'name': 'D & HR Administrator',
     'summary': """Administration settings for Discafé and Huelva Regalos""",
-    'version': '17.0.1.0.0',
+    'version': '18.0.1.0.0',
     'description': """Administration settings foR Discafé and Huelva Regalos""",
     'author': 'DDL',
     'company': 'Xtendoo',
