@@ -3,7 +3,7 @@
 {
     'name': 'document_format_dis',
     'summary': """Formatos de documentos DIS""",
-    'version': '16.0.1.0.0',
+    'version': '17.0.1.0.0',
     'description': """Formatos de documentos DIS""",
     'author': 'DDL',
     'company': 'Xtendoo',

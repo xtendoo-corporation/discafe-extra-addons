@@ -1,7 +1,7 @@
 # __manifest__.py
 {
     "name": "Fix para búsqueda de partners en ventas",
-    "version": "16.0.1.0.0",
+    "version": "17.0.1.0.0",
     "author": "Dani Domínguez, Xtendoo",
     "license": "AGPL-3",
     "category": "Sales",
