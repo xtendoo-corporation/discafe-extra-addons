@@ -120,7 +120,7 @@
 
                         <div>
                             <span style="display:inline;width:50%;font-weight:bolder;">Fecha:</span>
-                            <span style="display:inline;width:50%;" t-field="o.payment_date"/>
+                            <span style="display:inline;width:50%;" t-field="o.date"/>
                         </div>
 
                         <!-- FIn fecha del pago -->
@@ -156,17 +156,17 @@
 
                         <div>
                             <span style="display:inline;font-weight:bolder;">Cantidad:</span>
-                            <span t-field="o.amount" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                            <span t-esc="'%.2f'%(o.amount)"/>
                         </div>
 
                         <!-- Fin cantidad pagada -->
 
                         <!-- Referencia -->
 
-                        <div>
+                        <!--<div>
                             <span style="display:inline;width:100%;font-weight:bolder;">Referencia:</span>
-                            <span t-field="o.communication"/>
-                        </div>
+                            <span t-field="o.ref"/>
+                        </div>-->
 
                         <!-- Fin referencia -->
 
@@ -225,15 +225,15 @@
                                 </td>
 
                                 <td class="text-right" style="border-right:2px dotted black;border-top:2px dotted black">
-                                    <span t-field="inv.amount_total"/>
+                                    <span t-esc="'%.2f'%(inv.amount_total)"/>
                                 </td>
 
                                 <td class="text-right" style="border-right:2px dotted black;border-top:2px dotted black">
-                                    <span t-esc="inv.amount_total - inv.amount_residual" t-options="{'widget': 'monetary', 'display_currency': inv.currency_id}"/>
+                                    <span t-esc="'%.2f'%(inv.amount_total - inv.amount_residual)"/>
                                 </td>
 
                                 <td class="text-right" style="border-top:2px dotted black;">
-                                    <span t-field="inv.amount_residual"/>
+                                    <span t-esc="'%.2f'%(inv.amount_residual)"/>
                                 </td>
 
                             </tr>
