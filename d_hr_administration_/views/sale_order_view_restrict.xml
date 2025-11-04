@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="d_hr_administration_saleorder_form_inherit" model="ir.ui.view">
+            <field name="name">sale.order.form.inherit.d_hr_administration</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+            <!-- No ver Margen -->
+                <xpath expr="//field[@name='margin']" position="attributes">
+                    <attribute name="groups">d_hr_administration.show_margins</attribute>
+                </xpath>
+            <!-- Fin no ver margen -->
+                <!-- comerciales no editen tarifa-->
+                 <xpath expr="//field[@name='pricelist_id']" position="replace">
+                    <field name="is_admin" invisible="1"/>
+                    <field name="pricelist_id" force_save="1" readonly="not is_admin" options="{'no_create': True}"/>
+                </xpath>
+                <!-- Fin comerciales no editen tarifa-->
+
+                <!-- No editar precio unitario (en formulario embebido de lineas) -->
+                <xpath expr="//field[@name='order_line']//form//field[@name='price_unit']" position="replace">
+                    <field name="can_edit_price" invisible="1"/>
+                    <field name="price_unit" readonly="not can_edit_price"/>
+                </xpath>
+
+                <!-- No editar IVA (en formulario embebido de lineas) -->
+                <xpath expr="//field[@name='order_line']//form//field[@name='tax_id']" position="replace">
+                    <field name="can_edit_tax" invisible="1"/>
+                    <field name="tax_id"
+                           widget="many2many_tags"
+                           force_save="1"
+                           options="{'no_create': True}"
+                           domain="[('type_tax_use', '=', 'sale'), ('company_id', 'parent_of', parent.company_id), ('country_id', '=', parent.tax_country_id)]"
+                           readonly="not can_edit_tax"/>
+                </xpath>
+
+                <!-- No editar descuento (en formulario embebido de lineas) -->
+                <xpath expr="//field[@name='order_line']//form//field[@name='discount']" position="replace">
+                    <field name="can_edit_discounts" invisible="1"/>
+                    <field name="discount" class="oe_inline" readonly="not can_edit_discounts" force_save="1"/>
+                </xpath>
+
+            </field>
+        </record>
+       <!--  buscar mas... (ventas)  -->
+        <record model="ir.ui.view" id="d_hr_administration_product_template_tree_view_inherit">
+        <field name="name">product.template.tree.view.inherit.d_hr_administration</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_product_tree_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='standard_price']" position="attributes">
+                <attribute name="groups">d_hr_administration.show_cost_price</attribute>
+            </xpath>
+        </field>
+        </record>
+        <!--   Fin buscar mas... (ventas)   -->
+
+        <!-- Zona de entrega -->
+         <record id="d_hr_administration_partner_delivery_zone_view" model="ir.ui.view">
+            <field name="name">sale.order.form.inherit.delivery_zone.d_hr_administration</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="partner_delivery_zone.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='delivery_zone_id']" position="replace">
+                    <field name="is_admin" invisible="1"/>
+                    <field name="delivery_zone_id" force_save="1" readonly="state in ['done', 'cancel'] or not is_admin" options="{'no_create': True}"/>
+            </xpath>
+            </field>
+         </record>
+        <!-- Zona de entrega -->
+    </data>
+</odoo>

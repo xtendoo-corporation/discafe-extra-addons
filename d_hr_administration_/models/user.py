@@ -5,10 +5,11 @@ from odoo import fields, models
 
 
 class Users(models.Model):
-    _inherit = ['res.users','administrator.mixin.rule']
-    _name ='res.users'
+    _name = 'res.users'
+    _inherit = ['res.users', 'administrator.mixin.rule']
 
     administration = fields.Boolean(
         string='Administración',
-        default=False
-        )
+        default=False,
+        help="Indica si el usuario tiene permisos de administración"
+    )

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="d_hr_administration_invoice_margin_form_inherit" model="ir.ui.view">
+            <field name="name">account.move.form.d_hr_administration</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="arch" type="xml">
+                <!-- Campo price_unit -->
+                <xpath expr="//field[@name='invoice_line_ids']//field[@name='price_unit']" position="replace">
+                    <field name="is_admin" column_invisible="True"/>
+                    <field name="can_edit_price" column_invisible="True"/>
+                    <field name="price_unit" readonly="not can_edit_price"/>
+               </xpath>
+
+                <!-- Campo account_id -->
+                <xpath expr="//field[@name='invoice_line_ids']//field[@name='account_id']" position="replace">
+                    <field name="can_edit_account" column_invisible="True"/>
+                    <field name="account_id" readonly="not can_edit_account" options="{'no_create': True}"/>
+               </xpath>
+
+                <!-- Campo quantity -->
+                <xpath expr="//field[@name='invoice_line_ids']//field[@name='quantity']" position="replace">
+                    <field name="can_edit_quantity" column_invisible="True"/>
+                    <field name="quantity" readonly="not can_edit_quantity"/>
+               </xpath>
+
+                <!-- Campo discount -->
+                <xpath expr="//field[@name='invoice_line_ids']//field[@name='discount']" position="replace">
+                    <field name="can_edit_discounts" column_invisible="True"/>
+                    <field name="discount" readonly="not can_edit_discounts" force_save="1"/>
+                </xpath>
+
+                <!-- Campo tax_ids -->
+                <xpath expr="//field[@name='invoice_line_ids']//field[@name='tax_ids']" position="replace">
+                    <field name="can_edit_tax" column_invisible="True"/>
+                    <field name="tax_ids" widget="many2many_tags" force_save="1"
+                           options="{'no_create': True}"
+                           context="{'type': parent.move_type, 'tree_view_ref': 'account.account_tax_view_tree', 'search_view_ref': 'account.account_tax_view_search'}"
+                           domain="[('type_tax_use', '=', 'sale'), ('company_id', '=', parent.company_id)]"
+                           readonly="not can_edit_tax"/>
+               </xpath>
+
+                <!-- Campo product_id -->
+                <xpath expr="//field[@name='invoice_line_ids']//field[@name='product_id']" position="replace">
+                    <field name="can_edit_product_id" column_invisible="True"/>
+                    <field name="product_id" readonly="not can_edit_product_id" options="{'no_create': True}"/>
+               </xpath>
+
+                <!-- Campo name (descripción) -->
+                <xpath expr="//field[@name='invoice_line_ids']//field[@name='name']" position="replace">
+                    <field name="can_edit_product_desc" column_invisible="True"/>
+                    <field name="name" readonly="not can_edit_product_desc" widget="text"/>
+               </xpath>
+
+               <!-- Campo analytic_distribution -->
+               <xpath expr="//field[@name='invoice_line_ids']//field[@name='analytic_distribution']" position="replace">
+                    <field name="can_edit_account" column_invisible="True"/>
+                    <field name="analytic_distribution" readonly="not can_edit_account" widget="analytic_distribution" groups="analytic.group_analytic_accounting"/>
+               </xpath>
+
+               <!-- Botón Cancelar en la vista -->
+               <xpath expr="//button[@name='button_cancel']" position="attributes">
+                    <attribute name="groups">d_hr_administration.administration</attribute>
+               </xpath>
+
+               <!-- Botón Draft -->
+               <xpath expr="//button[@name='button_draft']" position="attributes">
+                    <attribute name="groups">d_hr_administration.administration</attribute>
+               </xpath>
+            </field>
+        </record>
+
+        <!-- Vista tree para facturas con restricciones -->
+        <record id="d_hr_administration_invoice_tree_inherit" model="ir.ui.view">
+            <field name="name">account.move.tree.d_hr_administration</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_invoice_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//list" position="attributes">
+                    <attribute name="create">0</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Restricción en acción de ventana para facturas de cliente -->
+        <record id="account.action_move_out_invoice_type" model="ir.actions.act_window">
+            <field name="context">{'default_move_type': 'out_invoice', 'is_sale': True}</field>
+        </record>
+
+        <!-- Restricción en acción de ventana para facturas de proveedor -->
+        <record id="account.action_move_in_invoice_type" model="ir.actions.act_window">
+            <field name="context">{'default_move_type': 'in_invoice'}</field>
+        </record>
+
+    </data>
+</odoo>

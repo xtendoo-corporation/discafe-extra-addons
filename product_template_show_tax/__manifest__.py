@@ -2,21 +2,21 @@
 
 {
     'name': 'Product show tax in tree view',
-    'summary': """Mostrar referencia en la list view de productos""",
+    'summary': """Mostrar impuestos en la vista de lista de productos""",
     'version': '18.0.1.0.0',
-    'description': """Mostrar referencia en la list view de productos""",
+    'description': """Mostrar impuestos en la vista de lista de productos""",
     'author': 'DDL',
     'company': 'Xtendoo',
     'website': 'http://www.xtendoo.com',
     'category': 'Extra Tools',
     'depends': [
         'base',
-        'stock',
-        'product'
+        'product',
+        'account',
     ],
     'license': 'AGPL-3',
     'data': [
-        #'views/product_template_show_tax.xml',
+        'views/product_template_show_tax.xml',
     ],
     'demo': [],
     'installable': True,
