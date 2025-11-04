@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+        <record id="inherited_view_picking_form" model="ir.ui.view">
+            <field name="name">inherited.stock.view.picking.form</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='move_ids_without_package']" position="after">
+                    <group>
+                        <field name="name_receiver" string="Nombre del receptor"/>
+                        <field name="vat_receiver" string="DNI del receptor"/>
+                    </group>
+                    <label for="digital_signature" string="Firma digital"/>
+                    <field name="digital_signature" widget="digital_signature"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

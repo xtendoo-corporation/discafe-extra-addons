@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+        <record id="inherited_account_invoice_form" model="ir.ui.view">
+            <field name="name">inherited.account.invoice.form</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='narration']" position="before">
+                    <label for="digital_signature" string="Firma digital"/>
+                    <field name="digital_signature" widget="digital_signature"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
