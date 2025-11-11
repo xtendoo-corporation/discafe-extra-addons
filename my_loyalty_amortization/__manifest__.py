@@ -10,11 +10,11 @@
         promoción es "Comprar X recibir Y" (buy_x_get_y).
     """,
     'author': 'Guillermo Bárcena López',
-    'website': 'https://www.discafe.com',
     'depends': [
         'base',
         'sale',
         'loyalty',
+        'sale_loyalty',
     ],
     'data': [
         'views/loyalty_program_views.xml',
@@ -24,4 +24,3 @@
     'auto_install': False,
     'license': 'LGPL-3',
 }
-
