@@ -22,8 +22,11 @@ class SaleOrder(models.Model):
             order.partner_id_readonly = bool(order.order_line)
 
     def _get_delivery_zone_id(self):
-        if 'partner_delivery_zone_id' in request.session:
-            return request.session['partner_delivery_zone_id']
+        if self.env.context.get('is_web_request'):
+            # Acceder a request.session solo si estamos en un contexto web
+            if 'partner_delivery_zone_id' in self.env.context.get('request', {}).session:
+                return self.env.context['request'].session.get('partner_delivery_zone_id')
+        # Si no estamos en un contexto web, devolvemos un valor por defecto
         return 0
 
     def _get_next_partner(self):
