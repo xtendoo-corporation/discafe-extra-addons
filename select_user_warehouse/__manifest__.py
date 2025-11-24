@@ -10,7 +10,7 @@
     'website': 'http://www.xtendoo.es',
     'description': """
 """,
-    'version': '14.0.0.1',
+    'version': '13.0.0.1',
     'depends': ['base','stock','sale_management'],
     'data': ['views/user_view.xml'],
     'images': ['static/description/banner.png'],

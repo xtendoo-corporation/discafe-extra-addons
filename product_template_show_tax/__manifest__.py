@@ -3,7 +3,7 @@
 {
     'name': 'Product show tax in tree view',
     'summary': """Mostrar referencia en la list view de productos""",
-    'version': '14.0.1.0.0',
+    'version': '13.0.1.0.0',
     'description': """Mostrar referencia en la list view de productos""",
     'author': 'DDL',
     'company': 'Xtendoo',
@@ -16,7 +16,7 @@
     ],
     'license': 'AGPL-3',
     'data': [
-        #'views/product_template_show_tax.xml',
+        'views/product_template_show_tax.xml',
     ],
     'demo': [],
     'installable': True,

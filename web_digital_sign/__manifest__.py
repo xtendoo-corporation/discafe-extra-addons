@@ -2,7 +2,7 @@
 
 {
     'name': 'Xtendoo Web Digital Signature',
-    'version': '14.0.1.0.0',
+    'version': '13.0.1.0.0',
     'author': 'Xtendoo',
     'maintainer': 'Dani Domínguez',
     'depends': ['web'],
