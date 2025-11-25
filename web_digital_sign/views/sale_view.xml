@@ -8,7 +8,12 @@
             <field name="arch" type="xml">
 
                 <xpath expr="//field[@name='note']" position="before">
-                    <field name="digital_signature" widget="digital_signature"/>
+                    <group class="oe_center" colspan="2" name="digital_signature">
+                        <label for="digital_signature" string="Firma digital"/>
+                        <h2>
+                            <field name="digital_signature" widget="signature"/>
+                        </h2>
+                    </group>
                 </xpath>
 
                 <xpath expr="//page[@name='customer_signature']" position="attributes">
@@ -19,3 +24,4 @@
         </record>
     </data>
 </odoo>
+

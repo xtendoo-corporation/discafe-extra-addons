@@ -8,7 +8,7 @@
 
             <t t-name="document_format_dis.report_saleorder_document_bluetooth_without_promotions">
 
-                 <t t-set="numLines" t-value="0"/>
+                 <t t-set="numLines" t-value="0"></t>
 
                 <t t-foreach="doc.order_line" t-as="line">
                      <t t-if="line.price_unit != 0.0">
@@ -95,7 +95,7 @@
 
                     <!-- Fin Cabecera documento -->
 
-                    <hr style="height:3px; background-color:black;clear:both;"/>
+                    <hr style="height:3px; background-color:black;clear:both;"></hr>
 
                     <!-- Datos del cliente -->
 
@@ -295,6 +295,7 @@
                         <!--Lineas -->
 
                     <div style="font-size:0.8em;">
+
                         <t t-set="ActLine" t-value="0"></t>
                         <t t-set="addSeparator" t-value="1"></t>
                         <t t-set="current_subtotal" t-value="0"/>
@@ -340,15 +341,13 @@
                                         <!-- Fin unidades -->
                                         <!-- Precio -->
                                         <div style="width:25%;float:left;text-align:right;">
-                            <t t-if="line.price_unit">
-                                <span style="text-align:right;display:block;">
-                                    <span t-esc="'%.2f'%(line.price_unit)"/>
-                                </span>
-                            </t>
-                            <t t-else="">
-                                <span style="text-align:right;display:block;color:white;">aa</span>
-                            </t>
-                        </div>
+                                            <t t-if="line.price_unit">
+                                                <span style="text-align:right;display:block;"><span t-esc="'%.2f'%line.price_unit"/>€</span>
+                                            </t>
+                                            <t t-else="">
+                                                <span style="text-align:right;display:block;color:white;">aa</span>
+                                            </t>
+                                        </div>
                                         <!-- Fin Precio -->
 
                                         <!-- Descuento -->
@@ -379,9 +378,9 @@
                                         <!-- Fin IVA -->
                                         <!-- Neto -->
                                          <div style="width:25%;float:left;text-align:right;">
-                                            <span style="text-align:right;display:block;">
-                                                <span t-esc="'%.2f'%(line.price_subtotal)"/>
-                                            </span>
+
+                                            <span style="text-align:right;display:block;"><span t-esc="'%.2f'%(line.price_subtotal)"/>€</span>
+
                                          </div>
                                         <!-- Fin Neto -->
 
@@ -400,7 +399,7 @@
 
                     <!-- Fin productos -->
 
-                    <hr style="height:3px; background-color:black;clear:both;"/>
+                    <hr style="height:3px; background-color:black;clear:both;"></hr>
 
                     <!-- Totales -->
 
@@ -415,7 +414,7 @@
                             </div>
 
                             <div style="width:50%;float:left;">
-                                <span t-esc="'%.2f'%(doc.amount_untaxed)"/>
+                                <span t-field="doc.amount_untaxed"/>
                             </div>
 
                         </div>
@@ -425,28 +424,35 @@
                         <!-- Iva -->
 
                         <div style="clear:both;">
-                            <t t-if="'amount_by_group' in doc._fields">
-                                <t t-foreach="doc.amount_by_group" t-as="amount_by_group">
-                                    <t t-if="amount_by_group[3] == 1 and doc.amount_untaxed == amount_by_group[2]">
-                                    </t>
-                                    <t t-else="">
-                                        <div style="width:70%;float:left;clear:both;text-align:left;">
-                                            <div style="clear:both;float:left;width:65%;">
-                                                <b><span t-esc="amount_by_group[0]"/></b>
-                                                <span>sobre</span>
-                                            </div>
-                                            <div style="text-align:right;float:left;width:35%;">
-                                                <span style="display:block;width:100%;">
-                                                    <t t-esc="amount_by_group[4]"/>
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <div class="text-right o_price_total" style="width:30%;float:left;text-align:right">
-                                            <span t-esc="amount_by_group[3]"/>
-                                        </div>
-                                    </t>
+
+                            <t t-foreach="doc.amount_by_group" t-as="amount_by_group">
+
+                                <t t-if="amount_by_group[3] == 1 and doc.amount_untaxed == amount_by_group[2]">
                                 </t>
+                                <t t-else="">
+                                    <div style="width:70%;float:left;clear:both;text-align:left;">
+                                    <div style="clear:both;float:left;width:65%;">
+                                        <b><span t-esc="amount_by_group[0]"/></b>
+                                        <span>sobre</span>
+                                    </div>
+
+                                    <div style="text-align:right;float:left;width:35%;">
+                                        <span style="display:block;width:100%;">
+                                        <t t-esc="amount_by_group[4]"/>
+                                    </span>
+
+                                    </div>
+                                </div>
+
+                                    <div class="text-right o_price_total" style="width:30%;float:left;text-align:right">
+                                    <span t-esc="amount_by_group[3]"/>
+                                </div>
+
+
+                                </t>
+
                             </t>
+
                         </div>
 
                         <!-- Fin iva -->
@@ -460,7 +466,7 @@
                             </div>
 
                             <div style="width:50%;float:left;">
-                                <span t-esc="'%.2f'%(doc.amount_total)"/>
+                                <span t-field="doc.amount_total"/>
                             </div>
 
                         </div>
@@ -469,7 +475,7 @@
 
                         <!-- Fin total documento -->
 
-                        <hr style="height:3px; background-color:black;clear:both;"/>
+                        <hr style="height:3px; background-color:black;clear:both;"></hr>
 
                     </div>
 
@@ -497,11 +503,11 @@
 
                     <!-- Firma del cliente -->
 
-                        <!-- <div style="height:100px;width:100%;border:2px solid black;">
-                              <span style="text-align:center;display:block;width:100%">Firma del cliente:</span>
+                        <div style="height:100px;width:100%;border:2px solid black;">
+                              <span style="text-align:center;display:block;width:100%;">Firma del cliente:</span>
                               <img style="width:100%;" t-attf-src="data:image/*;base64,{{doc.digital_signature}}"/>
                         </div>
-                        -->
+
 
                         <!-- fin Firmar del cliente -->
 

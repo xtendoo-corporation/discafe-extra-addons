@@ -20,18 +20,18 @@
             <field name="dpi">90</field>
         </record>
 
-        <record id="report_payment_receipt_bluetooth_action" model="ir.actions.report">
-            <field name="name">Recibo de Pago Bluetooth</field>
-            <field name="model">account.payment</field>
-            <field name="report_type">qweb-pdf</field>
-            <field name="report_name">document_format_dis.report_payment_receipt_bluetooth</field>
-            <field name="report_file">document_format_dis.report_payment_receipt_bluetooth</field>
-            <field name="binding_model_id" ref="account.model_account_payment"/>
-            <field name="binding_type">report</field>
-            <field name="paperformat_id" ref="bluetooth_payment"/>
+        <report id="document_format_dis.report_payment_receipt_bluetooth_action"
+                string="Recibo de Pago Bluetooth"
+                model="account.payment"
+                report_type="qweb-pdf"
+                name="document_format_dis.report_payment_receipt_bluetooth"
+        />
+
+        <record id="document_format_dis.report_payment_receipt_bluetooth_action" model="ir.actions.report">
+            <field name="paperformat_id" ref="document_format_dis.bluetooth_payment"/>
         </record>
 
-        <template id="report_payment_receipt_bluetooth">
+        <template id="document_format_dis.report_payment_receipt_bluetooth">
             <t t-call="web.html_container">
                 <t t-foreach="docs" t-as="o">
                     <t t-set="lang" t-value="o.partner_id.lang"/>
@@ -120,7 +120,7 @@
 
                         <div>
                             <span style="display:inline;width:50%;font-weight:bolder;">Fecha:</span>
-                            <span style="display:inline;width:50%;" t-field="o.date"/>
+                            <span style="display:inline;width:50%;" t-field="o.payment_date"/>
                         </div>
 
                         <!-- FIn fecha del pago -->
@@ -156,17 +156,17 @@
 
                         <div>
                             <span style="display:inline;font-weight:bolder;">Cantidad:</span>
-                            <span t-esc="'%.2f'%(o.amount)"/>
+                            <span t-field="o.amount" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
                         </div>
 
                         <!-- Fin cantidad pagada -->
 
                         <!-- Referencia -->
 
-                        <!--<div>
+                        <div>
                             <span style="display:inline;width:100%;font-weight:bolder;">Referencia:</span>
-                            <span t-field="o.ref"/>
-                        </div>-->
+                            <span t-field="o.communication"/>
+                        </div>
 
                         <!-- Fin referencia -->
 
@@ -225,15 +225,15 @@
                                 </td>
 
                                 <td class="text-right" style="border-right:2px dotted black;border-top:2px dotted black">
-                                    <span t-esc="'%.2f'%(inv.amount_total)"/>
+                                    <span t-field="inv.amount_total"/>
                                 </td>
 
                                 <td class="text-right" style="border-right:2px dotted black;border-top:2px dotted black">
-                                    <span t-esc="'%.2f'%(inv.amount_total - inv.amount_residual)"/>
+                                    <span t-esc="inv.amount_total - inv.amount_residual" t-options="{'widget': 'monetary', 'display_currency': inv.currency_id}"/>
                                 </td>
 
                                 <td class="text-right" style="border-top:2px dotted black;">
-                                    <span t-esc="'%.2f'%(inv.amount_residual)"/>
+                                    <span t-field="inv.amount_residual"/>
                                 </td>
 
                             </tr>

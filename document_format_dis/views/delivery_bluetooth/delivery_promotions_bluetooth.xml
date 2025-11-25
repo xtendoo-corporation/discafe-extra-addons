@@ -20,19 +20,19 @@
             <field name="dpi">90</field>
         </record>
 
-        <record id="report_delivery_promotions_bluetooh_action" model="ir.actions.report">
-            <field name="name">Albarán Bluetooth</field>
-            <field name="model">stock.picking</field>
-            <field name="report_type">qweb-pdf</field>
-            <field name="report_name">document_format_dis.report_delivery_promotions_bluetooh</field>
-            <field name="report_file">document_format_dis.report_delivery_promotions_bluetooh</field>
-            <field name="print_report_name">'Delivery Slip - %s - %s' % (object.partner_id.name or '', object.name)</field>
-            <field name="binding_model_id" ref="stock.model_stock_picking"/>
-            <field name="binding_type">report</field>
-            <field name="paperformat_id" ref="bluetooth_delivery_2"/>
+        <report id="document_format_dis.report_delivery_promotions_bluetooh_action"
+                string="Albarán Bluetooth"
+                model="stock.picking"
+                report_type="qweb-pdf"
+                name="document_format_dis.report_delivery_promotions_bluetooh"
+                print_report_name="'Delivery Slip - %s - %s' % (object.partner_id.name or '', object.name)"
+        />
+
+        <record id="document_format_dis.report_delivery_promotions_bluetooh_action" model="ir.actions.report">
+            <field name="paperformat_id" ref="document_format_dis.bluetooth_delivery_2"/>
         </record>
 
-        <template id="report_delivery_promotions_bluetooh">
+        <template id="document_format_dis.report_delivery_promotions_bluetooh">
              <t t-name="document_format_dis.report_delivery_promotions_bluetooh">
                 <t t-call="web.html_container">
                     <t t-foreach="docs" t-as="o">

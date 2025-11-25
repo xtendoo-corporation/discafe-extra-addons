@@ -3,7 +3,7 @@
 {
     'name': 'Discafe Select User Warehouse',
     'summary': """Discafe Select User Warehouse""",
-    'version': '18.0.1.0.0',
+    'version': '13.0.1.0.0',
     'description': """Discafe Select User Warehouse""",
     'author': 'DDL',
     'company': 'Xtendoo',

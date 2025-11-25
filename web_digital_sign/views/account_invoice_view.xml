@@ -7,10 +7,15 @@
             <field name="inherit_id" ref="account.view_move_form" />
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='narration']" position="before">
-                    <label for="digital_signature" string="Firma digital"/>
-                    <field name="digital_signature" widget="digital_signature"/>
+                    <group class="oe_center" colspan="2" name="digital_signature">
+                        <label for="digital_signature" string="Firma digital"/>
+                        <h2>
+                            <field name="digital_signature" widget="signature"/>
+                        </h2>
+                    </group>
                 </xpath>
             </field>
         </record>
     </data>
 </odoo>
+

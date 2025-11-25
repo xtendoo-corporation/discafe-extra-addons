@@ -1,211 +1,154 @@
-/** @odoo-module **/
+odoo.define('web_digital_sign.web_digital_sign', function(require) {
+    "use strict";
 
+    var core = require('web.core');
+    var BasicFields = require('web.basic_fields');
+    var FormController = require('web.FormController');
+    var Registry = require('web.field_registry');
+    var utils = require('web.utils');
+    var session = require('web.session');
+    var field_utils = require('web.field_utils');
 
-import { registry } from "@web/core/registry";
-import { Component, useEffect, useRef, useState, onWillStart, onMounted } from "@odoo/owl";
-import { useService } from "@web/core/utils/hooks";
-import { loadJS } from "@web/core/assets";
-import { standardFieldProps } from "@web/views/fields/standard_field_props";
+    var _t = core._t;
+    var QWeb = core.qweb;
 
-export class FieldDigitalSignature extends Component {
-    static template = "web_digital_sign.FieldDigitalSignature";
-    static props = {
-        ...standardFieldProps,
-    };
-
-    setup() {
-        this.orm = useService("orm");
-        this.notification = useService("notification");
-        this.signatureRef = useRef("signature");
-        this.jSignatureLoaded = false;
-        this.state = useState({
-            signatureUrl: null,
-            isEmpty: true,
-            isLoading: true,
-        });
-        console.log("DigitalSignature props:", this.props);
-
-
-        this.signOptions = {
-            'decor-color': '#D1D0CE',
-            'color': '#000',
-            'background-color': '#fff',
-            'height': '150',
-            'width': '550'
-        };
-
-        onWillStart(async () => {
-            await this.loadJSignature();
-        });
-
-        onMounted(() => {
-            if (this.jSignatureLoaded) {
-                this.initSignature();
-                if (this.fieldValue) {
-                    this.loadSignature();
-                }
+    var FieldSignature = BasicFields.FieldBinaryImage.extend({
+        template: 'FieldSignature',
+        events: _.extend({}, BasicFields.FieldBinaryImage.prototype.events, {
+            'click .save_sign': '_on_save_sign',
+            'click #sign_clean': '_on_clear_sign'
+        }),
+        jsLibs: ['/web_digital_sign/static/lib/jSignature/jSignatureCustom.js'],
+        placeholder: "/web/static/src/img/placeholder.png",
+        init: function(parent, name, record) {
+            this._super.apply(this, arguments);
+            this.sign_options = {
+                'decor-color': '#D1D0CE',
+                'color': '#000',
+                'background-color': '#fff',
+                'height': '150',
+                'width': '550'
+            };
+            this.empty_sign = [];
+        },
+        start: function() {
+            var self = this;
+            this.$(".signature").jSignature("init", this.sign_options);
+            this.$(".signature").attr({
+                "tabindex": "0",
+                'height': "100"
+            });
+            this.empty_sign = this.$(".signature").jSignature("getData", 'image');
+            self._render();
+        },
+        _on_clear_sign: function() {
+            this.$(".signature > canvas").remove();
+            this.$('> img').remove();
+            this.$(".signature").attr("tabindex", "0");
+            var sign_options = {
+                'decor-color': '#D1D0CE',
+                'color': '#000',
+                'background-color': '#fff',
+                'height': '150',
+                'width': '550',
+                'clear': true
+            };
+            this.$(".signature").jSignature(sign_options);
+            this.$(".signature").focus();
+            this._setValue(false);
+        },
+        _on_save_sign: function(value_) {
+            var self = this;
+            this.$('> img').remove();
+            var signature = this.$(".signature").jSignature("getData", 'image');
+            var is_empty = signature ?
+                self.empty_sign[1] === signature[1] :
+                false;
+            if (!is_empty && typeof signature !== "undefined" && signature[1]) {
+                this._setValue(signature[1]);
             }
-        });
-
-        useEffect(() => {
-            if (this.jSignatureLoaded) {
-                this.initSignature();
-            }
-        }, () => [this.isReadonly, this.jSignatureLoaded]);
-
-        useEffect(() => {
-            if (this.jSignatureLoaded && this.fieldValue) {
-                this.loadSignature();
-            }
-        }, () => [this.fieldValue, this.jSignatureLoaded]);
-    }
-
-    get fieldName() {
-        return this.props.name;
-    }
-
-    get fieldValue() {
-        return this.props.record.data[this.fieldName];
-    }
-
-    get isReadonly() {
-        return this.props.readonly || false;
-    }
-
-
-    async loadJSignature() {
-        if (this.jSignatureLoaded) return;
-
-        try {
-            // Asegurarse de que jQuery esté disponible globalmente
-            if (typeof window.$ === 'undefined' && typeof $ !== 'undefined') {
-                window.$ = $;
-                window.jQuery = $;
-            }
-
-            await loadJS("/web_digital_sign/static/lib/jSignature/jSignatureCustom.js");
-            this.jSignatureLoaded = true;
-            this.state.isLoading = false;
-        } catch (error) {
-            console.error("Error loading jSignature:", error);
-            this.state.isLoading = false;
-        }
-    }
-
-    initSignature() {
-        if (!this.signatureRef.el || !this.jSignatureLoaded) return;
-
-        const $signature = $(this.signatureRef.el);
-        $signature.empty();
-
-        if (!this.isReadonly) {
-            try {
-                $signature.jSignature("init", this.signOptions);
-                $signature.attr({
-                    "tabindex": "0",
-                    'height': "100"
+        },
+        _render: function() {
+            var self = this;
+            var url = this.placeholder;
+            if (this.value && !utils.is_bin_size(this.value)) {
+                url = 'data:image/png;base64,' + this.value;
+            } else if (this.value) {
+                url = session.url('/web/image', {
+                    model: this.model,
+                    id: JSON.stringify(this.res_id),
+                    field: this.nodeOptions.preview_image || this.name,
+                    unique: field_utils.format.datetime(this.recordData.__last_update).replace(/[^0-9]/g, ''),
                 });
-                this.emptySign = $signature.jSignature("getData", 'image');
-            } catch (error) {
-                console.error("Error initializing signature:", error);
+            } else {
+                url = this.placeholder;
             }
-        }
-    }
-
-    async loadSignature() {
-        const value = this.fieldValue;
-        if (!value) return;
-
-        if (this.isReadonly) {
-            this.state.signatureUrl = 'data:image/png;base64,' + value;
-        } else {
-            const $signature = $(this.signatureRef.el);
-            if (!$signature.length) return;
-
-            try {
-                const resId = this.props.record && this.props.record.resId;
-                if (!resId) return;
-
-                const data = await this.orm.read(
-                    this.props.record.resModel,
-                    [resId],
-                    [this.fieldName]
-                );
-                if (data && data[0]) {
-                    const fieldValue = data[0][this.fieldName];
-                    if (fieldValue) {
-                        $signature.jSignature("clear");
-                        $signature.jSignature("setData", 'data:image/png;base64,' + fieldValue);
-                        this.state.isEmpty = false;
-                    }
+            if (this.mode === "readonly") {
+                var $img = $(QWeb.render("FieldBinaryImage-img", {
+                    widget: self,
+                    url: url
+                }));
+                this.$('> img').remove();
+                this.$(".signature").hide();
+                this.$el.prepend($img);
+                $img.on('error', function() {
+                    self.on_clear();
+                    $img.attr('src', self.placeholder);
+                    self.do_warn(_t("Image"), _t("Could not display the selected image."));
+                });
+            } else if (this.mode === "edit") {
+                this.$('> img').remove();
+                if (this.value) {
+                    var field_name = this.nodeOptions.preview_image ?
+                        this.nodeOptions.preview_image :
+                        this.name;
+                    self._rpc({
+                        model: this.model,
+                        method: 'read',
+                        args: [this.res_id, [field_name]]
+                    }).then(function(data) {
+                        if (data) {
+                            var field_desc = _.values(_.pick(data[0], field_name));
+                            self.$(".signature").jSignature("clear");
+                            self.$(".signature").jSignature("setData", 'data:image/png;base64,' + field_desc[0]);
+                        }
+                    }).catch(function(error) {
+                        console.error("Error loading signature data:", error);
+                    });
+                } else {
+                    this.$('> img').remove();
+                    this.$('.signature > canvas').remove();
+                    var sign_options = {
+                        'decor-color': '#D1D0CE',
+                        'color': '#000',
+                        'background-color': '#fff',
+                        'height': '150',
+                        'width': '550'
+                    };
+                    this.$(".signature").jSignature("init", sign_options);
                 }
-            } catch (error) {
-                console.error("Error loading signature data:", error);
-            }
-        }
-    }
-
-    onClearSign() {
-        if (!this.jSignatureLoaded) return;
-
-        const $signature = $(this.signatureRef.el);
-        $signature.find("canvas").remove();
-        $signature.attr("tabindex", "0");
-
-        try {
-            $signature.jSignature(this.signOptions);
-            $signature.focus();
-            this.state.isEmpty = true;
-            this.emptySign = $signature.jSignature("getData", 'image');
-            if (this.props.record && this.props.record.update) {
-                this.props.record.update({ [this.fieldName]: false });
-            }
-        } catch (error) {
-            console.error("Error clearing signature:", error);
-        }
-    }
-
-    onSaveSign() {
-        if (!this.jSignatureLoaded) return;
-
-        const $signature = $(this.signatureRef.el);
-        try {
-            const signature = $signature.jSignature("getData", 'image');
-            const isEmpty = signature ? this.emptySign[1] === signature[1] : false;
-
-            if (!isEmpty && signature && signature[1]) {
-                this.state.isEmpty = false;
-                if (this.props.record && this.props.record.update) {
-                    this.props.record.update({ [this.fieldName]: signature[1] });
+            } else if (this.mode === 'create') {
+                this.$('> img').remove();
+                this.$('> canvas').remove();
+                if (!this.value) {
+                    this.$(".signature").empty().jSignature("init", {
+                        'decor-color': '#D1D0CE',
+                        'color': '#000',
+                        'background-color': '#fff',
+                        'height': '150',
+                        'width': '550'
+                    });
                 }
             }
-        } catch (error) {
-            console.error("Error saving signature:", error);
         }
-    }
+    });
 
-    get placeholder() {
-        return "/web/static/img/placeholder.png";
-    }
-
-    get imageUrl() {
-        const value = this.fieldValue;
-        if (!value) {
-            return this.placeholder;
+    FormController.include({
+        saveRecord: function() {
+            this.$('.save_sign').click();
+            return this._super.apply(this, arguments);
         }
-        if (this.state.signatureUrl) {
-            return this.state.signatureUrl;
-        }
-        return 'data:image/png;base64,' + value;
-    }
-}
+    });
 
-// Registrar en ambas categorías para compatibilidad con Odoo 18
-registry.category("fields").add("digital_signature", {
-    component: FieldDigitalSignature,
-    supportedTypes: ["binary"],
-});
-
-registry.category("view_widgets").add("digital_signature", {
-    component: FieldDigitalSignature,
+    Registry.add('signature', FieldSignature);
 });

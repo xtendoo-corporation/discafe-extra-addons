@@ -1,0 +1,430 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* xtendoo_partner_delivery_zone
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 13.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-03-20 07:59+0000\n"
+"PO-Revision-Date: 2025-03-20 07:59+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: xtendoo_partner_delivery_zone
+#: model_terms:ir.ui.view,arch_db:xtendoo_partner_delivery_zone.report_sale_delivery_zone_document
+msgid "<span>Fecha </span>"
+msgstr "<span>Fecha </span>"
+
+#. module: xtendoo_partner_delivery_zone
+#: model_terms:ir.ui.view,arch_db:xtendoo_partner_delivery_zone.report_sale_delivery_zone_document
+msgid "<span>Zona </span>"
+msgstr "<span>Zona </span>"
+
+#. module: xtendoo_partner_delivery_zone
+#: model_terms:ir.ui.view,arch_db:xtendoo_partner_delivery_zone.report_sale_delivery_zone_document
+msgid "<strong>Total Facturas</strong>"
+msgstr "<strong>Total Facturas</strong>"
+
+#. module: xtendoo_partner_delivery_zone
+#: model_terms:ir.ui.view,arch_db:xtendoo_partner_delivery_zone.report_sale_delivery_zone_document
+msgid "<strong>Total Pagos</strong>"
+msgstr "<strong>Total Pagos</strong>"
+
+#. module: xtendoo_partner_delivery_zone
+#: model_terms:ir.ui.view,arch_db:xtendoo_partner_delivery_zone.report_sale_delivery_zone_document
+msgid "<strong>Total Pedidos Pendientes de Facturar</strong>"
+msgstr "<strong>Total Pedidos Pendientes de Facturar</strong>"
+
+#. module: xtendoo_partner_delivery_zone
+#: model_terms:ir.ui.view,arch_db:xtendoo_partner_delivery_zone.report_sale_delivery_zone_document
+msgid "<strong>Total Presupuestos</strong>"
+msgstr "<strong>Total Presupuestos</strong>"
+
+#. module: xtendoo_partner_delivery_zone
+#: model_terms:ir.ui.view,arch_db:xtendoo_partner_delivery_zone.report_picking
+msgid "<strong>Zone</strong>"
+msgstr "<strong>Zone</strong>"
+
+#. module: xtendoo_partner_delivery_zone
+#: model:ir.model.fields,field_description:xtendoo_partner_delivery_zone.field_partner_delivery_zone__active
+msgid "Active"
+msgstr "Activo"
+
+#. module: xtendoo_partner_delivery_zone
+#: model_terms:ir.ui.view,arch_db:xtendoo_partner_delivery_zone.partner_delivery_zone_wizard
+#: model_terms:ir.ui.view,arch_db:xtendoo_partner_delivery_zone.wizard_report_sale_delivery_zone
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: xtendoo_partner_delivery_zone
+#: model:ir.model.fields,field_description:xtendoo_partner_delivery_zone.field_delivery_zone_partner_line__city
+#: model_terms:ir.ui.view,arch_db:xtendoo_partner_delivery_zone.view_partner_delivery_zone_form
+msgid "City"
+msgstr "Ciudad"
+
+#. module: xtendoo_partner_delivery_zone
+#: model_terms:ir.actions.act_window,help:xtendoo_partner_delivery_zone.partner_delivery_zone_action
+msgid "Click to set a new delivery zone for partners."
+msgstr "Haga clic para establecer una nueva zona de entrega para los clientes."
+
+#. module: xtendoo_partner_delivery_zone
+#: model_terms:ir.ui.view,arch_db:xtendoo_partner_delivery_zone.report_sale_delivery_zone_document
+msgid "Cliente"
+msgstr "Cliente"
+
+#. module: xtendoo_partner_delivery_zone
+#: model:ir.model.fields,field_description:xtendoo_partner_delivery_zone.field_partner_delivery_zone__code
+msgid "Code"
+msgstr "Código"
+
+#. module: xtendoo_partner_delivery_zone
+#: model:ir.model,name:xtendoo_partner_delivery_zone.model_res_partner
+msgid "Contact"
+msgstr "Contacto"
+
+#. module: xtendoo_partner_delivery_zone
+#: model:ir.model.fields,field_description:xtendoo_partner_delivery_zone.field_delivery_zone_partner_line__create_uid
+#: model:ir.model.fields,field_description:xtendoo_partner_delivery_zone.field_partner_delivery_zone__create_uid
+#: model:ir.model.fields,field_description:xtendoo_partner_delivery_zone.field_partner_delivery_zone_visit__create_uid
+#: model:ir.model.fields,field_description:xtendoo_partner_delivery_zone.field_partner_delivery_zone_wizard__create_uid
+#: model:ir.model.fields,field_description:xtendoo_partner_delivery_zone.field_wizard_report_sale_delivery_zone__create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: xtendoo_partner_delivery_zone
+#: model:ir.model.fields,field_description:xtendoo_partner_delivery_zone.field_delivery_zone_partner_line__create_date
+#: model:ir.model.fields,field_description:xtendoo_partner_delivery_zone.field_partner_delivery_zone__create_date
+#: model:ir.model.fields,field_description:xtendoo_partner_delivery_zone.field_partner_delivery_zone_visit__create_date
+#: model:ir.model.fields,field_description:xtendoo_partner_delivery_zone.field_partner_delivery_zone_wizard__create_date
+#: model:ir.model.fields,field_description:xtendoo_partner_delivery_zone.field_wizard_report_sale_delivery_zone__create_date
+msgid "Created on"
+msgstr "Creado el"
+
+#. module: xtendoo_partner_delivery_zone
+#: model:ir.model.fields,field_description:xtendoo_partner_delivery_zone.field_wizard_report_sale_delivery_zone__date_report
+msgid "Date Report"
+msgstr "Fecha del informe"
+
+#. module: xtendoo_partner_delivery_zone
+#: model:ir.model.fields,field_description:xtendoo_partner_delivery_zone.field_partner_delivery_zone_visit__date
+msgid "Date Visit"
+msgstr "Fecha de visita"
+
+#. module: xtendoo_partner_delivery_zone
+#: model_terms:ir.ui.view,arch_db:xtendoo_partner_delivery_zone.view_partner_delivery_zone_form
+msgid "Delivery Route"
+msgstr "Ruta de entrega"
+
+#. module: xtendoo_partner_delivery_zone
+#: model:ir.actions.act_window,name:xtendoo_partner_delivery_zone.partner_delivery_zone_action
+#: model:ir.model.fields,field_description:xtendoo_partner_delivery_zone.field_account_move__delivery_zone_id
+#: model:ir.model.fields,field_description:xtendoo_partner_delivery_zone.field_account_payment__delivery_zone_id
+#: model:ir.model.fields,field_description:xtendoo_partner_delivery_zone.field_delivery_zone_partner_line__delivery_zone_id
+#: model:ir.model.fields,field_description:xtendoo_partner_delivery_zone.field_partner_delivery_zone__sale_order_ids
+#: model:ir.model.fields,field_description:xtendoo_partner_delivery_zone.field_partner_delivery_zone_visit__delivery_zone_id
+#: model:ir.model.fields,field_description:xtendoo_partner_delivery_zone.field_sale_order__delivery_zone_id
+#: model:ir.model.fields,field_description:xtendoo_partner_delivery_zone.field_stock_picking__delivery_zone_id
+#: model:ir.ui.menu,name:xtendoo_partner_delivery_zone.partner_delivery_zone_menu
+#: model_terms:ir.ui.view,arch_db:xtendoo_partner_delivery_zone.view_partner_delivery_zone_search
+#: model_terms:ir.ui.view,arch_db:xtendoo_partner_delivery_zone.view_partner_delivery_zone_tree
+#: model_terms:ir.ui.view,arch_db:xtendoo_partner_delivery_zone.view_picking_internal_search
+#: model_terms:ir.ui.view,arch_db:xtendoo_partner_delivery_zone.view_sales_order_filter
+msgid "Delivery Zone"
+msgstr "Zona de entrega"
+
+#. module: xtendoo_partner_delivery_zone
+#: model:ir.model.fields,field_description:xtendoo_partner_delivery_zone.field_partner_delivery_zone__visit_ids
+msgid "Delivery Zone Visit"
+msgstr " Zona de entrega visitada"
+
+#. module: xtendoo_partner_delivery_zone
+#: model:ir.model.fields,field_description:xtendoo_partner_delivery_zone.field_res_partner__delivery_zone_ids
+#: model:ir.model.fields,field_description:xtendoo_partner_delivery_zone.field_res_users__delivery_zone_ids
+msgid "Delivery Zones"
+msgstr "Zonas de entrega"
+
+#. module: xtendoo_partner_delivery_zone
+#: model:ir.model.fields,field_description:xtendoo_partner_delivery_zone.field_delivery_zone_partner_line__display_name
+#: model:ir.model.fields,field_description:xtendoo_partner_delivery_zone.field_partner_delivery_zone__display_name
+#: model:ir.model.fields,field_description:xtendoo_partner_delivery_zone.field_partner_delivery_zone_visit__display_name
+#: model:ir.model.fields,field_description:xtendoo_partner_delivery_zone.field_partner_delivery_zone_wizard__display_name
+#: model:ir.model.fields,field_description:xtendoo_partner_delivery_zone.field_report_xtendoo_partner_delivery_zone_report_sale_delivery_zone__display_name
+#: model:ir.model.fields,field_description:xtendoo_partner_delivery_zone.field_wizard_report_sale_delivery_zone__display_name
+msgid "Display Name"
+msgstr "Nombre para mostrar"
+
+#. module: xtendoo_partner_delivery_zone
+#: model_terms:ir.ui.view,arch_db:xtendoo_partner_delivery_zone.report_sale_delivery_zone_document
+msgid "Factura"
+msgstr "Factura"
+
+#. module: xtendoo_partner_delivery_zone
+#: model_terms:ir.ui.view,arch_db:xtendoo_partner_delivery_zone.report_sale_delivery_zone_document
+msgid "Forma de Pago"
+msgstr "Forma de Pago"
+
+#. module: xtendoo_partner_delivery_zone
+#: model:ir.model.fields,field_description:xtendoo_partner_delivery_zone.field_delivery_zone_partner_line__id
+#: model:ir.model.fields,field_description:xtendoo_partner_delivery_zone.field_partner_delivery_zone__id
+#: model:ir.model.fields,field_description:xtendoo_partner_delivery_zone.field_partner_delivery_zone_visit__id
+#: model:ir.model.fields,field_description:xtendoo_partner_delivery_zone.field_partner_delivery_zone_wizard__id
+#: model:ir.model.fields,field_description:xtendoo_partner_delivery_zone.field_report_xtendoo_partner_delivery_zone_report_sale_delivery_zone__id
+#: model:ir.model.fields,field_description:xtendoo_partner_delivery_zone.field_wizard_report_sale_delivery_zone__id
+msgid "ID"
+msgstr "ID"
+
+#. module: xtendoo_partner_delivery_zone
+#: model:ir.model,name:xtendoo_partner_delivery_zone.model_account_move
+msgid "Journal Entries"
+msgstr "Asientos contables"
+
+#. module: xtendoo_partner_delivery_zone
+#: model:ir.model.fields,field_description:xtendoo_partner_delivery_zone.field_delivery_zone_partner_line____last_update
+#: model:ir.model.fields,field_description:xtendoo_partner_delivery_zone.field_partner_delivery_zone____last_update
+#: model:ir.model.fields,field_description:xtendoo_partner_delivery_zone.field_partner_delivery_zone_visit____last_update
+#: model:ir.model.fields,field_description:xtendoo_partner_delivery_zone.field_partner_delivery_zone_wizard____last_update
+#: model:ir.model.fields,field_description:xtendoo_partner_delivery_zone.field_report_xtendoo_partner_delivery_zone_report_sale_delivery_zone____last_update
+#: model:ir.model.fields,field_description:xtendoo_partner_delivery_zone.field_wizard_report_sale_delivery_zone____last_update
+msgid "Last Modified on"
+msgstr "Última modificación el"
+
+#. module: xtendoo_partner_delivery_zone
+#: model:ir.model.fields,field_description:xtendoo_partner_delivery_zone.field_delivery_zone_partner_line__write_uid
+#: model:ir.model.fields,field_description:xtendoo_partner_delivery_zone.field_partner_delivery_zone__write_uid
+#: model:ir.model.fields,field_description:xtendoo_partner_delivery_zone.field_partner_delivery_zone_visit__write_uid
+#: model:ir.model.fields,field_description:xtendoo_partner_delivery_zone.field_partner_delivery_zone_wizard__write_uid
+#: model:ir.model.fields,field_description:xtendoo_partner_delivery_zone.field_wizard_report_sale_delivery_zone__write_uid
+msgid "Last Updated by"
+msgstr "Última actualización por"
+
+#. module: xtendoo_partner_delivery_zone
+#: model:ir.model.fields,field_description:xtendoo_partner_delivery_zone.field_delivery_zone_partner_line__write_date
+#: model:ir.model.fields,field_description:xtendoo_partner_delivery_zone.field_partner_delivery_zone__write_date
+#: model:ir.model.fields,field_description:xtendoo_partner_delivery_zone.field_partner_delivery_zone_visit__write_date
+#: model:ir.model.fields,field_description:xtendoo_partner_delivery_zone.field_partner_delivery_zone_wizard__write_date
+#: model:ir.model.fields,field_description:xtendoo_partner_delivery_zone.field_wizard_report_sale_delivery_zone__write_date
+msgid "Last Updated on"
+msgstr "Última actualización el"
+
+#. module: xtendoo_partner_delivery_zone
+#: code:addons/xtendoo_partner_delivery_zone/models/sale_order.py:0
+#, python-format
+msgid "No more partners in this delivery zone"
+msgstr "No hay mas clientes en esta zona de entrega"
+
+#. module: xtendoo_partner_delivery_zone
+#: code:addons/xtendoo_partner_delivery_zone/models/sale_order.py:0
+#, python-format
+msgid "No puede cambiar de cliente si hay lineas en el pedido"
+msgstr "No puede cambiar de cliente si hay líneas en el pedido"
+
+#. module: xtendoo_partner_delivery_zone
+#: model_terms:ir.ui.view,arch_db:xtendoo_partner_delivery_zone.report_sale_delivery_zone_document
+msgid "Pagado"
+msgstr "Pagado"
+
+#. module: xtendoo_partner_delivery_zone
+#: model_terms:ir.ui.view,arch_db:xtendoo_partner_delivery_zone.report_sale_delivery_zone_document
+msgid "Pagos"
+msgstr "Pagos"
+
+#. module: xtendoo_partner_delivery_zone
+#: model:ir.model.fields,field_description:xtendoo_partner_delivery_zone.field_delivery_zone_partner_line__partner_id
+#: model:ir.model.fields,field_description:xtendoo_partner_delivery_zone.field_partner_delivery_zone_visit__partner_id
+#: model_terms:ir.ui.view,arch_db:xtendoo_partner_delivery_zone.view_partner_delivery_zone_form
+msgid "Partner"
+msgstr "Cliente"
+
+#. module: xtendoo_partner_delivery_zone
+#: model:ir.model.fields,field_description:xtendoo_partner_delivery_zone.field_partner_delivery_zone_wizard__partner_delivery_zone
+msgid "Partner Delivery Zone"
+msgstr "Zona de entrega del cliente"
+
+#. module: xtendoo_partner_delivery_zone
+#: model:ir.model,name:xtendoo_partner_delivery_zone.model_delivery_zone_partner_line
+msgid "Partner Delivery Zone Line"
+msgstr "Línea de zona de entrega del cliente"
+
+#. module: xtendoo_partner_delivery_zone
+#: model:ir.model,name:xtendoo_partner_delivery_zone.model_partner_delivery_zone_wizard
+msgid "Partner Delivery Zone Wizard"
+msgstr "Asistente de zona de entrega del cliente"
+
+#. module: xtendoo_partner_delivery_zone
+#: model:ir.model.fields,field_description:xtendoo_partner_delivery_zone.field_partner_delivery_zone__partner_zones_ids
+msgid "Partner Zones Line"
+msgstr "Línea de zonas del cliente"
+
+#. module: xtendoo_partner_delivery_zone
+#: model:ir.model.constraint,message:xtendoo_partner_delivery_zone.constraint_delivery_zone_partner_line_unique_delivery_zone
+msgid "Partner cannot be subscribed multiple times to the same list!"
+msgstr "¡El cliente no puede estar suscrito varias veces a la misma lista!"
+
+#. module: xtendoo_partner_delivery_zone
+#: model:ir.model,name:xtendoo_partner_delivery_zone.model_partner_delivery_zone
+msgid "Partner delivery zone"
+msgstr ""
+
+#. module: xtendoo_partner_delivery_zone
+#: model:ir.model,name:xtendoo_partner_delivery_zone.model_partner_delivery_zone_visit
+msgid "Partner delivery zone visit"
+msgstr " Zona de entrega del cliente"
+
+#. module: xtendoo_partner_delivery_zone
+#: model:ir.model,name:xtendoo_partner_delivery_zone.model_account_payment
+msgid "Payments"
+msgstr "Pagos"
+
+#. module: xtendoo_partner_delivery_zone
+#: model_terms:ir.ui.view,arch_db:xtendoo_partner_delivery_zone.report_sale_delivery_zone_document
+msgid "Pedido Pendientes"
+msgstr "Pedido Pendientes"
+
+#. module: xtendoo_partner_delivery_zone
+#: model:ir.model.fields,field_description:xtendoo_partner_delivery_zone.field_delivery_zone_partner_line__phone
+msgid "Phone"
+msgstr "Teléfono"
+
+#. module: xtendoo_partner_delivery_zone
+#: model_terms:ir.ui.view,arch_db:xtendoo_partner_delivery_zone.report_sale_delivery_zone_document
+msgid "Presupuestos"
+msgstr "Presupuestos"
+
+#. module: xtendoo_partner_delivery_zone
+#: model_terms:ir.ui.view,arch_db:xtendoo_partner_delivery_zone.view_order_form
+msgid "Próximo cliente"
+msgstr "Próximo cliente"
+
+#. module: xtendoo_partner_delivery_zone
+#: model_terms:ir.ui.view,arch_db:xtendoo_partner_delivery_zone.view_partner_delivery_zone_form
+msgid "Ref"
+msgstr "Ref"
+
+#. module: xtendoo_partner_delivery_zone
+#: model:ir.model.fields,field_description:xtendoo_partner_delivery_zone.field_delivery_zone_partner_line__ref
+msgid "Reference"
+msgstr "Referencia"
+
+#. module: xtendoo_partner_delivery_zone
+#: model:ir.actions.act_window,name:xtendoo_partner_delivery_zone.partner_delivery_zone_wizard_action
+msgid "Report Date"
+msgstr "Fecha del informe"
+
+#. module: xtendoo_partner_delivery_zone
+#: model:ir.model,name:xtendoo_partner_delivery_zone.model_report_xtendoo_partner_delivery_zone_report_sale_delivery_zone
+msgid "Report Sale Delivery Zone"
+msgstr "Informe de zona de entrega de ventas"
+
+#. module: xtendoo_partner_delivery_zone
+#: model:ir.model,name:xtendoo_partner_delivery_zone.model_wizard_report_sale_delivery_zone
+msgid "Report Sale Delivery Zone Wizard"
+msgstr "Asistente de informe de zona de entrega de ventas"
+
+#. module: xtendoo_partner_delivery_zone
+#: model:ir.actions.act_window,name:xtendoo_partner_delivery_zone.action_report_sale_delivery_zone_visit_day
+msgid "Report Sales Delivery Zones"
+msgstr "Informe de zonas de entrega de ventas"
+
+#. module: xtendoo_partner_delivery_zone
+#: model_terms:ir.ui.view,arch_db:xtendoo_partner_delivery_zone.report_sale_delivery_zone_document
+msgid "Resumen Diario"
+msgstr "Resumen Diario"
+
+#. module: xtendoo_partner_delivery_zone
+#: model:ir.model.fields,field_description:xtendoo_partner_delivery_zone.field_partner_delivery_zone_visit__sale_order_id
+msgid "Sale Order"
+msgstr "Pedido de venta"
+
+#. module: xtendoo_partner_delivery_zone
+#: model:ir.actions.report,name:xtendoo_partner_delivery_zone.report_sale
+msgid "Sale Report"
+msgstr "Informe de ventas"
+
+#. module: xtendoo_partner_delivery_zone
+#: model:ir.model,name:xtendoo_partner_delivery_zone.model_sale_order
+msgid "Sales Order"
+msgstr "Pedidos de venta"
+
+#. module: xtendoo_partner_delivery_zone
+#: model_terms:ir.ui.view,arch_db:xtendoo_partner_delivery_zone.partner_delivery_zone_wizard
+#: model_terms:ir.ui.view,arch_db:xtendoo_partner_delivery_zone.wizard_report_sale_delivery_zone
+msgid "Select"
+msgstr "Seleccionar"
+
+#. module: xtendoo_partner_delivery_zone
+#: model:ir.actions.act_window,name:xtendoo_partner_delivery_zone.action_report_partner_visit_day
+#: model:ir.ui.menu,name:xtendoo_partner_delivery_zone.menu_action_report_partner_visit_day_wizard
+msgid "Select Delivery Zone"
+msgstr "Seleccionar zona de entrega"
+
+#. module: xtendoo_partner_delivery_zone
+#: model:ir.model.fields,field_description:xtendoo_partner_delivery_zone.field_delivery_zone_partner_line__sequence
+msgid "Sequence"
+msgstr "Secuencia"
+
+#. module: xtendoo_partner_delivery_zone
+#: model:ir.model.fields,field_description:xtendoo_partner_delivery_zone.field_delivery_zone_partner_line__state_id
+#: model_terms:ir.ui.view,arch_db:xtendoo_partner_delivery_zone.view_partner_delivery_zone_form
+msgid "State"
+msgstr "Estado"
+
+#. module: xtendoo_partner_delivery_zone
+#: model:ir.model,name:xtendoo_partner_delivery_zone.model_stock_move
+msgid "Stock Move"
+msgstr "Movimiento de existencias"
+
+#. module: xtendoo_partner_delivery_zone
+#: model:ir.model.fields,field_description:xtendoo_partner_delivery_zone.field_delivery_zone_partner_line__street
+msgid "Street"
+msgstr "Calle"
+
+#. module: xtendoo_partner_delivery_zone
+#: model:ir.model.fields,field_description:xtendoo_partner_delivery_zone.field_delivery_zone_partner_line__street2
+msgid "Street2"
+msgstr "Calle 2"
+
+#. module: xtendoo_partner_delivery_zone
+#: model_terms:ir.ui.view,arch_db:xtendoo_partner_delivery_zone.report_sale_delivery_zone_document
+msgid "Total"
+msgstr "Total"
+
+#. module: xtendoo_partner_delivery_zone
+#: model_terms:ir.ui.view,arch_db:xtendoo_partner_delivery_zone.report_sale_delivery_zone_document
+msgid "Total Cobrado"
+msgstr "Total Cobrado"
+
+#. module: xtendoo_partner_delivery_zone
+#: model_terms:ir.ui.view,arch_db:xtendoo_partner_delivery_zone.report_sale_delivery_zone_document
+msgid "Total Facturado"
+msgstr "Total Facturado"
+
+#. module: xtendoo_partner_delivery_zone
+#: model_terms:ir.ui.view,arch_db:xtendoo_partner_delivery_zone.report_sale_delivery_zone_document
+msgid "Total Pedidos Pendientes"
+msgstr "Total Pedidos Pendientes"
+
+#. module: xtendoo_partner_delivery_zone
+#: model_terms:ir.ui.view,arch_db:xtendoo_partner_delivery_zone.report_sale_delivery_zone_document
+msgid "Total Presupuestos"
+msgstr "Total Presupuestos"
+
+#. module: xtendoo_partner_delivery_zone
+#: model:ir.model,name:xtendoo_partner_delivery_zone.model_stock_picking
+msgid "Transfer"
+msgstr "Albarán"
+
+#. module: xtendoo_partner_delivery_zone
+#: model:ir.model.fields,field_description:xtendoo_partner_delivery_zone.field_delivery_zone_partner_line__zip
+#: model_terms:ir.ui.view,arch_db:xtendoo_partner_delivery_zone.view_partner_delivery_zone_form
+msgid "Zip"
+msgstr "Zip"
+
+#. module: xtendoo_partner_delivery_zone
+#: model:ir.model.fields,field_description:xtendoo_partner_delivery_zone.field_partner_delivery_zone__name
+msgid "Zone"
+msgstr "Zona"

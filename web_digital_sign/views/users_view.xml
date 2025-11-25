@@ -9,7 +9,7 @@
                 <xpath expr="//field[@name='signature']" position="after">
                     <label for="digital_signature" string="Digital signature" class="oe_edit_only" />
                     <h2>
-                        <field name="digital_signature" widget="digital_signature"/>
+                        <field name="digital_signature" widget="signature"/>
                     </h2>
                 </xpath>
             </field>
@@ -22,10 +22,11 @@
                 <xpath expr="//field[@name='signature']" position="after">
                     <label for="digital_signature" string="Digital signature" class="oe_edit_only"/>
                     <h2>
-                        <field name="digital_signature" widget="digital_signature"/>
+                        <field name="digital_signature" widget="signature"/>
                     </h2>
                 </xpath>
             </field>
         </record>
     </data>
 </odoo>
+
