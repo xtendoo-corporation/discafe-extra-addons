@@ -4,7 +4,7 @@
 {
     'name': 'Partner Delivery Zone by Xtendoo',
     'summary': 'Create a Delivery Zones and customers in sales orders',
-    'version': '13.0.1.0.0',
+    'version': '18.0.1.0.0',
     'development_status': 'Beta',
     'category': 'Delivery',
     'website': 'https://www.xtendoo.es',
