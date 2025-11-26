@@ -18,7 +18,7 @@
                 </t>
 
                 <t t-if="isPromo == 1">
-                    <t t-set="esRect" t-value="o.type"></t>
+                    <t t-set="esRect" t-value="o.move_type"></t>
 
 
                <div class="page">
@@ -127,12 +127,12 @@
                    <div style="width:60%; float:left;margin-top:25px;font-size:0.9em;">
 
                        <div>
-                            <b><span t-if="o.type == 'out_invoice' and o.state in ('open', 'in_payment', 'paid')">Factura</span>
-                            <span t-if="o.type == 'out_invoice' and o.state == 'draft'">Factura Borrador</span>
-                            <span t-if="o.type == 'out_invoice' and o.state == 'cancel'">Factura Cancelada</span>
-                            <span t-if="o.type == 'out_refund'">Factura Rectificativa</span>
-                            <span t-if="o.type == 'in_refund'">Factura Rectificativa</span>
-                            <span t-if="o.type == 'in_invoice'">Factura</span></b>
+                            <b><span t-if="o.move_type == 'out_invoice' and o.state == 'posted'">Factura</span>
+                            <span t-if="o.move_type == 'out_invoice' and o.state == 'draft'">Factura Borrador</span>
+                            <span t-if="o.move_type == 'out_invoice' and o.state == 'cancel'">Factura Cancelada</span>
+                            <span t-if="o.move_type == 'out_refund'">Factura Rectificativa</span>
+                            <span t-if="o.move_type == 'in_refund'">Factura Rectificativa</span>
+                            <span t-if="o.move_type == 'in_invoice'">Factura</span></b>
                        </div>
 
                        <div>
@@ -181,13 +181,13 @@
 
                    <div style="clear:both;width:60%;font-size:0.9em;float:left;font-weight:bolder;">
 
-                       <div name="reference" class="col-auto mw-100 mb-2" t-if="o.invoice_payment_ref">
+                       <div name="reference" class="col-auto mw-100 mb-2" t-if="o.payment_reference">
                            <div style="width:100%">
                                <b><span style="color:black;">Referencia:</span></b>
                            </div>
 
                            <div style="width:100%">
-                               <span class="m-0" t-field="o.invoice_payment_ref"/>
+                               <span class="m-0" t-field="o.payment_reference"/>
                            </div>
 
                        </div>
@@ -321,7 +321,7 @@
                                             <!-- Precio -->
                                             <div style="width:25%;float:left;text-align:right;">
                                                 <t t-if="line.price_unit">
-                                                    <span style="text-align:right;display:block;"><span t-esc="'%.2f'%line.price_unit"/>€</span>
+                                                    <span style="text-align:right;display:block;"><span t-esc="'%.2f'%(line.price_unit)"/></span>
                                                 </t>
                                                 <t t-else="">
                                                     <span style="text-align:right;display:block;">0.00</span>
@@ -342,7 +342,7 @@
 
                                             <!-- IVA -->
                                            <!-- <div style="width:15%;float:left;text-align:right;">
-                                            <t t-foreach="line.invoice_line_tax_ids" t-as="tax">
+                                            <t t-foreach="line.tax_ids" t-as="tax">
                                                 <t t-set="tax_name" t-value="tax.name"></t>
                                                 <t t-set="isIVA" t-value="tax_name.find('IVA')"></t>
                                                 <t t-if="isIVA > -1">
@@ -358,7 +358,7 @@
                                             <!-- Neto -->
                                              <div style="width:25%;float:left;text-align:right;">
 
-                                                <span style="text-align:right;display:block;"><span t-esc="'%.2f'%(line.price_subtotal)"/>€</span>
+                                                <span style="text-align:right;display:block;"><span t-esc="'%.2f'%(line.price_subtotal)"/></span>
 
                                              </div>
                                             <!-- Fin Neto -->
@@ -402,11 +402,10 @@
 
                     <!-- Firma del cliente -->
 
-                        <div style="height:100px;width:100%;border:2px solid black;margin-top:5px;">
+                        <!-- <div style="height:100px;width:100%;border:2px solid black;margin-top:5px;">
                               <span style="text-align:center;display:block;width:100%;">Firma del cliente:</span>
                               <img style="width:100%;" t-attf-src="data:image/*;base64,{{o.digital_signature}}"/>
-                        </div>
-
+                        </div> -->
 
                         <!-- fin Firmar del cliente -->
 

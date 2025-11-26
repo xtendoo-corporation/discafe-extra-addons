@@ -344,12 +344,12 @@
                                         <!-- Fin unidades -->
                                         <!-- Precio -->
                                         <div style="width:25%;float:left;text-align:right;">
-                                            <t t-if="line.price_unit">
-                                                <span style="text-align:right;display:block;"><span t-esc="'%.2f'%line.price_unit"/>€</span>
-                                            </t>
-                                            <t t-else="">
-                                                <span style="text-align:right;display:block;">0.00</span>
-                                            </t>
+                                                <t t-if="line.price_unit">
+                                                    <span style="text-align:right;display:block;"><span t-field="line.price_unit" t-options="{'widget': 'monetary', 'display_currency': doc.currency_id}"/></span>
+                                                </t>
+                                                <t t-else="">
+                                                    <span style="text-align:right;display:block;">0.00</span>
+                                                </t>
                                         </div>
                                         <!-- Fin Precio -->
 
@@ -381,9 +381,7 @@
                                         <!-- Fin IVA -->
                                         <!-- Neto -->
                                          <div style="width:25%;float:left;text-align:right;">
-
-                                            <span style="text-align:right;display:block;"><span t-esc="'%.2f'%(line.price_subtotal)"/>€</span>
-
+                                            <span style="text-align:right;display:block;"><span t-field="line.price_subtotal" t-options="{'widget': 'monetary', 'display_currency': doc.currency_id}"/></span>
                                          </div>
                                         <!-- Fin Neto -->
 
@@ -426,11 +424,12 @@
 
                     <!-- Firma del cliente -->
 
+                        <!-- Firma del cliente
                         <div style="height:100px;width:100%;border:2px solid black;">
-                              <span style="text-align:center;display:block;width:100%;">Firma del cliente:</span>
+                              <span style="text-align:center;display:block;width:100%">Firma del cliente:</span>
                               <img style="width:100%;" t-attf-src="data:image/*;base64,{{doc.digital_signature}}"/>
                         </div>
-
+                        -->
 
                         <!-- fin Firmar del cliente -->
 

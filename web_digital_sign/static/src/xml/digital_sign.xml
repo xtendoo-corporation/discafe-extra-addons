@@ -1,21 +1,46 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<templates id="template" xml:space="preserve">
-   <t t-name="FieldSignature">
-       <t t-if="widget.mode != 'readonly'">
-           <div class="panel panel-default mt16 mb0 oe_edit_only" id="drawsign">
-                <div class="panel-heading">
-                    <div class="pull-right">
-                        <a id="sign_clean" class="btn btn-xs oe_edit_only">Clear</a>
-                        <a class="oe_edit_only save_sign"></a>
+<templates id="web_digital_sign_templates" xml:space="preserve">
+    <t t-name="web_digital_sign.FieldDigitalSignature" owl="1">
+        <div class="o_field_signature">
+
+            <t t-if="state.isLoading">
+                <div class="text-center p-3">
+                    <i class="fa fa-spinner fa-spin"/> Loading signature widget...
+                </div>
+            </t>
+
+            <t t-elif="!isReadonly">
+                <div class="card mt-3 mb-0 o_web_sign_container">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span>Signature</span>
+                        <div>
+                            <button type="button"
+                                    class="btn btn-sm btn-secondary"
+                                    t-on-click="onClearSign">
+                                Clear
+                            </button>
+                            <button type="button"
+                                    class="btn btn-sm btn-primary"
+                                    t-on-click="onSaveSign">
+                                Save
+                            </button>
+                        </div>
+                    </div>
+                    <div class="signature" t-ref="signature"></div>
+                </div>
+            </t>
+
+            <t t-else="">
+                <div class="card mt-3 mb-0">
+                    <div class="card-body p-0">
+                        <img t-if="imageUrl"
+                             t-att-src="imageUrl"
+                             class="img-fluid"
+                             alt="Signature"/>
                     </div>
                 </div>
-                <div class="signature"></div>
-            </div>
-       </t>
-       <t t-if="widget.mode == 'readonly'">
-           <div class="panel panel-default mt16 mb0 " id="drawsign">
-                <div class="signature"></div>
-            </div>
-       </t>
+            </t>
+
+        </div>
     </t>
 </templates>

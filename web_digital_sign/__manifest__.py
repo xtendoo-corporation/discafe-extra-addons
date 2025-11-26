@@ -2,10 +2,9 @@
 
 {
     'name': 'Xtendoo Web Digital Signature',
-    'version': '13.0.1.0.0',
+    'version': '18.0.1.0.0',
     'author': 'Xtendoo',
     'maintainer': 'Dani Domínguez',
-    'depends': ['web'],
     "license": "AGPL-3",
     'category': 'Tools',
     'description': '''
@@ -19,19 +18,27 @@
     ''',
     'images': ['static/description/Digital_Signature.jpg'],
     'depends': [
+        'web',
         'sale',
         'account',
         'stock',
     ],
     'data': [
-        'views/web_digital_sign_view.xml',
         'views/users_view.xml',
         'views/sale_view.xml',
         'views/stock_picking_view.xml',
         'views/account_invoice_view.xml',
     ],
+    'assets': {
+        'web.assets_backend': [
+        'web/static/lib/jquery/jquery.js',
+        'web_digital_sign/static/lib/jSignature/jSignatureCustom.js',
+        'web_digital_sign/static/src/js/digital_sign.js',
+        'web_digital_sign/static/src/xml/digital_sign.xml',
+
+        ],
+    },
     'website': 'http://www.serpentcs.com',
-    'qweb': ['static/src/xml/digital_sign.xml'],
     'installable': True,
     'auto_install': False,
 }

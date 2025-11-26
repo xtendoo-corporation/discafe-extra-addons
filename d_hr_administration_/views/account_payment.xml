@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <record id="d_hr_administration_view_account_payment_form" model="ir.ui.view">
+            <field name="name">account.payment.form.d_hr_administration</field>
+            <field name="model">account.payment</field>
+            <field name="inherit_id" ref="account.view_account_payment_form"/>
+            <field name="arch" type="xml">
+                <field name="date" position="before">
+                    <field name="lock_date" invisible="1"/>
+                </field>
+                <field name="date" position="attributes">
+                    <attribute name="readonly">lock_date</attribute>
+                </field>
+
+                <!-- Restringir botón de cancelar -->
+                <xpath expr="//button[@name='action_cancel']" position="attributes">
+                    <attribute name="groups">d_hr_administration.administration</attribute>
+                </xpath>
+
+                <!-- Restringir botón de draft -->
+                <xpath expr="//button[@name='action_draft']" position="attributes">
+                    <attribute name="groups">d_hr_administration.administration</attribute>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

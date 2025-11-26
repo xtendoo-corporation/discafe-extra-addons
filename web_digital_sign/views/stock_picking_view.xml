@@ -11,15 +11,10 @@
                         <field name="name_receiver" string="Nombre del receptor"/>
                         <field name="vat_receiver" string="DNI del receptor"/>
                     </group>
-                    <group class="oe_center" colspan="2" name="digital_signature">
-                        <label for="digital_signature" string="Firma digital"/>
-                        <h2>
-                            <field name="digital_signature" widget="signature"/>
-                        </h2>
-                    </group>
+                    <label for="digital_signature" string="Firma digital"/>
+                    <field name="digital_signature" widget="digital_signature"/>
                 </xpath>
             </field>
         </record>
     </data>
 </odoo>
-
