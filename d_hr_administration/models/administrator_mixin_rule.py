@@ -11,6 +11,7 @@ class AdministratorMixinRule(models.AbstractModel):
     is_admin = fields.Boolean(
         compute='_compute_is_admin',
         string="Is Admin",
+        default=lambda self: self.env.user.has_group('d_hr_administration.administration'),
         store=False
     )
 
@@ -24,6 +25,7 @@ class AdministratorMixinRule(models.AbstractModel):
     can_edit_tax = fields.Boolean(
         compute='_compute_can_edit_tax',
         string="Can Edit Tax",
+        default=lambda self: self.env.user.has_group('d_hr_administration.edit_tax'),
         store=False
     )
 
@@ -37,6 +39,7 @@ class AdministratorMixinRule(models.AbstractModel):
     can_edit_discounts = fields.Boolean(
         compute='_compute_can_edit_discounts',
         string="Can Edit Discounts",
+        default=lambda self: self.env.user.has_group('d_hr_administration.edit_discounts'),
         store=False
     )
 
@@ -50,6 +53,7 @@ class AdministratorMixinRule(models.AbstractModel):
     can_edit_price = fields.Boolean(
         compute='_compute_can_edit_price',
         string="Can Edit Price",
+        default=lambda self: self.env.user.has_group('d_hr_administration.edit_sale_price'),
         store=False
     )
 
@@ -63,6 +67,7 @@ class AdministratorMixinRule(models.AbstractModel):
     can_edit_account = fields.Boolean(
         compute='_compute_can_edit_account',
         string="Can Edit Account",
+        default=lambda self: self.env.user.has_group('d_hr_administration.edit_account'),
         store=False
     )
 
@@ -76,6 +81,7 @@ class AdministratorMixinRule(models.AbstractModel):
     can_edit_quantity = fields.Boolean(
         compute='_compute_can_edit_quantity',
         string="Can Edit Quantity",
+        default=lambda self: self.env.user.has_group('d_hr_administration.edit_quantity'),
         store=False
     )
 
@@ -89,6 +95,7 @@ class AdministratorMixinRule(models.AbstractModel):
     can_edit_product_desc = fields.Boolean(
         compute='_compute_can_edit_product_desc',
         string="Can Edit Product Description",
+        default=lambda self: self.env.user.has_group('d_hr_administration.edit_product_desc'),
         store=False
     )
 
@@ -102,6 +109,7 @@ class AdministratorMixinRule(models.AbstractModel):
     can_edit_product_id = fields.Boolean(
         compute='_compute_can_edit_product_id',
         string="Can Edit Product",
+        default=lambda self: self.env.user.has_group('d_hr_administration.edit_product_id'),
         store=False
     )
 
@@ -109,12 +117,16 @@ class AdministratorMixinRule(models.AbstractModel):
     def _compute_can_edit_product_id(self):
         """Compute if user can edit product"""
         can_edit = self.env.user.has_group('d_hr_administration.edit_product_id')
+        print("*" * 100)
+        print("CAN EDIT PRODUCT ID:", can_edit)
+        print("*" * 100)
         for record in self:
             record.can_edit_product_id = can_edit
 
     can_cancel_invoice = fields.Boolean(
         compute='_compute_can_cancel_invoice',
         string="Can Cancel Invoice",
+        default=lambda self: self.env.user.has_group('d_hr_administration.cancel_invoice'),
         store=False
     )
 
@@ -128,6 +140,7 @@ class AdministratorMixinRule(models.AbstractModel):
     can_create_refund_invoice = fields.Boolean(
         compute='_compute_can_create_refund_invoice',
         string="Can Create Refund Invoice",
+        default=lambda self: self.env.user.has_group('d_hr_administration.create_refund_invoice'),
         store=False
     )
 
