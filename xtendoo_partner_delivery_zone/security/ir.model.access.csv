@@ -8,4 +8,5 @@ access_partner_delivery_zone_visit_portal,partner.delivery.zone.portal,model_par
 access_delivery_zone_partner_line_user,delivery.zone.partner.line.user,model_delivery_zone_partner_line,base.group_user,1,0,0,0
 access_delivery_zone_partner_line_manager,delivery.zone.partner.line.manager,model_delivery_zone_partner_line,sales_team.group_sale_manager,1,1,1,1
 access_delivery_zone_partner_line_portal,delivery.zone.partner.line.portal,model_delivery_zone_partner_line,base.group_portal,1,0,0,0
-
+access_partner_delivery_zone_wizard_user,access_partner_delivery_zone_wizard_user,model_partner_delivery_zone_wizard,base.group_user,1,1,1,1
+access_wizard_report_sale_delivery_zone_user,access_wizard_report_sale_delivery_zone_user,model_wizard_report_sale_delivery_zone,base.group_user,1,1,1,1

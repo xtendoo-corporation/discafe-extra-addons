@@ -27,7 +27,7 @@
             </xpath>
 
             <xpath expr="//field[@name='payment_term_id']" position="after">
-                <field name="delivery_zone_id" attrs="{'readonly':[('state','in', ['done', 'cancel'])]}"/>
+                <field name="delivery_zone_id" readonly="state in ('done', 'cancel')" required="1"/>
             </xpath>
 
         </field>

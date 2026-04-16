@@ -10,7 +10,7 @@
             </xpath>
              <xpath expr="//field[@name='journal_id']" position="after">
                  <field name="invoice_user_id"/>
-                <field name="delivery_zone_id" attrs="{'readonly':[('state','!=', 'draft')]}"/>
+                <field name="delivery_zone_id" readonly="state != 'draft'"/>
             </xpath>
         </field>
     </record>

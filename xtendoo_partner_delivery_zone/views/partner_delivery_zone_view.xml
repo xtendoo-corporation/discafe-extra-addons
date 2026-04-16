@@ -7,22 +7,29 @@
         <field name="name">partner.delivery.zone.form</field>
         <field name="model">partner.delivery.zone</field>
         <field name="arch" type="xml">
-            <form string="Delivery Route">
-                <group>
-                    <field name="name"/>
-                </group>
-                <group>
-                    <field name="partner_zones_ids">
-                        <tree editable="bottom">
-                            <field name="sequence" widget="handle"/>
-                            <field name="ref" string="Ref"/>
-                            <field name="partner_id" string="Partner"/>
-                            <field name="city" string="City"/>
-                            <field name="state_id" string="State"/>
-                            <field name="zip" string="Zip"/>
-                        </tree>
-                    </field>
-                </group>
+            <form string="Zona de Entrega">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="code"/>
+                        <field name="active"/>
+                    </group>
+                    <notebook>
+                        <page string="Clientes">
+                            <field name="partner_zones_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="ref" string="Ref"/>
+                                    <field name="partner_id" string="Cliente"/>
+                                    <field name="city" string="Ciudad"/>
+                                    <field name="state_id" string="Provincia"/>
+                                    <field name="zip" string="CP"/>
+                                    <field name="phone" string="Teléfono"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
             </form>
         </field>
     </record>
@@ -31,34 +38,36 @@
         <field name="name">partner.delivery.zone.tree</field>
         <field name="model">partner.delivery.zone</field>
         <field name="arch" type="xml">
-            <tree string="Delivery Zone">
+            <list string="Delivery Zone">
                 <field name="name"/>
-            </tree>
+                <field name="code"/>
+            </list>
         </field>
     </record>
 
     <record id="view_partner_delivery_zone_search" model="ir.ui.view">
-        <field name="name">partner.delivery.zone.tree</field>
+        <field name="name">partner.delivery.zone.search</field>
         <field name="model">partner.delivery.zone</field>
         <field name="arch" type="xml">
             <search string="Delivery Zone">
                 <field name="name"/>
+                <field name="code"/>
             </search>
         </field>
     </record>
 
     <record id="partner_delivery_zone_action" model="ir.actions.act_window">
-        <field name="name">Delivery Zone</field>
+        <field name="name">Zonas de Entrega</field>
         <field name="res_model">partner.delivery.zone</field>
-        <field name="view_mode">tree,form</field>
-        <field name="view_id" ref="view_partner_delivery_zone_tree"/>
+        <field name="view_mode">list,form</field>
         <field name="help" type="html">
-            <p class="oe_view_nocontent_create">Click to set a new delivery zone for partners.</p>
+            <p class="oe_view_nocontent_create">Crea una nueva zona de entrega.</p>
         </field>
     </record>
 
     <menuitem id="partner_delivery_zone_menu"
-              parent="sale.menu_sale_config"
+              name="Zonas de Entrega"
+              parent="sale.menu_sales_config"
               action="partner_delivery_zone_action"
               sequence="30"/>
 
