@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <template id="external_layout_clean_dis" inherit_id="web.external_layout_standard">
+
+            <!-- Comentario migración Odoo 18: se hereda el layout estándar porque web.external_layout_clean ya no existe. -->
+            <xpath expr="//div[contains(@t-attf-class, 'header o_company_#{company.id}_layout')]" position="replace">
+                <div t-attf-class="header o_company_#{company.id}_layout">
+                    <div>
+                        <div style="display:block; width:27%; float:left; margin-left:-5%; margin-top:15px;">
+                            <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" alt="Logo" style="width:100%; max-height:200px;"/>
+                        </div>
+                        <div style="width:70%; display:block; float:left; margin-top:20px; color:black;">
+                            <strong>
+                                <div t-if="company.name">
+                                    <span style="color:black; margin-bottom:0;" t-field="company.name"/>
+                                </div>
+                            </strong>
+                            <hr style="height:5px; color:black; margin:3px;"/>
+                            <div name="company_address" style="display:inline; width:100%;">
+                                <div style="width:50%; display:block; float:left;">
+                                    <ul class="list-unstyled mb-0">
+                                        <li>
+                                            <div t-if="company.street" style="display:inline-block;">
+                                                <span t-field="company.street"/>
+                                            </div>
+                                            <div t-if="company.street2" style="display:inline-block;">
+                                                <span>, </span><span t-field="company.street2"/>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div t-if="company.zip" style="display:inline;">
+                                                <span t-field="company.zip"/>
+                                            </div>
+                                            <div t-if="company.city" style="display:inline;">
+                                                <span t-if="company.zip"> </span><span t-field="company.city"/>
+                                            </div>
+                                            <div t-if="company.country_id" style="display:inline;">
+                                                <span t-if="company.zip or company.city">, </span><span t-field="company.country_id"/>
+                                            </div>
+                                        </li>
+                                        <li t-if="company.vat">
+                                            <span>C.I.F.:</span>
+                                            <span t-field="company.vat"/>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div style="width:50%; display:block; float:left;">
+                                    <ul class="list-unstyled mb-0">
+                                        <li t-if="company.phone">
+                                            <span t-field="company.phone"/>
+                                        </li>
+                                        <li t-if="company.email">
+                                            <span t-field="company.email"/>
+                                        </li>
+                                        <li t-if="company.website">
+                                            <span t-field="company.website"/>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="clear:both;"/>
+                </div>
+            </xpath>
+
+            <xpath expr="//div[contains(@class, 'o_footer_content')]" position="replace">
+                <!-- Comentario migración Odoo 18: footer adaptado a la estructura estándar actual. -->
+                <div class="o_footer_content d-flex border-top pt-2">
+                    <div class="flex-grow-1 text-start me-2">
+                        <div>
+                            <span style="font-weight:bolder; font-size:0.9em;">Inscrita en el Reg. Mercantil de Huelva, Tomo 762, Libro 0, Folio 150, Sección 8ª, Hoja H13722/h, Inscrip. 1ª 10/05/05</span>
+                        </div>
+                        <div style="font-size:0.5em;">
+                            <span t-field="company.report_footer"/>
+                        </div>
+                    </div>
+                    <div class="text-end text-muted">
+                        <div t-if="report_type == 'pdf' and display_name_in_footer" t-out="o.name">(document name)</div>
+                        <div t-if="report_type == 'pdf'" class="text-nowrap">Page <span class="page"/> / <span class="topage"/></div>
+                    </div>
+                </div>
+            </xpath>
+
+
+        </template>
+    </data>
+</odoo>

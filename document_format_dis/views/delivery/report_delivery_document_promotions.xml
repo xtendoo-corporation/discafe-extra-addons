@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <template id="report_delivery_document_promotions">
+            <t t-name="document_format_dis.report_delivery_document_promotions">
+                <t t-call="web.external_layout">
+                    <t t-set="o" t-value="o.with_context(lang=(o.partner_id.lang if o.partner_id else o.env.lang))"/>
+                    <t t-set="partner" t-value="o.sale_id.partner_id if ('sale_id' in o._fields and o.sale_id) else (o.partner_id.commercial_partner_id if o.partner_id else False)"/>
+                    <t t-set="is_done" t-value="o.state == 'done'"/>
+                    <t t-if="is_done">
+                        <t t-set="promotion_lines" t-value="[line for line in o.move_line_ids if line.move_id.sale_line_id and line.move_id.sale_line_id.price_unit == 0.0]"/>
+                        <t t-set="display_discount" t-value="any(line.move_id.sale_line_id.discount for line in promotion_lines)"/>
+                    </t>
+                    <t t-else="">
+                        <t t-set="promotion_lines" t-value="[line for line in o.move_ids_without_package if line.sale_line_id and line.sale_line_id.price_unit == 0.0]"/>
+                        <t t-set="display_discount" t-value="any(line.sale_line_id.discount for line in promotion_lines)"/>
+                    </t>
+
+                    <t t-if="promotion_lines">
+                        <div class="page">
+                            <!-- Comentario migración Odoo 18: la página adicional solo se imprime cuando existen líneas promocionales. -->
+                            <div class="row mb-4">
+                                <div class="col-6">
+                                    <ul class="list-unstyled mb-0">
+                                        <li>
+                                            <strong>Albarán:</strong>
+                                            <span t-field="o.name"/>
+                                        </li>
+                                        <li t-if="'delivery_zone_id' in o._fields and o.delivery_zone_id">
+                                            <strong>Zona:</strong>
+                                            <span t-field="o.delivery_zone_id"/>
+                                        </li>
+                                        <li>
+                                            <strong>Estado:</strong>
+                                            <span t-field="o.state"/>
+                                        </li>
+                                        <li t-if="o.state == 'done' and o.date_done">
+                                            <strong>Fecha de entrega:</strong>
+                                            <span t-field="o.date_done" t-options="{'widget': 'date'}"/>
+                                        </li>
+                                        <li t-if="o.state != 'done' and o.scheduled_date">
+                                            <strong>Fecha estimada:</strong>
+                                            <span t-field="o.scheduled_date" t-options="{'widget': 'date'}"/>
+                                        </li>
+                                        <li t-if="o.origin">
+                                            <strong>Pedido:</strong>
+                                            <span t-field="o.origin"/>
+                                        </li>
+                                        <li t-if="partner and partner.ref">
+                                            <strong>Ref. Cliente:</strong>
+                                            <span t-field="partner.ref"/>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <div class="col-6">
+                                    <ul class="list-unstyled mb-0">
+                                        <li t-if="partner and partner.name">
+                                            <span t-field="partner.name"/>
+                                        </li>
+                                        <li t-if="partner and 'comercial' in partner._fields and partner.comercial">
+                                            <span t-field="partner.comercial"/>
+                                        </li>
+                                        <li t-if="partner and partner.street">
+                                            <span t-field="partner.street"/>
+                                        </li>
+                                        <li t-if="partner">
+                                            <span t-if="partner.zip" t-field="partner.zip"/>
+                                            <span t-if="partner.city">
+                                                <t t-if="partner.zip"> </t>
+                                                <span t-field="partner.city"/>
+                                            </span>
+                                            <t t-if="partner.country_id">, <span t-field="partner.country_id"/></t>
+                                        </li>
+                                        <li t-if="partner and partner.vat">
+                                            <strong>CIF:</strong>
+                                            <span t-field="partner.vat"/>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div style="width:100%; text-align:center; font-size:1.3em; font-weight:bolder; margin-bottom: 12px;">
+                                <p>Artículos en Promoción</p>
+                            </div>
+
+                            <table class="table table-sm table-borderless" style="font-size: 0.9em; width: 100%;">
+                                <thead style="border-top: 2px solid black; border-bottom: 2px solid black;">
+                                    <tr>
+                                        <th class="text-start" style="width: 13%;">Código</th>
+                                        <th class="text-start" style="width: 15%;">Lote</th>
+                                        <th class="text-start" style="width: 26%;">Descripción</th>
+                                        <th class="text-end" style="width: 10%;">Unidades</th>
+                                        <th class="text-end" style="width: 10%;">Precio/U</th>
+                                        <th t-if="display_discount" class="text-end" style="width: 8%;" groups="product.group_discount_per_so_line">Dto(%)</th>
+                                        <th class="text-end" style="width: 10%;">Valor neto</th>
+                                        <th class="text-end" style="width: 8%;">IVA</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="promotion_lines" t-as="line">
+                                        <t t-set="sale_line" t-value="line.move_id.sale_line_id if is_done else line.sale_line_id"/>
+                                        <t t-set="line_qty" t-value="line.quantity if is_done else line.product_uom_qty"/>
+                                        <t t-set="line_subtotal" t-value="sale_line.price_reduce_taxexcl * line_qty"/>
+                                        <t t-set="description_start" t-value="sale_line.name.find(']') + 1 if sale_line.name and ']' in sale_line.name else 0"/>
+                                        <t t-set="clean_description" t-value="sale_line.name[description_start:].strip() if sale_line.name else ''"/>
+                                        <t t-set="tax_labels" t-value="', '.join([(tax.invoice_label or tax.name) for tax in sale_line.tax_id])"/>
+
+                                        <tr style="border-bottom: 1px solid #000;">
+                                            <td class="text-start">
+                                                <span t-field="line.product_id.default_code"/>
+                                            </td>
+                                            <td class="text-start">
+                                                <t t-if="is_done and line.lot_id">
+                                                    <span t-field="line.lot_id.name"/>
+                                                </t>
+                                            </td>
+                                            <td class="text-start">
+                                                <span t-esc="clean_description or sale_line.name or line.product_id.display_name"/>
+                                            </td>
+                                            <td class="text-end">
+                                                <span t-esc="line_qty" t-options="{'widget': 'float', 'decimal_precision': 'Product Unit of Measure'}"/>
+                                            </td>
+                                            <td class="text-end text-nowrap">
+                                                <span t-field="sale_line.price_unit"/>
+                                            </td>
+                                            <td t-if="display_discount" class="text-end" groups="product.group_discount_per_so_line">
+                                                <span t-if="sale_line.discount" t-field="sale_line.discount"/>
+                                            </td>
+                                            <td class="text-end text-nowrap">
+                                                <span t-esc="line_subtotal" t-options="{'widget': 'monetary', 'display_currency': sale_line.currency_id}"/>
+                                            </td>
+                                            <td class="text-end">
+                                                <span t-esc="tax_labels"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+
+                            <hr style="height: 2px; background-color: black; clear: both; margin-bottom: 12px; border: 0; opacity: 1;"/>
+
+                            <div class="mt-3" t-if="'note' in o._fields and o.note">
+                                <span style="display:block;"><strong>Nota:</strong></span>
+                                <span t-field="o.note"/>
+                            </div>
+
+                            <div t-if="'signature' in o._fields and o.signature" class="mt-4" style="width: 30%; border: 2px solid black; padding: 8px;">
+                                <!-- Comentario migración Odoo 18: se usa la firma estándar del picking si existe en la instalación. -->
+                                <span style="text-align: center; display: block; width: 100%;">Firma del cliente:</span>
+                                <img t-att-src="image_data_uri(o.signature)" style="width: 100%; max-height: 4cm; object-fit: contain;"/>
+                            </div>
+
+                            <div class="oe_structure"/>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+
+</odoo>

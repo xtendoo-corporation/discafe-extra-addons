@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <record id="payment_A4" model="report.paperformat">
+            <field name="name">A4 payment</field>
+            <field name="default" eval="False"/>
+            <field name="format">custom</field>
+            <field name="margin_top">50</field>
+            <field name="margin_bottom">28</field>
+            <field name="margin_right">7</field>
+            <field name="margin_left">7</field>
+            <field name="page_height">297</field>
+            <field name="page_width">210</field>
+            <field name="orientation">Portrait</field>
+            <field name="header_line">False</field>
+            <field name="header_spacing">45</field>
+            <field name="dpi">95</field>
+        </record>
+
+        <record id="report_payment_receipt_action" model="ir.actions.report">
+            <field name="name">Recibo de Pago</field>
+            <field name="model">account.payment</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">document_format_dis.report_payment_receipt</field>
+            <field name="report_file">document_format_dis.report_payment_receipt</field>
+            <field name="binding_model_id" ref="account.model_account_payment"/>
+            <field name="binding_type">report</field>
+            <field name="paperformat_id" ref="document_format_dis.payment_A4"/>
+        </record>
+
+        <template id="report_payment_receipt">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-set="lang" t-value="o.partner_id.lang or o.company_id.partner_id.lang"/>
+                    <t t-call="document_format_dis.report_payment_receipt_document" t-lang="lang"/>
+                </t>
+            </t>
+        </template>
+
+        <template id="report_payment_receipt_document">
+            <t t-call="web.external_layout">
+                <!-- Comentario migración Odoo 18: se conserva la maqueta de Odoo 12 usando account.payment/account.move actuales. -->
+                <t t-set="o" t-value="o.with_context(lang=lang)"/>
+                <t t-set="partner" t-value="o.partner_id.commercial_partner_id if o.partner_id else False"/>
+                <t t-set="payment_reference" t-value="o.memo or o.payment_reference or (o.move_id.ref if o.move_id else False)"/>
+                <t t-set="invoices" t-value="o.reconciled_invoice_ids or o.reconciled_bill_ids"/>
+
+                <div class="page">
+                    <div>
+                        <div style="width:50%; float:left;">
+                            <ul class="list-unstyled mb-0">
+                                <li>
+                                    <b><span>Recibo: </span></b>
+                                    <span t-field="o.name"/>
+                                </li>
+                                <li>
+                                    <b><span>Fecha: </span></b>
+                                    <span t-field="o.date"/>
+                                </li>
+                                <li t-if="o.payment_method_id">
+                                    <b><span>Método de pago: </span></b>
+                                    <span t-field="o.payment_method_id.name"/>
+                                </li>
+                                <li>
+                                    <b><span>Cantidad pagada: </span></b>
+                                    <span t-field="o.amount" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                                </li>
+                                <li t-if="payment_reference">
+                                    <b><span>Referencia: </span></b>
+                                    <span t-out="payment_reference"/>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div style="width:50%; float:left;">
+                            <ul class="list-unstyled mb-0">
+                                <li t-if="partner and 'comercial' in partner._fields and partner.comercial">
+                                    <span t-field="partner.comercial"/>
+                                </li>
+                                <li t-if="partner and partner.name">
+                                    <span t-field="partner.name"/>
+                                </li>
+                                <li t-if="partner and partner.street">
+                                    <span t-field="partner.street"/>
+                                </li>
+                                <li t-if="partner and (partner.zip or partner.city or partner.country_id)">
+                                    <span t-if="partner.zip" t-field="partner.zip"/>
+                                    <span t-if="partner.city">
+                                        <span t-if="partner.zip"> </span>
+                                        <span t-field="partner.city"/>
+                                    </span>
+                                    <span t-if="partner.country_id">
+                                        <span t-if="partner.zip or partner.city">, </span>
+                                        <span t-field="partner.country_id"/>
+                                    </span>
+                                </li>
+                                <li t-if="partner and partner.vat">
+                                    <span>CIF: </span>
+                                    <span t-field="partner.vat"/>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div style="clear:both;"/>
+
+                    <div t-if="invoices">
+                        <hr style="height:2px; background-color:black; clear:both; margin:10px 0; border:0; opacity:1;"/>
+
+                        <div style="font-weight:bold; clear:both;">
+                            <div style="width:27.5%; float:left;">
+                                <span>Fecha factura</span>
+                            </div>
+                            <div style="width:27.5%; float:left;">
+                                <span>Factura</span>
+                            </div>
+                            <div style="width:15%; float:left; text-align:right;">
+                                <span>Total</span>
+                            </div>
+                            <div style="width:15%; float:left; text-align:right;">
+                                <span>Pagado</span>
+                            </div>
+                            <div style="width:15%; float:left; text-align:right;">
+                                <span>Diferencia</span>
+                            </div>
+                        </div>
+
+                        <div style="clear:both;"/>
+                        <hr style="height:2px; background-color:black; clear:both; margin:8px 0; border:0; opacity:1;"/>
+
+                        <div>
+                            <t t-foreach="invoices" t-as="inv">
+                                <div style="width:27.5%; float:left;">
+                                    <span t-if="inv.invoice_date" t-field="inv.invoice_date"/>
+                                </div>
+                                <div style="width:27.5%; float:left;">
+                                    <span t-if="inv.name" t-field="inv.name"/>
+                                </div>
+                                <div style="width:15%; float:left; text-align:right;">
+                                    <span t-out="inv.amount_total" t-options="{'widget': 'monetary', 'display_currency': inv.currency_id}"/>
+                                </div>
+                                <div style="width:15%; float:left; text-align:right;">
+                                    <span t-out="inv.amount_total - inv.amount_residual" t-options="{'widget': 'monetary', 'display_currency': inv.currency_id}"/>
+                                </div>
+                                <div style="width:15%; float:left; text-align:right;">
+                                    <span t-out="inv.amount_residual" t-options="{'widget': 'monetary', 'display_currency': inv.currency_id}"/>
+                                </div>
+                                <div style="clear:both;"/>
+                            </t>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+    </data>
+
+</odoo>

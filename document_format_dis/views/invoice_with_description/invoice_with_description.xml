@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <!-- Comentario migración Odoo 18: acción de informe para factura con descripción ampliada. -->
+        <record id="report_invoice_with_description_action" model="ir.actions.report">
+            <field name="name">Factura con descripción ampliada</field>
+            <field name="model">account.move</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">document_format_dis.report_invoice_with_description</field>
+            <field name="report_file">document_format_dis.report_invoice_with_description</field>
+            <field name="print_report_name">object._get_report_base_filename()</field>
+            <field name="binding_model_id" ref="account.model_account_move"/>
+            <field name="binding_type">report</field>
+        </record>
+
+        <template id="report_invoice_with_description">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-set="lang" t-value="o.user_id.lang if o.move_type in ('in_invoice', 'in_refund') else o.partner_id.lang"/>
+                    <t t-call="document_format_dis.report_invoice_document_with_description" t-lang="lang"/>
+                </t>
+            </t>
+        </template>
+
+    </data>
+</odoo>

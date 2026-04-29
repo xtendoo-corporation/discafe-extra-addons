@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <record id="A4_picking_report" model="report.paperformat">
+            <field name="name">A4 Picking Report</field>
+            <field name="default" eval="False"/>
+            <field name="format">custom</field>
+            <field name="margin_top">40.00</field>
+            <field name="margin_bottom">28.00</field>
+            <field name="margin_right">7.00</field>
+            <field name="margin_left">7.00</field>
+            <field name="page_height">297</field>
+            <field name="page_width">210</field>
+            <field name="orientation">Portrait</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">38</field>
+            <field name="dpi">90</field>
+        </record>
+
+        <!-- Comentario migración Odoo 18: acción legacy sustituida por ir.actions.report enlazado a stock.picking. -->
+        <record id="stock_picking_report" model="ir.actions.report">
+            <field name="name">Informe de carga</field>
+            <field name="model">stock.picking</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">document_format_dis.stock_picking_report_template</field>
+            <field name="report_file">document_format_dis.stock_picking_report_template</field>
+            <field name="print_report_name">'Informe de carga - %s - %s' % (object.partner_id.name or '', object.name)</field>
+            <field name="binding_model_id" ref="stock.model_stock_picking"/>
+            <field name="binding_type">report</field>
+            <field name="paperformat_id" ref="document_format_dis.A4_picking_report"/>
+        </record>
+
+        <template id="stock_picking_report_template">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="document_format_dis.stock_picking_report_charge" t-lang="o.partner_id.lang"/>
+                </t>
+            </t>
+        </template>
+
+        <template id="stock_picking_report_charge">
+            <t t-call="web.external_layout">
+                <!-- Comentario migración Odoo 18: el campo antiguo de cantidad desaparece; las operaciones detalladas usan stock.move.line.quantity. -->
+                <t t-set="location_names" t-value="{
+                    'Physical Locations/PAZ/Stock': 'La Paz',
+                    'Physical Locations/FRG1/Stock': 'Frugón 1 (Juan Andres)',
+                    'Physical Locations/FRG2/Stock': 'Frugón 2 (Jose Manuel)',
+                    'Physical Locations/FRG3/Stock': 'Furgón 3 (Fernando)',
+                    'Physical Locations/FRG4/Stock': 'Frugón 4 (Antonio Vidarte)',
+                }"/>
+                <t t-set="report_date" t-value="o.date_done or o.scheduled_date or o.date"/>
+                <t t-set="lines_to_print" t-value="o.move_line_ids_without_package.sorted(key=lambda ml: (ml.product_id.default_code or '', ml.product_id.display_name or '', ml.lot_id.name or ml.lot_name or '', ml.id))"/>
+
+                <div class="page">
+                    <div class="row">
+                        <!--Datos del documento -->
+                        <div style="width:100%; margin-top:35px; color:black; text-align:center;">
+                            <p style="font-size:1.6em;">
+                                <b>Informe de <span t-field="o.name"/> - <span t-esc="report_date.strftime('%m-%d-%Y') if report_date else ''"/></b>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div style="margin-top:15px;">
+                        <div style="float:left; width:50%; font-size:1.2em; text-align:center;">
+                            <p>
+                                <b>Desde: </b>
+                                <span t-esc="location_names.get(o.location_id.complete_name, o.location_id.display_name or '')"/>
+                            </p>
+                        </div>
+
+                        <div style="float:left; width:50%; font-size:1.2em; text-align:center;">
+                            <p>
+                                <b>Hasta: </b>
+                                <span t-esc="location_names.get(o.location_dest_id.complete_name, o.location_dest_id.display_name or '')"/>
+                            </p>
+                        </div>
+                    </div>
+                    <!-- Fin datos documento -->
+
+                    <!-- Separador -->
+                    <hr style="height:2px; background-color:black; clear:both; margin:0; border:0; opacity:1;"/>
+                    <!-- Fin separador -->
+
+                    <!-- Cabecera -->
+                    <div>
+                        <div style="float:left; width:15%;">
+                            <span>Código</span>
+                        </div>
+                        <div style="float:left; width:60%;">
+                            <span>Producto</span>
+                        </div>
+                        <div style="float:left; width:15%;">
+                            <span>Lote</span>
+                        </div>
+                        <div style="float:left; width:10%; text-align:right;">
+                            <span>Cantidad</span>
+                        </div>
+                    </div>
+                    <!-- Fin cabecera -->
+
+                    <!-- Separador -->
+                    <hr style="height:2px; background-color:black; clear:both; margin:0 0 4px 0; border:0; opacity:1;"/>
+                    <!-- Fin separador -->
+
+                    <!-- Lineas -->
+                    <div style="font-size:0.9em;">
+                        <t t-foreach="lines_to_print" t-as="ml">
+                            <!-- codigo -->
+                            <div style="float:left; width:15%;">
+                                <t t-if="ml.product_id.default_code">
+                                    <span t-field="ml.product_id.default_code"/>
+                                </t>
+                                <t t-else="">
+                                    <span style="color:white;">aaaa</span>
+                                </t>
+                            </div>
+                            <!-- Fin codigo -->
+
+                            <!-- Nombre -->
+                            <div style="float:left; width:60%;">
+                                <t t-if="ml.product_id.display_name">
+                                    <span t-field="ml.product_id.display_name"/>
+                                </t>
+                                <t t-else="">
+                                    <span style="color:white;">aaaa</span>
+                                </t>
+                            </div>
+                            <!-- Fin Nombre -->
+
+                            <!-- Lote -->
+                            <div style="float:left; width:15%;">
+                                <t t-if="ml.lot_id">
+                                    <span t-field="ml.lot_id.name"/>
+                                </t>
+                                <t t-elif="ml.lot_name">
+                                    <span t-field="ml.lot_name"/>
+                                </t>
+                                <t t-else="">
+                                    <span style="color:white;">aaaa</span>
+                                </t>
+                            </div>
+                            <!-- Fin Lote -->
+
+                            <!-- Cantidad -->
+                            <div style="float:left; width:10%; text-align:right;">
+                                <t t-if="ml.quantity">
+                                    <span t-field="ml.quantity"/>
+                                </t>
+                                <t t-else="">
+                                    <span style="color:white;">aaaa</span>
+                                </t>
+                            </div>
+                            <!-- Fin Cantidad -->
+
+                            <div style="clear:both;"/>
+                        </t>
+                    </div>
+                    <!-- Fin Lineas -->
+                </div>
+            </t>
+        </template>
+
+    </data>
+</odoo>
