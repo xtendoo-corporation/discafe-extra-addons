@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
+    <data>
 
      <template id="report_sale_delivery_zone">
         <t t-call="web.html_container">
@@ -350,11 +351,14 @@
         </t>
     </template>
 
-    <report id="report_sale"
-            string="Sale Report"
-            model="xtendoo_partner_delivery_zone.report_sale_delivery_zone"
-            report_type="qweb-pdf"
-            name="xtendoo_partner_delivery_zone.report_sale_delivery_zone"
-            file="xtendoo_partner_delivery_zone.report_sale_delivery_zone"/>
+    <!-- Comentario migración Odoo 18: se usa un XML ID nuevo para evitar colisión con report_sale existente como ir.ui.view. -->
+    <record id="report_sale_action" model="ir.actions.report">
+        <field name="name">Sale Report</field>
+        <field name="model">partner.delivery.zone</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">xtendoo_partner_delivery_zone.report_sale_delivery_zone</field>
+        <field name="report_file">xtendoo_partner_delivery_zone.report_sale_delivery_zone</field>
+    </record>
 
+    </data>
 </odoo>

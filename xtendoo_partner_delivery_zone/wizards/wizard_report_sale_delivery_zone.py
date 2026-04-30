@@ -26,4 +26,5 @@ class WizardReportSaleDeliveryZone(models.TransientModel):
             'form': self.read()[0],
             'active_ids': self._context['active_ids'],
         }
-        return self.env.ref('xtendoo_partner_delivery_zone.report_sale').report_action(self, data=data)
+        # Comentario migración Odoo 18: se apunta a la nueva acción para evitar colisión con el XML ID report_sale antiguo.
+        return self.env.ref('xtendoo_partner_delivery_zone.report_sale_action').report_action(self, data=data)

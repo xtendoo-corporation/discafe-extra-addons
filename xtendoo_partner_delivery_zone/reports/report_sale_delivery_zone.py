@@ -1,6 +1,5 @@
-from odoo import api,fields, models, _
+from odoo import api, fields, models, _
 from datetime import datetime
-from odoo.tools.misc import DEFAULT_SERVER_DATE_FORMAT
 
 
 class ReportSaleDeliveryZone(models.AbstractModel):
@@ -58,19 +57,22 @@ class ReportSaleDeliveryZone(models.AbstractModel):
 
 
     def get_invoices_delivery_zone_date(self, delivery_zone_id, date):
+        # Comentario migración Odoo 18: account.invoice se integró en account.move y el campo type pasó a move_type.
         invoices = self.env['account.move'].search(
             [('delivery_zone_id', '=', delivery_zone_id),
              ('state', '!=', 'draft'),
-             ('type', '=', 'out_invoice'),
+             ('move_type', '=', 'out_invoice'),
              ('invoice_date', '=', date)]
         )
         result = []
         for invoice in invoices:
             importe_pagado_a_fecha = 0.00
             payments = self.env['account.payment'].search([
+                '|',
                 ('invoice_ids', 'in', [invoice.id]),
+                ('reconciled_invoice_ids', 'in', [invoice.id]),
                 ('payment_type', '=', 'inbound'),
-                ('payment_date', '<=', date)
+                ('date', '<=', date)
             ])
             if payments:
                 importe_pagado_a_fecha = sum(payment.amount for payment in payments)
@@ -79,22 +81,13 @@ class ReportSaleDeliveryZone(models.AbstractModel):
 
         return result
 
-    # @api.multi
-    # def get_invoices_delivery_zone_date(self, delivery_zone_id, date):
-    #     return self.env['account.move'].search(
-    #         [('delivery_zone_id', '=', delivery_zone_id),
-    #          ('state', '!=', 'draft'),
-    #          ('type', '=', 'out_invoice'),
-    #          ('date_invoice', '=', date)]
-    #     )
-
 
     def get_payments_delivery_zone_date(self, delivery_zone_id, date):
         payment_ids = self.get_payments_delivery_zone_date_ids(delivery_zone_id, date)
         return self.env['account.payment'].search(
             [('delivery_zone_id', '=', delivery_zone_id),
              ('payment_type', '=', 'inbound'),
-             ('payment_date', '=', date),
+             ('date', '=', date),
              ('id', 'not in', payment_ids)]
         )
 
@@ -104,13 +97,15 @@ class ReportSaleDeliveryZone(models.AbstractModel):
         invoices = self.env['account.move'].search(
             [('delivery_zone_id', '=', delivery_zone_id),
              ('state', '!=', 'draft'),
-             ('type', '=', 'out_invoice'),
+             ('move_type', '=', 'out_invoice'),
              ('invoice_date', '=', date)])
         for invoice in invoices:
             payment_ids = self.env['account.payment'].search([
+                '|',
                 ('invoice_ids', 'in', [invoice.id]),
+                ('reconciled_invoice_ids', 'in', [invoice.id]),
                 ('payment_type', '=', 'inbound'),
-                ('payment_date', '=', date)
+                ('date', '=', date)
             ])
             for payment in payment_ids:
                 payments.append(payment.id)
@@ -121,7 +116,7 @@ class ReportSaleDeliveryZone(models.AbstractModel):
         return self.env['account.payment'].read_group(
             [('delivery_zone_id', '=', delivery_zone_id),
              ('payment_type', '=', 'inbound'),
-             ('payment_date', '=', date)],
+             ('date', '=', date)],
              ['journal_id', 'amount'],
              ['journal_id'],
         )
