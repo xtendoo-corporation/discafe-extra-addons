@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="sale_order_promotion_view_form" model="ir.ui.view">
+        <field name="name">sale.order.promotion.form</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='order_line']" position="before">
+                <!-- Comentario migración Odoo 18: se mantiene el botón de promociones sobre las líneas del pedido. -->
+                <button string="Apply Promotions "
+                        name="apply_promotions"
+                        type="object"
+                        class="oe_inline oe_link">
+                    <i class="fa fa-arrow-left" title="Apply Promotions"/>
+                </button>
+            </xpath>
+            <xpath expr="//group[@name='partner_details']/field[@name='partner_id']" position="before">
+                <field name="partner_id_readonly" invisible="1"/>
+            </xpath>
+            <xpath expr="//group[@name='partner_details']/field[@name='partner_id']" position="attributes">
+                <attribute name="readonly">partner_id_readonly or state in ['cancel', 'sale']</attribute>
+                <attribute name="context">{'res_partner_search_mode': 'customer', 'search_default_customer': 1, 'show_address': 1, 'show_vat': True}</attribute>
+                <attribute name="options">{'always_reload': True}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/form/field[@name='sequence']" position="before">
+                <field name="promotion" invisible="1"/>
+                <field name="parent_id" invisible="1"/>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/form//field[@name='product_id']" position="attributes">
+                <attribute name="readonly">promotion or not product_updatable</attribute>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/list/field[@name='sequence']" position="before">
+                <field name="promotion" column_invisible="True"/>
+                <field name="parent_id" column_invisible="True"/>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/list/field[@name='product_id']" position="attributes">
+                <attribute name="readonly">promotion or not product_updatable</attribute>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/list/field[@name='product_template_id']" position="attributes">
+                <attribute name="readonly">promotion or (id and not product_updatable)</attribute>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>
