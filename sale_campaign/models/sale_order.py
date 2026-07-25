@@ -13,7 +13,10 @@ class SaleOrder(models.Model):
     @api.depends('order_line')
     def _compute_partner_id_readonly(self):
         for order in self:
-            order.partner_id_readonly = bool(order.order_line)
+            # No bloquear el cliente en pedidos aún no guardados: si no, el
+            # alta de un pedido nuevo con líneas en un solo guardado pierde
+            # el partner_id (el widget omite los campos readonly al crear).
+            order.partner_id_readonly = bool(order.order_line) and not isinstance(order.id, models.NewId)
 
     # @api.onchange('order_line')
     # def _onchange_order_lines(self):
