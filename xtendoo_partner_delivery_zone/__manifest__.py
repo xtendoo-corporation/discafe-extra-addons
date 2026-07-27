@@ -13,6 +13,7 @@
     'application': False,
     'installable': True,
     'depends': [
+        'partner_delivery_zone',
         'sale_stock',
         'sale_management',
         'contacts',
@@ -28,11 +29,8 @@
         'views/sale_order_view.xml',
         'views/account_payment_view.xml',
         'views/account_invoice_view.xml',
-        'views/report_shipping.xml',
-        'views/stock_picking_view.xml',
         'reports/report_sale_delivery_zone.xml',
         'wizards/wizards_select_visits_routes.xml',
         'wizards/wizards_report_sale_delivery_zone.xml',
     ],
 }
-
