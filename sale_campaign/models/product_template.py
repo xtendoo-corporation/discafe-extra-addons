@@ -7,6 +7,6 @@ class ProductTemplate(models.Model):
     promotion_ids = fields.Many2many(
         comodel_name='sale.promotion',
         relation='product_template_sale_promotion_rel',
-        column1='product_tmpl_id',
-        column2='promotion_id',
+        column1='product_template_id',
+        column2='sale_promotion_id',
         string='Promotions')

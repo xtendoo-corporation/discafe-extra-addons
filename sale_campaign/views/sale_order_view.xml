@@ -12,7 +12,7 @@
                         name="apply_promotions"
                         type="object"
                         class="oe_inline oe_link">
-                    <i class="fa fa-arrow-left" title="Apply Promotions"/>
+                    <i class="fa fa-arrow-left" title="Apply Promotions"/> Apply Promotions
                 </button>
             </xpath>
             <xpath expr="//group[@name='partner_details']/field[@name='partner_id']" position="before">
