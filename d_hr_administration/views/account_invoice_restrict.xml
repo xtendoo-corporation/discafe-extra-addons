@@ -6,11 +6,6 @@
             <field name="model">account.move</field>
             <field name="inherit_id" ref="account.view_move_form"/>
             <field name="arch" type="xml">
-                <!-- Deshabilitar botón Nuevo en el formulario -->
-                <xpath expr="//form" position="attributes">
-                    <attribute name="create">false</attribute>
-                </xpath>
-
                 <!-- Campo price_unit -->
                 <xpath expr="//field[@name='invoice_line_ids']//field[@name='price_unit']" position="replace">
                     <field name="is_admin" column_invisible="True"/>
@@ -73,18 +68,6 @@
                <xpath expr="//button[@name='button_draft']" position="attributes">
                     <attribute name="groups">d_hr_administration.administration</attribute>
                </xpath>
-            </field>
-        </record>
-
-        <!-- Vista tree para facturas con restricción de creación -->
-        <record id="d_hr_administration_invoice_tree_inherit" model="ir.ui.view">
-            <field name="name">account.move.tree.d_hr_administration</field>
-            <field name="model">account.move</field>
-            <field name="inherit_id" ref="account.view_invoice_tree"/>
-            <field name="arch" type="xml">
-                <xpath expr="//list" position="attributes">
-                    <attribute name="create">false</attribute>
-                </xpath>
             </field>
         </record>
 
