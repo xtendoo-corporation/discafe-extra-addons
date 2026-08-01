@@ -86,7 +86,7 @@ msgstr "Grupo de administradores:\n"
 "                                      - Puede ser vendido\n"
 "                                      - Puede ser comprado\n"
 "                                      - Código de barras\n"
-"                                      - Código interno\n""
+"                                      - Código interno\n"
 "            "
 
 
