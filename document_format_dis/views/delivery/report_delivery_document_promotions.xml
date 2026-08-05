@@ -92,7 +92,7 @@
                                         <th class="text-start" style="width: 26%;">Descripción</th>
                                         <th class="text-end" style="width: 10%;">Unidades</th>
                                         <th class="text-end" style="width: 10%;">Precio/U</th>
-                                        <th t-if="display_discount" class="text-end" style="width: 8%;" groups="product.group_discount_per_so_line">Dto(%)</th>
+                                        <th t-if="display_discount" class="text-end" style="width: 8%;">Dto(%)</th>
                                         <th class="text-end" style="width: 10%;">Valor neto</th>
                                         <th class="text-end" style="width: 8%;">IVA</th>
                                     </tr>
@@ -124,7 +124,7 @@
                                             <td class="text-end text-nowrap">
                                                 <span t-field="sale_line.price_unit"/>
                                             </td>
-                                            <td t-if="display_discount" class="text-end" groups="product.group_discount_per_so_line">
+                                            <td t-if="display_discount" class="text-end">
                                                 <span t-if="sale_line.discount" t-field="sale_line.discount"/>
                                             </td>
                                             <td class="text-end text-nowrap">

@@ -92,7 +92,7 @@
                                     <th class="text-start" style="width: 26%;">Descripción</th>
                                     <th class="text-end" style="width: 7%;">Uds.</th>
                                     <th class="text-end" style="width: 10%;">Precio/Ud</th>
-                                    <th t-if="display_discount" class="text-end" style="width: 10%;" groups="product.group_discount_per_so_line">Des.(%)</th>
+                                    <th t-if="display_discount" class="text-end" style="width: 10%;">Des.(%)</th>
                                     <th class="text-end" style="width: 12%;">Valor neto</th>
                                     <th class="text-end" style="width: 7%;">IVA</th>
                                 </tr>
@@ -128,13 +128,12 @@
                                         <td class="text-end text-nowrap">
                                             <span t-field="line.price_unit"/>
                                         </td>
-                                        <td t-if="display_discount" class="text-end" groups="product.group_discount_per_so_line">
+                                        <td t-if="display_discount" class="text-end">
                                             <span t-field="line.discount"/>
                                         </td>
                                         <td class="text-end text-nowrap">
                                             <span t-if="is_customer_refund">-</span>
-                                            <span t-field="line.price_subtotal" groups="account.group_show_line_subtotals_tax_excluded"/>
-                                            <span t-field="line.price_total" groups="account.group_show_line_subtotals_tax_included"/>
+                                            <span t-field="line.price_subtotal"/>
                                         </td>
                                         <td class="text-end">
                                             <span t-esc="tax_labels"/>
@@ -148,28 +147,30 @@
 
                         <div class="row justify-content-end">
                             <div class="col-6">
+                                <!-- Comentario migración Odoo 18: se usa la estructura de tax_totals (_get_tax_totals_summary) con base_amount_currency, subtotals/tax_groups y total_amount_currency. -->
+                                <t t-set="currency" t-value="o.currency_id"/>
+                                <t t-set="same_tax_base" t-value="tax_totals.get('same_tax_base')"/>
                                 <table class="table table-sm table-borderless mb-0">
                                     <tr>
                                         <td><strong>Base Imponible</strong></td>
                                         <td class="text-end">
                                             <span t-if="is_customer_refund">-</span>
-                                            <span t-out="tax_totals.get('formatted_amount_untaxed', '')"/>
+                                            <span t-out="tax_totals.get('base_amount_currency', 0.0)" t-options='{"widget": "monetary", "display_currency": currency}'/>
                                         </td>
                                     </tr>
                                     <t t-foreach="tax_totals.get('subtotals', [])" t-as="subtotal">
-                                        <t t-set="subtotal_name" t-value="subtotal.get('name', '')"/>
-                                        <t t-foreach="tax_totals.get('groups_by_subtotal', {}).get(subtotal_name, [])" t-as="amount_by_group">
+                                        <t t-foreach="subtotal.get('tax_groups', [])" t-as="tax_group">
                                             <tr>
                                                 <td>
-                                                    <span t-out="amount_by_group.get('tax_group_name', '')"/>
-                                                    <t t-if="len(tax_totals.get('groups_by_subtotal', {}).get(subtotal_name, [])) &gt; 1 or tax_totals.get('amount_untaxed', 0) != amount_by_group.get('tax_group_base_amount', 0)">
+                                                    <span t-out="tax_group.get('group_name', '')"/>
+                                                    <t t-if="not same_tax_base and tax_group.get('display_base_amount_currency') is not False">
                                                         <span> sobre </span>
-                                                        <span t-out="amount_by_group.get('formatted_tax_group_base_amount', '')"/>
+                                                        <span t-out="tax_group.get('display_base_amount_currency', 0.0)" t-options='{"widget": "monetary", "display_currency": currency}'/>
                                                     </t>
                                                 </td>
                                                 <td class="text-end">
                                                     <span t-if="is_customer_refund">-</span>
-                                                    <span t-out="amount_by_group.get('formatted_tax_group_amount', '')"/>
+                                                    <span t-out="tax_group.get('tax_amount_currency', 0.0)" t-options='{"widget": "monetary", "display_currency": currency}'/>
                                                 </td>
                                             </tr>
                                         </t>
@@ -178,7 +179,7 @@
                                         <td><strong>Total</strong></td>
                                         <td class="text-end">
                                             <span t-if="is_customer_refund">-</span>
-                                            <span t-out="tax_totals.get('formatted_amount_total', '')"/>
+                                            <span t-out="tax_totals.get('total_amount_currency', 0.0)" t-options='{"widget": "monetary", "display_currency": currency}'/>
                                         </td>
                                     </tr>
                                 </table>
