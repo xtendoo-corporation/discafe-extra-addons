@@ -8,7 +8,7 @@
         <field name="arch" type="xml">
             <xpath expr="//field[@name='order_line']" position="before">
                 <!-- Comentario migración Odoo 18: se mantiene el botón de promociones sobre las líneas del pedido. -->
-                <button string="Apply Promotions"
+                <button string="Aplicar Promociones"
                         name="apply_promotions"
                         type="object"
                         class="oe_inline oe_link"
