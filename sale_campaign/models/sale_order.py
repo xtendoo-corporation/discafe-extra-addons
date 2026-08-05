@@ -8,7 +8,7 @@ class SaleOrder(models.Model):
         string='Partner id status',
         default=False,
         compute='_compute_partner_id_readonly',
-        store=True)
+        store=False)
 
     @api.depends('order_line')
     def _compute_partner_id_readonly(self):
