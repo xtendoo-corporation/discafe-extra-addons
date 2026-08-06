@@ -10,7 +10,8 @@
             </xpath>
              <xpath expr="//field[@name='delivery_date']" position="after">
                  <field name="invoice_user_id"/>
-                <field name="delivery_zone_id" readonly="state != 'draft'"/>
+               <field name="can_edit_delivery_zone" invisible="1"/>
+               <field name="delivery_zone_id" readonly="not can_edit_delivery_zone" options="{'no_create': True}"/>
             </xpath>
         </field>
     </record>

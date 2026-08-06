@@ -4,14 +4,45 @@
 <odoo>
 
     <record id="view_order_form" model="ir.ui.view">
-        <field name="name">sale.order.delivery.zone.next.partner.form.view</field>
+        <field name="name">sale.order.delivery.zone.form.view</field>
         <field name="model">sale.order</field>
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="arch" type="xml">
+
+<!--            <button name="action_draft" states="cancel" type="object" string="Set to Quotation"/>-->
+<!--            <xpath expr="//button[@name='action_unlock']" position="after">-->
+<!--                <button name="button_next_partner"-->
+<!--                        type="object"-->
+<!--                        class="oe_inline oe_link oe_edit_only">-->
+<!--                    <i class="fa fa-arrow-right"/>-->
+<!--                    <span> Next Partner</span>-->
+<!--                </button>-->
+<!--            </xpath> -->
+
             <xpath expr="//button[@name='action_cancel']" position="after">
                 <button name="button_next_partner"
                         type="object"
-                        class="btn btn-info" string="Próximo cliente"/>
+                        class="btn btn-info" string="Próximo cliente">
+                </button>
+            </xpath>
+
+            <xpath expr="//field[@name='payment_term_id']" position="after">
+                <field name="delivery_zone_id" readonly="state in ('done', 'cancel')" required="1"/>
+            </xpath>
+
+        </field>
+    </record>
+
+    <record id="view_sales_order_filter" model="ir.ui.view">
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_sales_order_filter"/>
+        <field name="arch" type="xml">
+            <field name="order_line" position="after">
+                <separator/>
+                <field name="delivery_zone_id"/>
+            </field>
+            <xpath expr="//filter[@name='customer']/.." position="inside">
+                <filter name="delivery_zone_group" string="Delivery Zone" context="{'group_by': 'delivery_zone_id'}"/>
             </xpath>
         </field>
     </record>

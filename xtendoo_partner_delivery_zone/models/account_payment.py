@@ -1,22 +1,25 @@
 # -*- coding: utf-8 -*-
 
-from odoo import api, fields, models
+from odoo import models, fields
 
 
 class AccountPayment(models.Model):
     _inherit = "account.payment"
 
+    def _get_partner_delivery_zone(self):
+        try:
+            from odoo.http import request
+            if request and request.session and 'partner_delivery_zone_id' in request.session:
+                return request.session['partner_delivery_zone_id']
+        except Exception:
+            pass
+        return False
+
     delivery_zone_id = fields.Many2one(
         comodel_name='partner.delivery.zone',
         string="Delivery Zone",
         ondelete='restrict',
+        required=True,
         index=True,
-        compute='_compute_delivery_zone_id',
-        store=True,
-        readonly=False,
+        default=_get_partner_delivery_zone,
     )
-
-    @api.depends('partner_id')
-    def _compute_delivery_zone_id(self):
-        for payment in self:
-            payment.delivery_zone_id = payment.partner_id.delivery_zone_id

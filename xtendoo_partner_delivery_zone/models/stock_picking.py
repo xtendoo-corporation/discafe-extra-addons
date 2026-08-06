@@ -1,10 +1,11 @@
-# -*- coding: utf-8 -*-
+# Copyright 2018 Tecnativa - Sergio Teruel
+# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
-from odoo import api, fields, models
+from odoo import fields, models
 
 
-class AccountInvoice(models.Model):
-    _inherit = "account.move"
+class StockPicking(models.Model):
+    _inherit = 'stock.picking'
 
     def _get_partner_delivery_zone(self):
         try:
@@ -19,18 +20,7 @@ class AccountInvoice(models.Model):
         comodel_name='partner.delivery.zone',
         string="Delivery Zone",
         ondelete='restrict',
-        required=True,
         index=True,
+        required=True,
         default=_get_partner_delivery_zone,
     )
-
-    can_edit_delivery_zone = fields.Boolean(
-        compute='_compute_can_edit_delivery_zone',
-        store=False,
-    )
-
-    @api.depends_context('uid')
-    def _compute_can_edit_delivery_zone(self):
-        can_edit = self.env.user.has_group('d_hr_administration.administration')
-        for record in self:
-            record.can_edit_delivery_zone = can_edit
