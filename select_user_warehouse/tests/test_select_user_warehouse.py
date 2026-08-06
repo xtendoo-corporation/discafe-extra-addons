@@ -58,6 +58,24 @@ class TestSelectUserWarehouse(TransactionCase):
         )
         self.assertEqual(order.warehouse_id, self.user_warehouse)
 
+    def test_warehouse_follows_current_user_not_salesperson(self):
+        other_warehouse = self.env["stock.warehouse"].create({
+            "name": "Almacén Otro",
+            "code": "WHOTR",
+            "company_id": self.company.id,
+        })
+        salesman_group = self.env.ref("sales_team.group_sale_salesman")
+        other_user = self.env["res.users"].create({
+            "name": "Other Salesman",
+            "login": "test_other_salesman",
+            "groups_id": [(4, salesman_group.id)],
+            "warehouse_id": other_warehouse.id,
+        })
+        order = self.SaleOrder.with_user(self.user_with_wh).new(
+            {"user_id": other_user.id}
+        )
+        self.assertEqual(order.warehouse_id, self.user_warehouse)
+
     def test_default_get_raises_when_user_has_no_warehouse(self):
         with self.assertRaises(UserError):
             self.SaleOrder.with_user(self.user_without_wh).default_get(

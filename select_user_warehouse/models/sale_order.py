@@ -18,3 +18,17 @@ class SaleOrder(models.Model):
             ))
 
         return result
+
+    @api.depends('user_id', 'company_id')
+    def _compute_warehouse_id(self):
+        # El almacén depende del usuario conectado, no del comercial ni del cliente.
+        user_warehouse = self.env.user.warehouse_id
+        remaining = self.env['sale.order']
+        for order in self:
+            editable = order.state in ('draft', 'sent') or not order.ids
+            if user_warehouse and user_warehouse.company_id == order.company_id and editable:
+                order.warehouse_id = user_warehouse
+            else:
+                remaining |= order
+        if remaining:
+            super(SaleOrder, remaining)._compute_warehouse_id()
