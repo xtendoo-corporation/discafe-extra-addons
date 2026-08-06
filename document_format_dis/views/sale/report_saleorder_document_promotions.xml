@@ -143,11 +143,10 @@
                                                 <span t-if="line.discount" t-field="line.discount"/>
                                             </td>
                                             <td class="text-end text-nowrap">
-                                                <span t-field="line.price_subtotal" groups="account.group_show_line_subtotals_tax_excluded"/>
-                                                <span t-field="line.price_total" groups="account.group_show_line_subtotals_tax_included"/>
+                                                <span t-field="line.price_subtotal"/>
                                             </td>
                                             <td class="text-end">
-                                                <t t-set="tax_labels" t-value="', '.join([(tax.invoice_label or tax.name) for tax in line.tax_id])"/>
+                                                <t t-set="tax_labels" t-value="', '.join(['{:g}%'.format(tax.amount) if tax.amount_type == 'percent' else (tax.invoice_label or tax.name) for tax in line.tax_id])"/>
                                                 <span t-esc="tax_labels"/>
                                             </td>
                                         </tr>

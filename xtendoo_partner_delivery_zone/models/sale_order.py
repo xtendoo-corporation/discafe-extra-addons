@@ -49,6 +49,15 @@ class SaleOrder(models.Model):
 
         self.partner_id = partner_id
 
+    @api.constrains('delivery_zone_id')
+    def _check_delivery_zone_id(self):
+        for order in self:
+            if not order.delivery_zone_id:
+                raise ValidationError(_(
+                    "El pedido debe tener una zona de entrega. "
+                    "Seleccione una zona de entrega antes de guardar el pedido."
+                ))
+
     @api.model
     def create(self, vals):
         if not vals.get('delivery_zone_id'):
