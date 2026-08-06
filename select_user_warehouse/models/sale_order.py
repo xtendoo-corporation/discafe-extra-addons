@@ -9,7 +9,7 @@ class SaleOrder(models.Model):
 
     @api.model
     def default_get(self, default_fields):
-        fields = super(SaleOrder, self).default_get(default_fields)
+        result = super().default_get(default_fields)
 
         if not self.env.user.warehouse_id:
             raise UserError(_(
@@ -17,6 +17,4 @@ class SaleOrder(models.Model):
                 "Configure el almacén en su ficha de usuario antes de crear un pedido."
             ))
 
-        fields['warehouse_id'] = self.env.user.warehouse_id.id
-
-        return fields
+        return result
