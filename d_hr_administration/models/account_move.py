@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from odoo import api, models, fields
+from odoo import api, models, _
 from odoo.exceptions import ValidationError
-import logging
-
-_logger = logging.getLogger(__name__)
 
 
 class AccountMove(models.Model):
@@ -13,40 +10,46 @@ class AccountMove(models.Model):
 
     @api.model_create_multi
     def create(self, vals_list):
-        """
-        Bloquear la creación de facturas excepto si:
-        - El usuario es administrador
-        - La factura viene de un pedido de venta
-        """
-        # Check if user is administrator
         if self.env.user.has_group('d_hr_administration.administration'):
             return super().create(vals_list)
-
-        # Check if coming from sale order
-        context_params = self.env.context.get('params', {})
-        if context_params.get('model') == 'sale.order' or context_params.get('is_sale'):
+        if self.env.su:
             return super().create(vals_list)
 
-        # Check if it's coming from active_model context
-        if self.env.context.get('active_model') == 'sale.order':
-            return super().create(vals_list)
+        for vals in vals_list:
+            if vals.get('move_type', 'entry') not in ('out_invoice', 'out_refund'):
+                continue
+            from_sale = (
+                self.env.context.get('is_sale')
+                or self.env.context.get('active_model') == 'sale.order'
+            )
+            has_sale_lines = any(
+                line_vals.get('sale_line_ids')
+                for command, _id, line_vals in (
+                    line for line in vals.get('invoice_line_ids', [])
+                    if isinstance(line, (list, tuple))
+                    and len(line) == 3
+                    and isinstance(line[2], dict)
+                )
+            )
+            if not from_sale and not has_sale_lines:
+                raise ValidationError(_(
+                    "No tiene permisos para crear facturas de cliente "
+                    "manualmente. Utilice un pedido de venta."
+                ))
 
-        raise ValidationError("No tiene permisos para crear facturas manualmente. Use un pedido de venta.")
+        return super().create(vals_list)
 
     def action_cancel(self):
-        """Override cancel action to check permissions"""
         if not self.env.user.has_group('d_hr_administration.administration'):
-            raise ValidationError("No tiene permisos para cancelar facturas")
+            raise ValidationError(_("No tiene permisos para cancelar facturas"))
         return super().action_cancel()
 
     def button_cancel(self):
-        """Override button cancel to check permissions"""
         if not self.env.user.has_group('d_hr_administration.administration'):
-            raise ValidationError("No tiene permisos para cancelar facturas")
+            raise ValidationError(_("No tiene permisos para cancelar facturas"))
         return super().button_cancel()
 
     def button_draft(self):
-        """Override button draft to check permissions"""
         if not self.env.user.has_group('d_hr_administration.administration'):
-            raise ValidationError("No tiene permisos para cambiar a borrador")
+            raise ValidationError(_("No tiene permisos para cambiar a borrador"))
         return super().button_draft()
