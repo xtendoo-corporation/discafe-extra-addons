@@ -1,4 +1,5 @@
 # Copyright 2018 Tecnativa - Sergio Teruel
+# Copyright 2020 Xtendoo - Manuel Calero Solís
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 from odoo import fields, models, api
@@ -6,15 +7,8 @@ from datetime import datetime, date
 
 
 class PartnerDeliveryZone(models.Model):
-    _name = 'partner.delivery.zone'
-    _description = 'Partner delivery zone'
+    _inherit = 'partner.delivery.zone'
 
-    code = fields.Char()
-
-    name = fields.Char(
-        string='Zone',
-        required=True,
-    )
     partner_zones_ids = fields.One2many(
         'delivery.zone.partner.line',
         'delivery_zone_id',
@@ -33,7 +27,6 @@ class PartnerDeliveryZone(models.Model):
         string='Delivery Zone',
         auto_join=True,
     )
-    active = fields.Boolean(default=True)
 
     @api.model
     def get_report_action(self, active_ids):
