@@ -360,8 +360,8 @@
 
                                         <!--Unidades -->
                                         <div style="width:25%;float:left;text-align:right;">
-                                            <t t-if="move_line.qty_done">
-                                                <span style="text-align:right;display:block" t-esc="'%.0f'%(move_line.qty_done)"/>
+                                            <t t-if="move_line.quantity">
+                                                <span style="text-align:right;display:block" t-esc="'%.0f'%(move_line.quantity)"/>
                                             </t>
                                             <t t-else="">
                                                 <span style="text-align:right;display:block;color:white;">aa</span>
