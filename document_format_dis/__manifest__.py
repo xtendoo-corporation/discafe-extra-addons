@@ -20,6 +20,7 @@
         'stock',
         'l10n_es_partner',
         'partner_delivery_zone',
+        'web_digital_sign',
     ],
     'license': 'AGPL-3',
     'data': [
