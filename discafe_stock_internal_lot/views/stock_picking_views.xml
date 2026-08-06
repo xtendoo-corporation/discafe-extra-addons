@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="view_picking_form_internal_restrict_lot_editable" model="ir.ui.view">
+        <field name="name">stock.picking.form.internal.restrict.lot.editable</field>
+        <field name="model">stock.picking</field>
+        <field
+            name="inherit_id"
+            ref="stock_restrict_lot.custom_main_stock_picking_form_view"
+        />
+        <field name="arch" type="xml">
+            <xpath
+                expr="//field[@name='move_ids_without_package']/list/field[@name='restrict_lot_id']"
+                position="attributes"
+            >
+                <attribute name="readonly"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
