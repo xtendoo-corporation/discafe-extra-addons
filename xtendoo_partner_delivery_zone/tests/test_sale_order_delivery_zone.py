@@ -28,6 +28,10 @@ class TestSaleOrderDeliveryZone(TransactionCase):
             "name": "Zona Test",
             "code": "ZT",
         })
+        cls.other_zone = cls.env["partner.delivery.zone"].create({
+            "name": "Otra Zona",
+            "code": "OZ",
+        })
         cls.partner_a = cls.env["res.partner"].create({
             "name": "Cliente A",
             "delivery_zone_id": cls.zone.id,
@@ -35,6 +39,10 @@ class TestSaleOrderDeliveryZone(TransactionCase):
         cls.partner_b = cls.env["res.partner"].create({
             "name": "Cliente B",
             "delivery_zone_id": cls.zone.id,
+        })
+        cls.partner_other_zone = cls.env["res.partner"].create({
+            "name": "Cliente otra zona",
+            "delivery_zone_id": cls.other_zone.id,
         })
         cls.partner_no_zone = cls.env["res.partner"].create({
             "name": "Cliente sin zona",
@@ -94,6 +102,27 @@ class TestSaleOrderDeliveryZone(TransactionCase):
                 ["partner_id", "delivery_zone_id"])
         self.assertEqual(res.get("delivery_zone_id"), self.zone.id)
         self.assertEqual(res.get("partner_id"), self.partner_a.id)
+
+    # -- _compute_delivery_zone_id --------------------------------------------
+    def test_compute_uses_session_zone_over_partner_zone(self):
+        with self._mock_request(self.zone.id):
+            order = self.SaleOrder.new({"partner_id": self.partner_other_zone.id})
+            self.assertEqual(order.delivery_zone_id, self.zone)
+
+    def test_compute_uses_session_zone_for_partner_without_zone(self):
+        with self._mock_request(self.zone.id):
+            order = self.SaleOrder.new({"partner_id": self.partner_no_zone.id})
+            self.assertEqual(order.delivery_zone_id, self.zone)
+
+    def test_compute_falls_back_to_partner_zone_without_session(self):
+        with patch("odoo.http.request", None):
+            order = self.SaleOrder.new({"partner_id": self.partner_other_zone.id})
+            self.assertEqual(order.delivery_zone_id, self.other_zone)
+
+    def test_compute_ignores_stale_session_zone(self):
+        with self._mock_request(999999):
+            order = self.SaleOrder.new({"partner_id": self.partner_other_zone.id})
+            self.assertEqual(order.delivery_zone_id, self.other_zone)
 
     # -- _check_delivery_zone_id (constrains) ----------------------------------
     def test_create_with_zone_ok_and_visit_created(self):

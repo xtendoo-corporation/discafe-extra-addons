@@ -21,6 +21,27 @@ class SaleOrder(models.Model):
         zone_id = self._get_delivery_zone_id()
         return self.env['delivery.zone.partner.line'].get_next_partner_not_visited_today(zone_id)
 
+    @api.depends('partner_shipping_id')
+    def _compute_delivery_zone_id(self):
+        # La zona de reparto la fija la ruta que el usuario tiene seleccionada
+        # en la sesión, no la del cliente. Si no hay ruta activa se mantiene el
+        # comportamiento estándar (zona del cliente).
+        session_zone = self.env['partner.delivery.zone']
+        zone_id = self._get_delivery_zone_id()
+        if zone_id:
+            candidate = session_zone.browse(zone_id)
+            if candidate.exists():
+                session_zone = candidate
+        remaining = self.env['sale.order']
+        for order in self:
+            editable = order.state in ('draft', 'sent') or not order.ids
+            if session_zone and editable:
+                order.delivery_zone_id = session_zone
+            else:
+                remaining |= order
+        if remaining:
+            super(SaleOrder, remaining)._compute_delivery_zone_id()
+
     @api.model
     def default_get(self, default_fields):
         res = super(SaleOrder, self).default_get(default_fields)
