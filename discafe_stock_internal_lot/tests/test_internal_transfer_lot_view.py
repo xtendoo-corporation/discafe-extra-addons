@@ -49,3 +49,22 @@ class TestInternalTransferLotView(TransactionCase):
             "//field[@name='move_ids_without_package']/list/field[@name='restrict_lot_id']"
         )[0]
         self.assertNotIn("readonly", restrict_lot.attrib)
+
+    def test_operations_restrict_lot_is_filtered_by_allowed_lots(self):
+        view = self.env["stock.picking"].get_view(
+            view_id=self.picking_form_view.id,
+            view_type="form",
+        )
+        xml = etree.fromstring(view["arch"])
+        restrict_lot = xml.xpath(
+            "//field[@name='move_ids_without_package']/list/field[@name='restrict_lot_id']"
+        )[0]
+        self.assertEqual(
+            restrict_lot.attrib.get("domain"),
+            "[('id', 'in', allowed_restrict_lot_ids)]",
+        )
+        allowed = xml.xpath(
+            "//field[@name='move_ids_without_package']/list/"
+            "field[@name='allowed_restrict_lot_ids']"
+        )
+        self.assertTrue(allowed)
