@@ -25,6 +25,7 @@
 
         'security/ir.model.access.csv',
 
+        'views/partner_delivery_zone_tree_view.xml',
         'views/partner_delivery_zone_view.xml',
         'views/res_partner_view.xml',
         'views/sale_order_view.xml',

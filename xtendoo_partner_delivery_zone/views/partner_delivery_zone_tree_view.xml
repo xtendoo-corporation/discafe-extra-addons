@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_partner_delivery_zone_tree_no_inline_edit" model="ir.ui.view">
+        <field name="name">partner.delivery.zone.tree.no.inline.edit</field>
+        <field name="model">partner.delivery.zone</field>
+        <field name="inherit_id" ref="partner_delivery_zone.view_partner_delivery_zone_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//list" position="replace">
+                <list>
+                    <field name="code"/>
+                    <field name="name"/>
+                </list>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
