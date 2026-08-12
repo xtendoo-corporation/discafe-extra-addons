@@ -382,6 +382,8 @@
                    <!-- Totales -->
 
                     <div style="width:100%;margin-bottom:10px;margin-top:10px;text-align:right;">
+                        <t t-set="tax_totals" t-value="o.tax_totals or {}"/>
+                        <t t-set="same_tax_base" t-value="tax_totals.get('same_tax_base', True)"/>
 
                         <!-- Subtotal -->
 
@@ -391,7 +393,7 @@
                             </div>
 
                             <div style="width:35%;float:left;">
-                                <span t-esc="'%.2f'%(o.amount_untaxed)"/>
+                                <span t-esc="('%.2f' % tax_totals.get('base_amount_currency', o.amount_untaxed)).replace('.', ',')"/>
                             </div>
 
                         </div>
@@ -400,32 +402,38 @@
 
                         <!-- Iva -->
 
-                        <div style="clear:both;">
-                            <t t-set="tax_totals" t-value="o.tax_totals"/>
-                            <t t-if="tax_totals">
-                                <t t-foreach="tax_totals.get('groups_by_subtotal', {}).get(tax_totals.get('subtotals_order', ['Untaxed Amount'])[0], [])" t-as="tax_group">
-                                    <div style="width:70%;float:left;clear:both;text-align:left;">
-                                        <div style="clear:both;float:left;width:65%;">
-                                            <b><span t-esc="tax_group['tax_group_name']"/></b>
-                                            <span>sobre</span>
-                                        </div>
+<div style="clear:both;">
+    <t t-if="tax_totals">
+        <t t-foreach="tax_totals.get('subtotals', [])" t-as="subtotal">
+            <t t-foreach="subtotal.get('tax_groups', [])" t-as="tax_group">
+                <div style="width:70%;float:left;clear:both;text-align:left;">
+                    <div style="clear:both;float:left;width:65%;">
+                        <b><span t-out="tax_group.get('group_name', '')"/></b>
+                        <t t-if="not same_tax_base and tax_group.get('display_base_amount_currency') is not False">
+                            <span> sobre </span>
+                        </t>
+                    </div>
 
-                                        <div style="text-align:right;float:left;width:35%;">
-                                            <span style="display:block;width:100%;">
-                                                <span t-esc="'%.2f'%(tax_group['tax_group_base_amount'])"/>
-                                            </span>
-                                        </div>
-                                    </div>
+                    <div style="text-align:right;float:left;width:35%;">
+                        <span t-if="not same_tax_base and tax_group.get('display_base_amount_currency') is not False"
+                              style="display:block;width:100%;">
+                            <span t-esc="('%.2f' % tax_group.get('display_base_amount_currency', 0.0)).replace('.', ',')"/>
+                            <span> €</span>
+                        </span>
+                    </div>
+                </div>
 
-                                    <div class="text-right o_price_total" style="width:30%;float:left;text-align:right">
-                                        <span t-if="o.move_type == 'out_refund'">-</span>
-                                        <span t-esc="'%.2f'%(tax_group['tax_group_amount'])"/>
-                                    </div>
-                                </t>
-                            </t>
-                        </div>
+                <div class="text-right o_price_total" style="width:30%;float:left;text-align:right">
+                    <span t-if="o.move_type == 'out_refund'">-</span>
+                    <span t-esc="('%.2f' % tax_group.get('tax_amount_currency', 0.0)).replace('.', ',')"/>
+                    <span> €</span>
+                </div>
+            </t>
+        </t>
+    </t>
+</div>
 
-                        <!-- Fin iva -->
+<!-- Fin iva -->
 
                         <!-- Total documento -->
 
@@ -436,7 +444,7 @@
                             </div>
 
                             <div style="width:50%;float:left;">
-                                <span t-esc="'%.2f'%(o.amount_total)"/>
+                                <span t-esc="('%.2f' % tax_totals.get('total_amount_currency', o.amount_total)).replace('.', ',')"/>
                             </div>
 
                         </div>

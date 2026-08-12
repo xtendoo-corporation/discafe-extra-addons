@@ -423,31 +423,43 @@
                         <!-- Fin subtotal -->
 
                         <!-- Iva -->
+                        <t t-set="tax_totals" t-value="doc.tax_totals"/>
+                         <t t-set="currency" t-value="doc.currency_id"/>
+                        <t t-set="same_tax_base" t-value="tax_totals.get('same_tax_base', True)"/>
 
                         <div style="clear:both;">
-                            <t t-if="'amount_by_group' in doc._fields">
-                                <t t-foreach="doc.amount_by_group" t-as="amount_by_group">
-                                    <t t-if="amount_by_group[3] == 1 and doc.amount_untaxed == amount_by_group[2]">
-                                    </t>
-                                    <t t-else="">
-                                        <div style="width:70%;float:left;clear:both;text-align:left;">
-                                            <div style="clear:both;float:left;width:65%;">
-                                                <b><span t-esc="amount_by_group[0]"/></b>
-                                                <span>sobre</span>
-                                            </div>
-                                            <div style="text-align:right;float:left;width:35%;">
-                                                <span style="display:block;width:100%;">
-                                                    <t t-esc="amount_by_group[4]"/>
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <div class="text-right o_price_total" style="width:30%;float:left;text-align:right">
-                                            <span t-esc="amount_by_group[3]"/>
-                                        </div>
-                                    </t>
-                                </t>
-                            </t>
-                        </div>
+<t t-if="tax_totals">
+    <t t-foreach="tax_totals.get('subtotals', [])" t-as="subtotal">
+        <t t-foreach="subtotal.get('tax_groups', [])" t-as="tax_group">
+
+            <div style="width:70%;float:left;clear:both;text-align:left;">
+                <div style="clear:both;float:left;width:65%;">
+                    <b>
+                        <span t-out="tax_group.get('group_name', '')"/>
+                    </b>
+
+                    <t t-if="not same_tax_base">
+                        <span> sobre </span>
+                    </t>
+                </div>
+
+                <div style="text-align:right;float:left;width:35%;">
+                    <span t-if="not same_tax_base"
+                          style="display:block;width:100%;">
+                        <span t-esc="('%.2f' % tax_group.get('base_amount', 0.0)).replace('.', ',')"/>
+                    </span>
+                </div>
+            </div>
+
+            <div class="text-right o_price_total"
+                 style="width:30%;float:left;text-align:right;">
+                <span t-esc="('%.2f' % tax_group.get('tax_amount', 0.0)).replace('.', ',')"/>
+            </div>
+
+        </t>
+    </t>
+</t>
+</div>
 
                         <!-- Fin iva -->
 
