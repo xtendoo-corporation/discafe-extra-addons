@@ -404,33 +404,36 @@
 
 <div style="clear:both;">
     <t t-if="tax_totals">
-        <t t-foreach="tax_totals.get('subtotals', [])" t-as="subtotal">
-            <t t-foreach="subtotal.get('tax_groups', [])" t-as="tax_group">
-                <div style="width:70%;float:left;clear:both;text-align:left;">
-                    <div style="clear:both;float:left;width:65%;">
-                        <b><span t-out="tax_group.get('group_name', '')"/></b>
-                        <t t-if="not same_tax_base and tax_group.get('display_base_amount_currency') is not False">
-                            <span> sobre </span>
-                        </t>
-                    </div>
+    <t t-foreach="tax_totals.get('subtotals', [])" t-as="subtotal">
+        <t t-foreach="subtotal.get('tax_groups', [])" t-as="tax_group">
 
-                    <div style="text-align:right;float:left;width:35%;">
-                        <span t-if="not same_tax_base and tax_group.get('display_base_amount_currency') is not False"
-                              style="display:block;width:100%;">
-                            <span t-esc="('%.2f' % tax_group.get('display_base_amount_currency', 0.0)).replace('.', ',')"/>
-                            <span> €</span>
-                        </span>
-                    </div>
+            <div style="width:70%;float:left;clear:both;text-align:left;">
+                <div style="clear:both;float:left;width:65%;">
+                    <b>
+                        <span t-out="tax_group.get('group_name', '')"/>
+                    </b>
+
+                    <t t-if="not same_tax_base">
+                        <span> sobre </span>
+                    </t>
                 </div>
 
-                <div class="text-right o_price_total" style="width:30%;float:left;text-align:right">
-                    <span t-if="o.move_type == 'out_refund'">-</span>
-                    <span t-esc="('%.2f' % tax_group.get('tax_amount_currency', 0.0)).replace('.', ',')"/>
-                    <span> €</span>
+                <div style="text-align:right;float:left;width:35%;">
+                    <span t-if="not same_tax_base"
+                          style="display:block;width:100%;">
+                        <span t-esc="('%.2f' % tax_group.get('base_amount', 0.0)).replace('.', ',')"/>
+                    </span>
                 </div>
-            </t>
+            </div>
+
+            <div class="text-right o_price_total"
+                 style="width:30%;float:left;text-align:right;">
+                <span t-esc="('%.2f' % tax_group.get('tax_amount', 0.0)).replace('.', ',')"/>
+            </div>
+
         </t>
     </t>
+</t>
 </div>
 
 <!-- Fin iva -->
