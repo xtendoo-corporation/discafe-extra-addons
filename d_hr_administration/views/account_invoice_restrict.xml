@@ -44,7 +44,7 @@
                 <!-- Campo product_id -->
                 <xpath expr="//field[@name='invoice_line_ids']//field[@name='product_id']" position="replace">
                     <field name="can_edit_product_id" column_invisible="True"/>
-                    <field name="product_id" readonly="not can_edit_product_id" options="{'no_create': True}"/>
+                    <field name="product_id" widget="product_label_section_and_note_field" readonly="not can_edit_product_id" options="{'no_create': True}"/>
                </xpath>
 
                 <!-- Campo name (descripción) -->
