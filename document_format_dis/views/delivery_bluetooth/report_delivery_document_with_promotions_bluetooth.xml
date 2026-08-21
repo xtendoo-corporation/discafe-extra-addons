@@ -453,9 +453,15 @@
                         <!-- Firma del cliente -->
                         <div style="clear:both;"></div>
 
-                        <div style="height:100px;width:100%;border:2px solid black;margin-top:20px;">
+                        <div t-if="('digital_signature' in o._fields and o.digital_signature) or ('signature' in o._fields and o.signature)"
+                             style="height:100px;width:100%;border:2px solid black;margin-top:20px;">
                               <span style="text-align:center;display:block;width:100%;">Firma del cliente:</span>
-                              <img style="width:100%;" t-attf-src="data:image/*;base64,{{o.digital_signature}}"/>
+                              <img t-if="'digital_signature' in o._fields and o.digital_signature"
+                                   t-att-src="image_data_uri(o.digital_signature)"
+                                   style="width:100%;height:75px;object-fit:contain;"/>
+                              <img t-elif="'signature' in o._fields and o.signature"
+                                   t-att-src="image_data_uri(o.signature)"
+                                   style="width:100%;height:75px;object-fit:contain;"/>
                         </div>
 
                         <div style="clear:both;height:10px;" class="oe_structure"/>
