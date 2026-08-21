@@ -2,3 +2,4 @@
 
 from . import partner_delivery_zone_wizard
 from . import wizard_report_sale_delivery_zone
+from . import account_payment_register

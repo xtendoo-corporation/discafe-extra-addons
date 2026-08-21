@@ -2,3 +2,4 @@
 from . import test_partner_delivery_zone
 from . import test_sale_order_delivery_zone
 from . import test_account_move_delivery_zone
+from . import test_payment_register_delivery_zone

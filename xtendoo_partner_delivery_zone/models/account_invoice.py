@@ -39,7 +39,11 @@ class AccountInvoice(models.Model):
         for move in self:
             print("Factura")
             if session_zone:
-                move.delivery_zone_id = session_zone
+                candidate = self.env['partner.delivery.zone'].browse(session_zone)
+                if candidate.exists():
+                    move.delivery_zone_id = candidate
+                else:
+                    move.delivery_zone_id = move.partner_id.delivery_zone_id
                 print("move.delivery_zone_id: ", move.delivery_zone_id)
             else:
                 move.delivery_zone_id = move.partner_id.delivery_zone_id

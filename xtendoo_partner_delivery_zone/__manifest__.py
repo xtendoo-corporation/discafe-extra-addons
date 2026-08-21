@@ -31,6 +31,7 @@
         'views/sale_order_view.xml',
         'views/account_payment_view.xml',
         'views/account_invoice_view.xml',
+        'views/account_payment_register_view.xml',
         'reports/report_sale_delivery_zone.xml',
         'wizards/wizards_select_visits_routes.xml',
         'wizards/wizards_report_sale_delivery_zone.xml',
