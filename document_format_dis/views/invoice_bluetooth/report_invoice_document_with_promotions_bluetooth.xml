@@ -401,14 +401,18 @@
                   <!-- <hr style="height:3px; background-color:black;clear:both;"></hr>-->
 
                     <!-- Firma del cliente -->
-                    <div t-if="('digital_signature' in o._fields and o.digital_signature) or ('signature' in o._fields and o.signature)"
+                    <t t-set="invoice_signature"
+                       t-value="o.digital_signature if 'digital_signature' in o._fields and o.digital_signature else (o.signature if 'signature' in o._fields and o.signature else False)"/>
+                    <t t-set="delivery_signature"
+                       t-value="o.invoice_line_ids.sale_line_ids.order_id.picking_ids.filtered('digital_signature')[:1].digital_signature"/>
+                    <div t-if="invoice_signature or delivery_signature"
                          style="height:100px;width:100%;border:2px solid black;margin-top:5px;">
                         <span style="text-align:center;display:block;width:100%;">Firma del cliente:</span>
-                        <img t-if="'digital_signature' in o._fields and o.digital_signature"
-                             t-att-src="image_data_uri(o.digital_signature)"
+                        <img t-if="invoice_signature"
+                             t-att-src="image_data_uri(invoice_signature)"
                              style="width:100%;max-height:80px;object-fit:contain;"/>
-                        <img t-elif="'signature' in o._fields and o.signature"
-                             t-att-src="image_data_uri(o.signature)"
+                        <img t-elif="delivery_signature"
+                             t-att-src="image_data_uri(delivery_signature)"
                              style="width:100%;max-height:80px;object-fit:contain;"/>
                     </div>
                     <!-- fin Firmar del cliente -->
