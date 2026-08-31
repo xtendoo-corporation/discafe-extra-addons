@@ -31,6 +31,23 @@ class TestAccountMoveDeliveryZone(TransactionCase):
             "name": "Cliente factura sin zona",
         })
 
+        cls.account_manager = cls.env["res.users"].create({
+            "name": "Gestor Contable Factura",
+            "login": "account_manager_invoice_zone@example.com",
+            "groups_id": [
+                (4, cls.env.ref("base.group_user").id),
+                (4, cls.env.ref("account.group_account_manager").id),
+            ],
+        })
+        cls.regular_user = cls.env["res.users"].create({
+            "name": "Usuario Regular Factura",
+            "login": "regular_invoice_zone@example.com",
+            "groups_id": [
+                (4, cls.env.ref("base.group_user").id),
+                (4, cls.env.ref("account.group_account_invoice").id),
+            ],
+        })
+
     def _mock_request(self, zone_id):
         request = MagicMock()
         request.session = {"partner_delivery_zone_id": zone_id}
@@ -61,3 +78,19 @@ class TestAccountMoveDeliveryZone(TransactionCase):
         with self._mock_request(999999):
             move = self._new_invoice(self.partner_other_zone)
             self.assertEqual(move.delivery_zone_id, self.other_zone)
+
+    def test_account_manager_can_edit_delivery_zone(self):
+        """can_edit_delivery_zone is True for account.group_account_manager."""
+        move = self.Move.with_user(self.account_manager).new({
+            "move_type": "out_invoice",
+            "partner_id": self.partner_other_zone.id,
+        })
+        self.assertTrue(move.can_edit_delivery_zone)
+
+    def test_regular_user_cannot_edit_delivery_zone(self):
+        """can_edit_delivery_zone is False without account.group_account_manager."""
+        move = self.Move.with_user(self.regular_user).new({
+            "move_type": "out_invoice",
+            "partner_id": self.partner_other_zone.id,
+        })
+        self.assertFalse(move.can_edit_delivery_zone)

@@ -17,10 +17,6 @@ class WizardReportSaleDeliveryZone(models.TransientModel):
     )
 
     def action_print_report(self):
-        print("*"*100)
-        print("context:", self._context)
-        # print("active_ids:", self._context['active_ids'])
-        print("*"*100)
         data = {
             'model': 'wizard.report.sale.delivery.zone',
             'form': self.read()[0],

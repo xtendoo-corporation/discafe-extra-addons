@@ -10,11 +10,9 @@ class AccountInvoice(models.Model):
         try:
             from odoo.http import request
             if request and request.session and 'partner_delivery_zone_id' in request.session:
-                print("Encuentra", request.session['partner_delivery_zone_id'])
                 return request.session['partner_delivery_zone_id']
         except Exception:
             pass
-        print("NO")
         return False
 
     delivery_zone_id = fields.Many2one(
@@ -29,22 +27,16 @@ class AccountInvoice(models.Model):
 
     @api.depends('partner_id')
     def _compute_delivery_zone_id(self):
-        print("*"*50)
-        print("PASA")
-        print("*"*50)
         # La zona la fija la ruta que el usuario tiene seleccionada en la
         # sesión; si no hay ruta activa se usa la zona del cliente (estándar).
         session_zone = self._get_delivery_zone_id_from_session()
-        print("session_zone", session_zone)
         for move in self:
-            print("Factura")
             if session_zone:
                 candidate = self.env['partner.delivery.zone'].browse(session_zone)
                 if candidate.exists():
                     move.delivery_zone_id = candidate
                 else:
                     move.delivery_zone_id = move.partner_id.delivery_zone_id
-                print("move.delivery_zone_id: ", move.delivery_zone_id)
             else:
                 move.delivery_zone_id = move.partner_id.delivery_zone_id
 
@@ -62,6 +54,6 @@ class AccountInvoice(models.Model):
 
     @api.depends_context('uid')
     def _compute_can_edit_delivery_zone(self):
-        can_edit = self.env.user.has_group('d_hr_administration.administration')
+        can_edit = self.env.user.has_group('account.group_account_manager')
         for move in self:
             move.can_edit_delivery_zone = can_edit

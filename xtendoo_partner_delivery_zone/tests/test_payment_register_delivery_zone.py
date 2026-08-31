@@ -6,7 +6,8 @@ Coverage:
   - Stale session zone (non-existent DB ID) → correct fallback.
   - Admin manual selection propagates to the created account.payment.
   - Default zone propagates to the created account.payment.
-  - can_edit_delivery_zone: False for regular users, True for admin group.
+  - can_edit_delivery_zone: False for regular users, True for accounting
+    managers (account.group_account_manager).
   - Server-side enforcement: _effective_delivery_zone ignores a non-admin's
     direct write and always re-derives the default.
   - Existing account.payment session/partner zone compute is not broken.
@@ -71,10 +72,12 @@ class TestPaymentRegisterDeliveryZone(TransactionCase):
         cls.invoice_other_zone = cls._make_posted_invoice(cls.partner_other_zone, 50.0)  # zone = cls.other_zone
         cls.invoice_no_doc_zone = cls._make_posted_invoice(cls.partner_no_zone, 30.0)   # zone = False
 
-        # User WITH d_hr_administration.administration + accounting rights.
-        # Required for propagation tests because d_hr_administration overrides
-        # action_cancel with a permission check that fires even on empty
-        # recordsets.
+        # User WITH accounting-manager + administration + accounting rights.
+        # account.group_account_manager grants delivery-zone edit rights
+        # (can_edit_delivery_zone / _effective_delivery_zone).
+        # d_hr_administration.administration is still required because
+        # d_hr_administration overrides action_cancel with a permission check
+        # that fires even on empty recordsets during payment creation.
         cls.admin_user = cls.env["res.users"].create({
             "name": "Admin Register Zone Tests",
             "login": "admin_register_zone_tests@example.com",
@@ -82,6 +85,7 @@ class TestPaymentRegisterDeliveryZone(TransactionCase):
                 (4, cls.env.ref("base.group_user").id),
                 (4, cls.env.ref("account.group_account_invoice").id),
                 (4, cls.env.ref("account.group_account_user").id),
+                (4, cls.env.ref("account.group_account_manager").id),
                 (4, cls.env.ref("d_hr_administration.administration").id),
             ],
         })
@@ -270,14 +274,14 @@ class TestPaymentRegisterDeliveryZone(TransactionCase):
     # ------------------------------------------------------------------
 
     def test_regular_user_cannot_edit_delivery_zone(self):
-        """can_edit_delivery_zone is False without d_hr_administration group."""
+        """can_edit_delivery_zone is False without account.group_account_manager."""
         with patch("odoo.http.request", None):
             wizard = self._new_wizard(self.invoice, user=self.regular_user)
             can_edit = wizard.can_edit_delivery_zone
         self.assertFalse(can_edit)
 
     def test_administration_group_user_can_edit_delivery_zone(self):
-        """can_edit_delivery_zone is True for d_hr_administration.administration."""
+        """can_edit_delivery_zone is True for account.group_account_manager."""
         with patch("odoo.http.request", None):
             wizard = self._new_wizard(self.invoice, user=self.admin_user)
             can_edit = wizard.can_edit_delivery_zone

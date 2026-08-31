@@ -12,7 +12,7 @@ class AccountPaymentRegister(models.TransientModel):
       3. Zone of the partner.
 
     All users can see the field (read).  Only members of the
-    *d_hr_administration.administration* group may change it; that restriction
+    *account.group_account_manager* group may change it; that restriction
     is enforced in the UI via *can_edit_delivery_zone* and re-enforced
     server-side in *_effective_delivery_zone* so that direct-RPC writes cannot
     bypass it.
@@ -59,7 +59,7 @@ class AccountPaymentRegister(models.TransientModel):
         on the wizard field cannot bypass the UI readonly restriction.
         """
         self.ensure_one()
-        if self.env.user.has_group("d_hr_administration.administration"):
+        if self.env.user.has_group("account.group_account_manager"):
             return self.delivery_zone_id
 
         # Non-admin: re-resolve, ignoring any wizard field value.
@@ -78,7 +78,7 @@ class AccountPaymentRegister(models.TransientModel):
 
     @api.depends_context("uid")
     def _compute_can_edit_delivery_zone(self):
-        can_edit = self.env.user.has_group("d_hr_administration.administration")
+        can_edit = self.env.user.has_group("account.group_account_manager")
         for wizard in self:
             wizard.can_edit_delivery_zone = can_edit
 
