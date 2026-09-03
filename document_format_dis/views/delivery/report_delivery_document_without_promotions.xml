@@ -108,7 +108,7 @@
                                     <t t-set="sale_line" t-value="line.move_id.sale_line_id if is_done else line.sale_line_id"/>
                                     <t t-set="line_qty" t-value="line.quantity if is_done else line.product_uom_qty"/>
                                     <t t-set="line_subtotal" t-value="sale_line.price_reduce_taxexcl * line_qty"/>
-                                    <t t-set="line_tax_total" t-value="(sale_line.price_reduce_taxinc - sale_line.price_reduce_taxexcl) * line_qty"/>
+                                    <t t-set="line_tax_total" t-value="line_subtotal * sum(tax.amount for tax in sale_line.tax_id) / 100.0"/>
                                     <t t-set="description_start" t-value="sale_line.name.find(']') + 1 if sale_line.name and ']' in sale_line.name else 0"/>
                                     <t t-set="clean_description" t-value="sale_line.name[description_start:].strip() if sale_line.name else ''"/>
                                     <t t-set="tax_labels" t-value="', '.join([(tax.invoice_label or tax.name) for tax in sale_line.tax_id])"/>
