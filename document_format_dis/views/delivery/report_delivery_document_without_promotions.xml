@@ -108,7 +108,6 @@
                                     <t t-set="sale_line" t-value="line.move_id.sale_line_id if is_done else line.sale_line_id"/>
                                     <t t-set="line_qty" t-value="line.quantity if is_done else line.product_uom_qty"/>
                                     <t t-set="line_subtotal" t-value="sale_line.price_reduce_taxexcl * line_qty"/>
-                                    <t t-set="line_tax_total" t-value="line_subtotal * sum(tax.amount for tax in sale_line.tax_id) / 100.0"/>
                                     <t t-set="description_start" t-value="sale_line.name.find(']') + 1 if sale_line.name and ']' in sale_line.name else 0"/>
                                     <t t-set="clean_description" t-value="sale_line.name[description_start:].strip() if sale_line.name else ''"/>
                                     <t t-set="tax_labels" t-value="', '.join([(tax.invoice_label or tax.name) for tax in sale_line.tax_id])"/>
@@ -156,9 +155,10 @@
                                             <t t-set="base_iva_4" t-value="base_iva_4 + line_subtotal"/>
                                             <t t-set="importe_iva_4" t-value="importe_iva_4 + (line_subtotal * tax.amount / 100.0)"/>
                                         </t>
+                                        <t t-else="">
+                                            <t t-set="otros_impuestos" t-value="otros_impuestos + (line_subtotal * tax.amount / 100.0)"/>
+                                        </t>
                                     </t>
-                                    <t t-set="known_taxes_total" t-value="(line_subtotal * 0.21 if any(t.amount == 21.0 for t in sale_line.tax_id) else 0.0) + (line_subtotal * 0.10 if any(t.amount == 10.0 for t in sale_line.tax_id) else 0.0) + (line_subtotal * 0.04 if any(t.amount == 4.0 for t in sale_line.tax_id) else 0.0)"/>
-                                    <t t-set="otros_impuestos" t-value="otros_impuestos + (line_tax_total - known_taxes_total)"/>
                                 </t>
                             </tbody>
                         </table>
