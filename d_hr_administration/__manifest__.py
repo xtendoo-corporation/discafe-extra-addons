@@ -1,7 +1,7 @@
 {
     'name': 'D & HR Administrator',
     'summary': """Administration settings for Discafé and Huelva Regalos""",
-    'version': '18.0.1.0.0',
+    'version': '18.0.1.0.1',
     'description': """Administration settings for Discafé and Huelva Regalos""",
     'author': 'DDL',
     'company': 'Xtendoo',
@@ -16,14 +16,21 @@
         'account',
         'account_invoice_margin',
         'partner_delivery_zone',
+        'product_expiry',
     ],
     'license': 'AGPL-3',
+    'assets': {
+        'web.assets_backend': [
+            'd_hr_administration/static/src/css/account_reports.css',
+        ],
+    },
     'data': [
         'security/security.xml',
         'views/sale_order_view_restrict.xml',
         'views/account_payment.xml',
         'views/account_invoice_restrict.xml',
         'views/product_template_restrict.xml',
+        'views/product_template_expiry_view.xml',
     ],
     'installable': True,
     'auto_install': False,
